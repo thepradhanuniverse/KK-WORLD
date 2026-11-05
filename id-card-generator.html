@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | ID Card Generator</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#080d1b;
+  color:#f8fafc;
+  padding:25px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+header h1{font-size:28px}
+header a{color:#38bdf8;text-decoration:none}
+
+.main{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+.panel{
+  background:#111a2d;
+  padding:25px;
+  border:1px solid #26334d;
+  border-radius:16px;
+}
+
+.panel h2{margin-bottom:20px}
+
+label{
+  display:block;
+  margin:15px 0 7px;
+  color:#cbd5e1;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #334155;
+  background:#080d1b;
+  color:white;
+}
+
+button{
+  padding:12px 18px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:15px;
+}
+
+.primary{
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+}
+
+.secondary{
+  background:#26334d;
+  color:white;
+}
+
+.card-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:400px;
+}
+
+.id-card{
+  width:340px;
+  min-height:215px;
+  background:white;
+  color:#172033;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 15px 40px #0006;
+}
+
+.card-header{
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  text-align:center;
+  padding:15px;
+}
+
+.card-header h3{font-size:20px}
+.card-header p{font-size:11px;margin-top:5px}
+
+.card-content{
+  display:flex;
+  padding:18px;
+  gap:15px;
+  align-items:center;
+}
+
+.photo{
+  width:90px;
+  height:110px;
+  object-fit:cover;
+  border:2px solid #5865f2;
+  border-radius:6px;
+}
+
+.details{
+  font-size:12px;
+  line-height:1.8;
+  overflow-wrap:anywhere;
+}
+
+.details strong{
+  display:block;
+  font-size:16px;
+  color:#2563eb;
+  margin-bottom:5px;
+}
+
+.card-footer{
+  background:#eef2ff;
+  text-align:center;
+  padding:8px;
+  font-size:10px;
+  color:#475569;
+}
+
+@media(max-width:800px){
+  .main{grid-template-columns:1fr}
+  body{padding:15px}
+}
+
+@media print{
+  body{background:white;padding:0}
+  header,.form-panel,.print-button{display:none!important}
+  .main{display:block}
+  .panel{background:white;border:none;padding:0}
+  .card-wrap{min-height:0}
+  .id-card{box-shadow:none;border:1px solid #ddd}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>KK World <span style="color:#38bdf8">ID Generator</span></h1>
+  <a href="dashboard.html">← Back to Dashboard</a>
+</header>
+
+<div class="main">
+
+<section class="panel form-panel">
+  <h2>Enter ID Card Details</h2>
+
+  <label>Organization / School Name</label>
+  <input id="organization" placeholder="KK World Organization">
+
+  <label>Full Name</label>
+  <input id="name" placeholder="Enter full name">
+
+  <label>ID Number</label>
+  <input id="idNumber" placeholder="KKW-001">
+
+  <label>Designation / Class</label>
+  <input id="designation" placeholder="Student / Employee">
+
+  <label>Phone Number</label>
+  <input id="phone" placeholder="Phone number">
+
+  <label>Address</label>
+  <input id="address" placeholder="Enter address">
+
+  <label>Photo</label>
+  <input id="photoInput" type="file" accept="image/*">
+
+  <button class="primary" onclick="updateCard()">Update ID Card</button>
+  <button class="secondary" onclick="resetForm()">Reset</button>
+</section>
+
+<section class="panel">
+  <h2>ID Card Preview</h2>
+
+  <div class="card-wrap">
+    <div class="id-card" id="idCard">
+
+      <div class="card-header">
+        <h3 id="previewOrg">KK WORLD</h3>
+        <p>IDENTITY CARD</p>
+      </div>
+
+      <div class="card-content">
+        <img id="previewPhoto" class="photo"
+          src="https://placehold.co/200x250/e2e8f0/64748b?text=PHOTO">
+
+        <div class="details">
+          <strong id="previewName">Your Name</strong>
+          <div>ID: <span id="previewId">KKW-001</span></div>
+          <div>Role: <span id="previewDesignation">Student / Employee</span></div>
+          <div>Phone: <span id="previewPhone">-</span></div>
+          <div id="previewAddress">Address: -</div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        KK WORLD • DIGITAL IDENTITY
+      </div>
+
+    </div>
+  </div>
+
+  <button class="primary print-button" onclick="window.print()">
+    🖨️ Print ID Card
+  </button>
+</section>
+
+</div>
+</div>
+
+<script>
+function updateCard(){
+  document.getElementById("previewOrg").textContent =
+    document.getElementById("organization").value || "KK WORLD";
+
+  document.getElementById("previewName").textContent =
+    document.getElementById("name").value || "Your Name";
+
+  document.getElementById("previewId").textContent =
+    document.getElementById("idNumber").value || "KKW-001";
+
+  document.getElementById("previewDesignation").textContent =
+    document.getElementById("designation").value || "Student / Employee";
+
+  document.getElementById("previewPhone").textContent =
+    document.getElementById("phone").value || "-";
+
+  document.getElementById("previewAddress").textContent =
+    "Address: " + (document.getElementById("address").value || "-");
+}
+
+document.querySelectorAll("input:not([type=file])").forEach(input=>{
+  input.addEventListener("input",updateCard);
+});
+
+document.getElementById("photoInput").addEventListener("change",function(){
+  const file=this.files[0];
+
+  if(file){
+    if(!file.type.startsWith("image/")){
+      alert("Please select an image file.");
+      return;
+    }
+
+    const reader=new FileReader();
+
+    reader.onload=function(e){
+      document.getElementById("previewPhoto").src=e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+});
+
+function resetForm(){
+  document.querySelectorAll("input").forEach(input=>input.value="");
+
+  document.getElementById("previewPhoto").src=
+    "https://placehold.co/200x250/e2e8f0/64748b?text=PHOTO";
+
+  updateCard();
+}
+
+updateCard();
+</script>
+
+</body>
+</html>
