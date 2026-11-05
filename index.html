@@ -1,18 +1,22 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>KK World | Everything. Connected.</title>
 
-<meta name="description" content="KK World - A modern digital platform for education, organization management and productivity.">
+<meta name="description" content="KK World is a modern digital platform for education, organizations, productivity and smart management.">
+
+<meta name="theme-color" content="#080d1b">
 
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* Navigation enhancements */
+/* Navigation */
+
 nav {
   display: flex;
   justify-content: space-between;
@@ -44,7 +48,33 @@ nav {
   color: #38bdf8;
 }
 
+/* Buttons */
+
+.btn {
+  display: inline-block;
+  padding: 13px 24px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #5865f2, #2563eb);
+  color: white;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-outline {
+  display: inline-block;
+  padding: 13px 24px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  margin-left: 10px;
+  color: white;
+}
+
 /* Hero */
+
 .hero {
   text-align: center;
   padding: 120px 20px;
@@ -82,23 +112,8 @@ nav {
   font-size: 18px;
 }
 
-.btn {
-  display: inline-block;
-  padding: 13px 24px;
-  border-radius: 10px;
-  color: white;
-  font-weight: 700;
-}
+/* Sections */
 
-.btn-outline {
-  display: inline-block;
-  padding: 13px 24px;
-  border: 1px solid #334155;
-  border-radius: 10px;
-  margin-left: 10px;
-}
-
-/* Features */
 .section {
   padding: 90px 7%;
 }
@@ -115,6 +130,8 @@ nav {
 .section-title p {
   color: #94a3b8;
 }
+
+/* Feature cards */
 
 .cards {
   display: grid;
@@ -142,6 +159,7 @@ nav {
 }
 
 /* About */
+
 .about {
   text-align: center;
   padding: 90px 20px;
@@ -158,6 +176,7 @@ nav {
 }
 
 /* CTA */
+
 .cta {
   text-align: center;
   padding: 90px 20px;
@@ -173,6 +192,7 @@ nav {
 }
 
 /* Footer */
+
 footer {
   padding: 30px 7%;
   display: flex;
@@ -182,7 +202,20 @@ footer {
   gap: 20px;
 }
 
+.footer-logo {
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+}
+
+.footer-logo span {
+  color: #38bdf8;
+}
+
+/* Mobile */
+
 @media (max-width: 768px) {
+
   .cards {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -194,9 +227,11 @@ footer {
   .hero {
     padding: 80px 20px;
   }
+
 }
 
 @media (max-width: 500px) {
+
   .cards {
     grid-template-columns: 1fr;
   }
@@ -214,14 +249,21 @@ footer {
     flex-direction: column;
     text-align: center;
   }
+
 }
 </style>
+
 </head>
 
 <body>
 
+<!-- NAVIGATION -->
+
 <nav>
-  <a href="#home" class="logo">KK<span> World</span></a>
+
+  <a href="#home" class="logo">
+    KK<span> World</span>
+  </a>
 
   <div class="nav-links">
     <a href="#home">Home</a>
@@ -230,12 +272,19 @@ footer {
     <a href="#contact">Contact</a>
   </div>
 
-  <a href="#features" class="btn">Explore Platform</a>
+  <a href="#features" class="btn">
+    Explore Platform
+  </a>
+
 </nav>
+
+<!-- HERO -->
 
 <section class="hero" id="home">
 
-  <div class="badge">THE FUTURE OF DIGITAL MANAGEMENT</div>
+  <div class="badge">
+    THE FUTURE OF DIGITAL MANAGEMENT
+  </div>
 
   <h1>
     Everything You Need.<br>
@@ -248,16 +297,28 @@ footer {
     in one modern platform.
   </p>
 
-  <a href="#features" class="btn">Explore Platform →</a>
-  <a href="#about" class="btn-outline">Discover More</a>
+  <a href="#features" class="btn">
+    Explore Platform →
+  </a>
+
+  <a href="#about" class="btn-outline">
+    Discover More
+  </a>
 
 </section>
+
+<!-- FEATURES -->
 
 <section class="section" id="features">
 
   <div class="section-title">
+
     <h2>One Platform. Endless Possibilities.</h2>
-    <p>Powerful digital tools designed to simplify your world.</p>
+
+    <p>
+      Powerful digital tools designed to simplify your world.
+    </p>
+
   </div>
 
   <div class="cards">
@@ -265,43 +326,65 @@ footer {
     <div class="card">
       <div class="icon">🎓</div>
       <h3>Education Management</h3>
-      <p>Manage student records, school operations and educational workflows.</p>
+      <p>
+        Manage student records, school operations
+        and educational workflows.
+      </p>
     </div>
 
     <div class="card">
       <div class="icon">🪪</div>
       <h3>ID Card Generator</h3>
-      <p>Create professional identity cards with modern templates and smart tools.</p>
+      <p>
+        Create professional identity cards with
+        modern templates and smart tools.
+      </p>
     </div>
 
     <div class="card">
       <div class="icon">🏢</div>
       <h3>Organization Management</h3>
-      <p>Manage organizations, teams and digital operations efficiently.</p>
+      <p>
+        Manage organizations, teams and digital
+        operations efficiently.
+      </p>
     </div>
 
     <div class="card">
       <div class="icon">⚡</div>
       <h3>Smart Automation</h3>
-      <p>Simplify everyday workflows with productivity-focused digital tools.</p>
+      <p>
+        Simplify everyday workflows with
+        productivity-focused digital tools.
+      </p>
     </div>
 
     <div class="card">
       <div class="icon">📊</div>
       <h3>Advanced Dashboard</h3>
-      <p>Access important information through a centralized workspace.</p>
+      <p>
+        Access important information through
+        a centralized workspace.
+      </p>
     </div>
 
     <div class="card">
       <div class="icon">🚀</div>
       <h3>More Coming Soon</h3>
-      <p>A growing ecosystem of powerful tools built for the future.</p>
+      <p>
+        A growing ecosystem of powerful tools
+        built for the future.
+      </p>
     </div>
 
   </div>
+
 </section>
 
+<!-- ABOUT -->
+
 <section class="about" id="about">
+
   <h2>Welcome to KK World</h2>
 
   <p>
@@ -310,24 +393,44 @@ footer {
     access innovative tools through one connected platform.
     We are building a smarter and more connected future.
   </p>
+
 </section>
 
+<!-- CTA -->
+
 <section class="cta" id="contact">
+
   <h2>Ready to Explore KK World?</h2>
-  <p>Your smarter digital experience starts here.</p>
+
+  <p>
+    Your smarter digital experience starts here.
+  </p>
 
   <a href="mailto:contact@example.com" class="btn">
     Contact Us →
   </a>
+
 </section>
 
+<!-- FOOTER -->
+
 <footer>
-  <div class="logo">KK<span> World</span></div>
 
-  <div>© 2026 KK World. All rights reserved.</div>
+  <div class="footer-logo">
+    KK<span> World</span>
+  </div>
 
-  <div>Built for a smarter digital future.</div>
+  <div>
+    © 2026 KK World. All rights reserved.
+  </div>
+
+  <div>
+    Built for a smarter digital future.
+  </div>
+
 </footer>
+
+<script src="script.js"></script>
 
 </body>
 </html>
