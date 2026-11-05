@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | My Profile</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#080d1b;
+  color:#f8fafc;
+  min-height:100vh;
+  padding:25px;
+}
+
+.container{max-width:850px;margin:auto}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
+}
+
+.logo{font-size:27px;font-weight:bold}
+.logo span{color:#38bdf8}
+
+.btn{
+  border:0;
+  padding:12px 18px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.card{
+  background:#111a2d;
+  border:1px solid #26334d;
+  border-radius:16px;
+  padding:28px;
+  margin-bottom:25px;
+}
+
+h2{margin-bottom:8px}
+.subtitle{color:#94a3b8;margin-bottom:25px;font-size:14px}
+
+label{
+  display:block;
+  margin:16px 0 8px;
+  font-size:14px;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  background:#080d1b;
+  border:1px solid #334155;
+  border-radius:8px;
+  color:white;
+  outline:none;
+}
+
+input:focus{border-color:#38bdf8}
+
+input:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.message{
+  margin-top:15px;
+  color:#38bdf8;
+  font-size:14px;
+}
+
+.danger{background:#991b1b}
+
+.back{
+  display:inline-block;
+  margin-top:10px;
+  color:#38bdf8;
+  text-decoration:none;
+}
+
+@media(max-width:600px){
+  body{padding:15px}
+  .grid{grid-template-columns:1fr}
+  .card{padding:20px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">KK <span>World</span></div>
+    <a href="dashboard.html" class="btn">Dashboard →</a>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="card">
+
+    <h2>👤 My Profile</h2>
+    <p class="subtitle">Manage your personal information.</p>
+
+    <form id="profileForm">
+
+      <div class="grid">
+        <div>
+          <label>Full Name</label>
+          <input id="name" required maxlength="80">
+        </div>
+
+        <div>
+          <label>Mobile Number</label>
+          <input id="mobile" type="tel" inputmode="numeric"
+          maxlength="10" pattern="[0-9]{10}" required>
+        </div>
+      </div>
+
+      <label>User ID</label>
+      <input id="userId" disabled>
+
+      <label>Organization</label>
+      <input id="organization" maxlength="100">
+
+      <button class="btn" type="submit" style="margin-top:22px">
+        Save Profile
+      </button>
+
+      <p class="message" id="profileMessage"></p>
+
+    </form>
+
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="card">
+
+    <h2>🔐 Change Password</h2>
+    <p class="subtitle">Update your account password.</p>
+
+    <form id="passwordForm">
+
+      <label>Current Password</label>
+      <input id="currentPassword" type="password" required>
+
+      <label>New Password</label>
+      <input id="newPassword" type="password" minlength="8" required>
+
+      <label>Confirm New Password</label>
+      <input id="confirmPassword" type="password" minlength="8" required>
+
+      <button class="btn" type="submit" style="margin-top:22px">
+        Change Password
+      </button>
+
+      <p class="message" id="passwordMessage"></p>
+
+    </form>
+
+  </div>
+
+  <!-- ACCOUNT -->
+  <div class="card">
+
+    <h2>📋 Account Information</h2>
+    <p class="subtitle">Your KK World account details.</p>
+
+    <p style="margin:12px 0">
+      <strong>User ID:</strong> <span id="accountId"></span>
+    </p>
+
+    <p style="margin:12px 0">
+      <strong>Account Type:</strong> Standard User
+    </p>
+
+    <button class="btn danger" onclick="logout()" style="margin-top:20px">
+      Logout
+    </button>
+
+  </div>
+
+  <a href="dashboard.html" class="back">← Back to Dashboard</a>
+
+</div>
+
+<script>
+const user = JSON.parse(
+  sessionStorage.getItem("kkworldUser") || "null"
+);
+
+if (!user || !user.userId) {
+  window.location.href = "login.html";
+}
+
+// Fill profile
+if (user && user.userId) {
+  document.getElementById("name").value = user.name || "";
+  document.getElementById("mobile").value = user.mobile || "";
+  document.getElementById("organization").value = user.organization || "";
+  document.getElementById("userId").value = user.userId;
+  document.getElementById("accountId").textContent = user.userId;
+}
+
+// Find saved account
+function getAccounts(){
+  return JSON.parse(localStorage.getItem("kkworldUsers") || "[]");
+}
+
+function saveAccounts(accounts){
+  localStorage.setItem("kkworldUsers", JSON.stringify(accounts));
+}
+
+// Save profile
+document.getElementById("profileForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const mobile = document.getElementById("mobile").value.trim();
+  const organization = document.getElementById("organization").value.trim();
+
+  if(!/^[0-9]{10}$/.test(mobile)){
+    document.getElementById("profileMessage").textContent =
+      "Enter a valid 10-digit mobile number.";
+    return;
+  }
+
+  user.name = name;
+  user.mobile = mobile;
+  user.organization = organization;
+
+  sessionStorage.setItem("kkworldUser", JSON.stringify(user));
+
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.userId === user.userId);
+
+  if(account){
+    account.name = name;
+    account.mobile = mobile;
+    account.organization = organization;
+    saveAccounts(accounts);
+  }
+
+  document.getElementById("profileMessage").textContent =
+    "Profile updated successfully!";
+
+});
+
+// Change password
+document.getElementById("passwordForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const current = document.getElementById("currentPassword").value;
+  const newPass = document.getElementById("newPassword").value;
+  const confirm = document.getElementById("confirmPassword").value;
+  const message = document.getElementById("passwordMessage");
+
+  if(newPass.length < 8){
+    message.textContent = "Password must be at least 8 characters.";
+    return;
+  }
+
+  if(newPass !== confirm){
+    message.textContent = "New passwords do not match.";
+    return;
+  }
+
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.userId === user.userId);
+
+  if(!account){
+    message.textContent =
+      "Account record not found. Password change is unavailable.";
+    return;
+  }
+
+  if(account.password !== current){
+    message.textContent = "Current password is incorrect.";
+    return;
+  }
+
+  account.password = newPass;
+  saveAccounts(accounts);
+
+  message.textContent = "Password updated successfully!";
+
+  document.getElementById("passwordForm").reset();
+});
+
+// Logout
+function logout(){
+  sessionStorage.removeItem("kkworldUser");
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
