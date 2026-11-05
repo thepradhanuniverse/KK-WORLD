@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KK_WORLD | Everything. Connected.</title>
+
+<meta name="description" content="KK_WORLD - A powerful all-in-one digital platform for smarter management and productivity.">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #080d1b;
+  --card: #111a2d;
+  --blue: #5865f2;
+  --cyan: #38bdf8;
+  --white: #f8fafc;
+  --muted: #94a3b8;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  line-height: 1.6;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 8%;
+  border-bottom: 1px solid #1e293b;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: var(--cyan);
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-links a {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.nav-links a:hover {
+  color: white;
+}
+
+.btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #5865f2, #2563eb);
+  padding: 13px 23px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px #5865f244;
+}
+
+.hero {
+  text-align: center;
+  padding: 110px 20px 90px;
+  background:
+    radial-gradient(ellipse at top, #182652 0%, transparent 65%);
+}
+
+.badge {
+  display: inline-block;
+  padding: 7px 16px;
+  border: 1px solid #334155;
+  border-radius: 50px;
+  color: var(--cyan);
+  font-size: 13px;
+  margin-bottom: 25px;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 7vw, 76px);
+  line-height: 1.1;
+  letter-spacing: -3px;
+  max-width: 850px;
+  margin: auto;
+}
+
+.hero h1 span {
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  max-width: 650px;
+  margin: 25px auto 35px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.section {
+  padding: 75px 8%;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-title h2 {
+  font-size: 38px;
+  margin-bottom: 12px;
+}
+
+.section-title p {
+  color: var(--muted);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.card {
+  background: linear-gradient(145deg, #111a2d, #0c1322);
+  border: 1px solid #243047;
+  padding: 30px;
+  border-radius: 18px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: #5865f2;
+}
+
+.icon {
+  font-size: 32px;
+  margin-bottom: 18px;
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  font-size: 21px;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.about {
+  background: #0c1322;
+  text-align: center;
+  padding: 75px 20px;
+}
+
+.about p {
+  max-width: 700px;
+  margin: 20px auto;
+  color: var(--muted);
+}
+
+.cta {
+  text-align: center;
+  padding: 85px 20px;
+}
+
+.cta h2 {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.cta p {
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+
+footer {
+  padding: 30px 8%;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: 550px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    letter-spacing: -1px;
+  }
+
+  .section-title h2,
+  .cta h2 {
+    font-size: 30px;
+  }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="#" class="logo">KK<span>_WORLD</span></a>
+
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <a href="#contact" class="btn">Get Started</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="badge">THE FUTURE OF DIGITAL MANAGEMENT</div>
+
+  <h1>
+    Everything You Need.<br>
+    <span>All in One World.</span>
+  </h1>
+
+  <p>
+    Discover a smarter way to manage, organize and grow.
+    KK_WORLD brings powerful digital solutions together
+    in one modern platform.
+  </p>
+
+  <a href="#features" class="btn">Explore Platform →</a>
+</section>
+
+<section class="section" id="features">
+
+  <div class="section-title">
+    <h2>One Platform. Endless Possibilities.</h2>
+    <p>Powerful tools designed to simplify your digital world.</p>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="icon">🎓</div>
+      <h3>Education Management</h3>
+      <p>Manage student records, school operations and educational workflows.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🪪</div>
+      <h3>ID Card Generator</h3>
+      <p>Create professional identity cards with modern templates and smart tools.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🏢</div>
+      <h3>Organization Management</h3>
+      <p>Manage organizations, teams and digital operations efficiently.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>Smart Automation</h3>
+      <p>Save time with intelligent workflows and productivity solutions.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>Advanced Dashboard</h3>
+      <p>Access important information through a centralized workspace.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>More Coming Soon</h3>
+      <p>A growing ecosystem of powerful tools built for the future.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="about" id="about">
+  <h2>Welcome to KK_WORLD</h2>
+
+  <p>
+    Our vision is to create a powerful digital ecosystem
+    where organizations, businesses and individuals can
+    access innovative tools through one connected platform.
+  </p>
+</section>
+
+<section class="cta" id="contact">
+  <h2>Ready to Explore KK_WORLD?</h2>
+  <p>Your smarter digital experience starts here.</p>
+  <a href="mailto:contact@example.com" class="btn">Contact Us →</a>
+</section>
+
+<footer>
+  <div>© 2026 KK_WORLD. All rights reserved.</div>
+  <div>Built for a smarter digital future.</div>
+</footer>
+
+</body>
+</html>
