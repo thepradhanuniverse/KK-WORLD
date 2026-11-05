@@ -1,0 +1,152 @@
+
+/* KK WORLD - PREMIUM DESIGN SYSTEM */
+
+:root {
+  --primary: #5865f2;
+  --secondary: #38bdf8;
+  --background: #080d1b;
+  --surface: #111a2d;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: var(--background);
+  color: var(--text);
+}
+
+/* PREMIUM NAVIGATION */
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  background: rgba(8, 13, 27, 0.85);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* PREMIUM BUTTONS */
+
+.btn {
+  background: linear-gradient(135deg, #5865f2, #2563eb);
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(88,101,242,0.2);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 35px rgba(88,101,242,0.35);
+}
+
+/* HERO SECTION */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgba(88,101,242,0.12);
+  filter: blur(120px);
+  border-radius: 50%;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+}
+
+.hero p {
+  line-height: 1.8;
+}
+
+/* FEATURE CARDS */
+
+.card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    rgba(17,26,45,0.95),
+    rgba(8,13,27,0.95)
+  );
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.35s ease,
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(56,189,248,0.5);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.icon {
+  background: linear-gradient(
+    135deg,
+    rgba(88,101,242,0.2),
+    rgba(56,189,248,0.1)
+  );
+  border: 1px solid rgba(56,189,248,0.15);
+}
+
+/* SECTION ANIMATIONS */
+
+.section-title h2 {
+  letter-spacing: -1.5px;
+}
+
+.about {
+  background: linear-gradient(
+    180deg,
+    #0c1322,
+    #080d1b
+  );
+}
+
+/* FOOTER */
+
+footer {
+  background: #060a14;
+}
+
+/* MOBILE RESPONSIVENESS */
+
+@media (max-width: 768px) {
+  nav {
+    padding: 18px 5%;
+  }
+
+  .hero {
+    padding: 80px 20px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 25px;
+  }
+}
