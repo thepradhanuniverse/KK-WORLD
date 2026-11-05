@@ -10,142 +10,197 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-body {
-  min-height: 100vh;
-  background: #080d1b;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-.dashboard {
-  display: flex;
-  min-height: 100vh;
+body{
+  background:#080d1b;
+  color:#f8fafc;
+  font-family:Inter,Arial,sans-serif;
 }
 
-.sidebar {
-  width: 250px;
-  padding: 30px 20px;
-  background: #0c1322;
-  border-right: 1px solid #243047;
+.dashboard{
+  display:flex;
+  min-height:100vh;
 }
 
-.sidebar h2 {
-  margin-bottom: 35px;
+.sidebar{
+  width:250px;
+  background:#0c1322;
+  border-right:1px solid rgba(255,255,255,.08);
+  padding:30px 20px;
+  flex-shrink:0;
 }
 
-.sidebar h2 span {
-  color: #38bdf8;
+.logo{
+  font-size:25px;
+  font-weight:bold;
+  margin-bottom:40px;
 }
 
-.sidebar a {
-  display: block;
-  padding: 13px 15px;
-  color: #94a3b8;
-  border-radius: 10px;
-  margin-bottom: 8px;
+.logo span{
+  color:#38bdf8;
+}
+
+.sidebar a{
+  display:block;
+  padding:14px;
+  margin-bottom:8px;
+  color:#94a3b8;
+  text-decoration:none;
+  border-radius:10px;
+  transition:.3s;
 }
 
 .sidebar a:hover,
-.sidebar a.active {
-  background: #182652;
-  color: white;
+.sidebar a.active{
+  background:#17243b;
+  color:#38bdf8;
 }
 
-.main {
-  flex: 1;
-  padding: 35px;
+.main{
+  flex:1;
+  padding:35px;
+  min-width:0;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-  gap: 20px;
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:35px;
 }
 
-.header p {
-  color: #94a3b8;
+.topbar h1{
+  font-size:30px;
 }
 
-.welcome {
-  padding: 35px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #182652, #111a2d);
-  border: 1px solid #243047;
-  margin-bottom: 35px;
+.btn{
+  display:inline-block;
+  padding:12px 20px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  transition:.3s;
 }
 
-.welcome h1 {
-  font-size: 35px;
-  margin-bottom: 10px;
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px #5865f244;
 }
 
-.welcome p {
-  color: #cbd5e1;
+.welcome{
+  padding:35px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#172554,#111a2d);
+  border:1px solid #26334d;
+  margin-bottom:35px;
 }
 
-.tools {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+.welcome h2{
+  font-size:28px;
+  margin-bottom:12px;
 }
 
-.tool-card {
-  background: #111a2d;
-  border: 1px solid #243047;
-  padding: 25px;
-  border-radius: 16px;
-  transition: 0.3s;
+.welcome p{
+  color:#cbd5e1;
+  line-height:1.7;
 }
 
-.tool-card:hover {
-  transform: translateY(-5px);
-  border-color: #5865f2;
+.section-title{
+  margin-bottom:20px;
 }
 
-.tool-card .icon {
-  font-size: 30px;
+.apps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
 }
 
-.tool-card p {
-  color: #94a3b8;
-  margin: 10px 0 20px;
+.card{
+  background:#111a2d;
+  border:1px solid #26334d;
+  border-radius:16px;
+  padding:25px;
+  transition:.3s;
 }
 
-.tool-card a {
-  color: #38bdf8;
-  font-weight: bold;
+.card:hover{
+  transform:translateY(-5px);
+  border-color:#38bdf8;
 }
 
-@media(max-width: 900px) {
-  .tools {
-    grid-template-columns: repeat(2, 1fr);
+.card-icon{
+  font-size:35px;
+  margin-bottom:18px;
+}
+
+.card h3{
+  font-size:20px;
+  margin-bottom:12px;
+}
+
+.card p{
+  color:#94a3b8;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.card a{
+  color:#38bdf8;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.card a:hover{
+  color:#7dd3fc;
+}
+
+footer{
+  margin-top:40px;
+  color:#64748b;
+  font-size:13px;
+}
+
+@media(max-width:768px){
+  .dashboard{
+    flex-direction:column;
   }
-}
 
-@media(max-width: 650px) {
-  .dashboard {
-    flex-direction: column;
+  .sidebar{
+    width:100%;
+    padding:20px;
+    border-right:none;
+    border-bottom:1px solid #26334d;
   }
 
-  .sidebar {
-    width: 100%;
+  .logo{
+    margin-bottom:20px;
   }
 
-  .sidebar a {
-    display: inline-block;
+  .sidebar a{
+    display:inline-block;
+    margin:3px;
+    padding:10px;
   }
 
-  .main {
-    padding: 20px;
+  .main{
+    padding:20px;
   }
 
-  .tools {
-    grid-template-columns: 1fr;
+  .topbar h1{
+    font-size:25px;
   }
 
-  .header {
-    align-items: flex-start;
-    flex-direction: column;
+  .welcome{
+    padding:25px;
   }
 }
 </style>
@@ -155,78 +210,132 @@ body {
 
 <div class="dashboard">
 
+  <!-- SIDEBAR -->
   <aside class="sidebar">
 
-    <h2>KK<span> World</span></h2>
+    <div class="logo">
+      KK <span>World</span>
+    </div>
 
     <a href="dashboard.html" class="active">🏠 Dashboard</a>
-
-    <a href="#tools">🛠️ Applications</a>
-
+    <a href="#applications">📦 Applications</a>
     <a href="index.html">🌐 Main Website</a>
-
     <a href="#settings">⚙️ Settings</a>
 
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="main">
 
-    <div class="header">
-
-      <div>
-        <h2>Dashboard</h2>
-        <p>Welcome to your KK World workspace.</p>
-      </div>
-
-      <a href="index.html" class="btn">Visit Website</a>
-
+    <div class="topbar">
+      <h1>Dashboard</h1>
+      <a href="index.html" class="btn">Visit Website ↗</a>
     </div>
 
+    <!-- WELCOME -->
     <section class="welcome">
-
-      <h1>Welcome to KK World 🚀</h1>
-
+      <h2>Welcome to KK World 🚀</h2>
       <p>
-        Your digital workspace for powerful tools,
-        smarter management and productivity.
+        Your digital workspace for smart tools, applications,
+        education management and organization solutions.
       </p>
-
     </section>
 
-    <section id="tools">
+    <!-- APPLICATIONS -->
+    <section id="applications">
 
-      <h2 style="margin-bottom:25px;">Your Applications</h2>
+      <div class="section-title">
+        <h2>Our Applications</h2>
+        <p style="color:#94a3b8;margin-top:8px">
+          Explore the tools available in KK World.
+        </p>
+      </div>
 
-      <div class="tools">
+      <div class="apps">
 
-        <div class="tool-card">
-          <div class="icon">🪪</div>
+        <!-- ID CARD GENERATOR -->
+        <div class="card">
+          <div class="card-icon">🪪</div>
           <h3>ID Card Generator</h3>
-          <p>Create professional student and organization ID cards.</p>
-          <a href="#">Open Application →</a>
+          <p>
+            Create professional identity cards with photos,
+            personal details and printable ID card previews.
+          </p>
+          <a href="id-card-generator.html">
+            Open Application →
+          </a>
         </div>
 
-        <div class="tool-card">
-          <div class="icon">🎓</div>
+        <!-- EDUCATION MANAGEMENT -->
+        <div class="card">
+          <div class="card-icon">🎓</div>
           <h3>Education Management</h3>
-          <p>Manage student records and educational operations.</p>
-          <a href="#">Coming Soon</a>
+          <p>
+            Manage educational information, student records
+            and academic activities.
+          </p>
+          <a href="#" onclick="comingSoon(event)">
+            Coming Soon →
+          </a>
         </div>
 
-        <div class="tool-card">
-          <div class="icon">🏢</div>
+        <!-- ORGANIZATION MANAGEMENT -->
+        <div class="card">
+          <div class="card-icon">🏢</div>
           <h3>Organization Management</h3>
-          <p>Manage organization information and workflows.</p>
-          <a href="#">Coming Soon</a>
+          <p>
+            Organize employees, members, departments
+            and organization information.
+          </p>
+          <a href="#" onclick="comingSoon(event)">
+            Coming Soon →
+          </a>
+        </div>
+
+        <!-- SMART AUTOMATION -->
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>Smart Automation</h3>
+          <p>
+            Discover smart digital tools and automation
+            features for your daily workflow.
+          </p>
+          <a href="#" onclick="comingSoon(event)">
+            Coming Soon →
+          </a>
+        </div>
+
+        <!-- MORE TOOLS -->
+        <div class="card">
+          <div class="card-icon">🛠️</div>
+          <h3>More Applications</h3>
+          <p>
+            More useful digital tools and applications
+            will be added to KK World.
+          </p>
+          <a href="#" onclick="comingSoon(event)">
+            Coming Soon →
+          </a>
         </div>
 
       </div>
 
     </section>
+
+    <footer>
+      © 2026 KK World. All rights reserved.
+    </footer>
 
   </main>
 
 </div>
+
+<script>
+function comingSoon(event){
+  event.preventDefault();
+  alert("This application is coming soon!");
+}
+</script>
 
 </body>
 </html>
