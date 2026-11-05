@@ -15,244 +15,223 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* Navigation */
-
 nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 7%;
+  flex-wrap:wrap;
+  gap:15px;
 }
 
 .logo {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -1px;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-1px;
 }
 
-.logo span {
-  color: #38bdf8;
-}
+.logo span {color:#38bdf8}
 
 .nav-links {
-  display: flex;
-  gap: 30px;
+  display:flex;
+  gap:30px;
 }
 
 .nav-links a {
-  color: #94a3b8;
-  transition: 0.3s;
+  color:#94a3b8;
+  transition:.3s;
 }
 
-.nav-links a:hover {
-  color: #38bdf8;
-}
-
-/* Buttons */
+.nav-links a:hover {color:#38bdf8}
 
 .btn {
-  display: inline-block;
-  padding: 13px 24px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #5865f2, #2563eb);
-  color: white;
-  font-weight: 700;
-  transition: 0.3s;
+  display:inline-block;
+  padding:13px 24px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  font-weight:700;
+  transition:.3s;
 }
 
-.btn:hover {
-  transform: translateY(-3px);
-}
+.btn:hover {transform:translateY(-3px)}
 
 .btn-outline {
-  display: inline-block;
-  padding: 13px 24px;
-  border: 1px solid #334155;
-  border-radius: 10px;
-  margin-left: 10px;
-  color: white;
+  display:inline-block;
+  padding:13px 24px;
+  border:1px solid #334155;
+  border-radius:10px;
+  margin-left:10px;
+  color:white;
+}
+
+.auth-btn {
+  display:inline-block;
+  padding:11px 20px;
+  border:1px solid #38bdf8;
+  border-radius:10px;
+  color:#38bdf8;
+  font-weight:bold;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.auth-btn:hover {
+  background:#38bdf8;
+  color:#080d1b;
 }
 
 /* Hero */
 
 .hero {
-  text-align: center;
-  padding: 120px 20px;
+  text-align:center;
+  padding:120px 20px;
 }
 
 .badge {
-  display: inline-block;
-  border: 1px solid #334155;
-  padding: 8px 18px;
-  border-radius: 50px;
-  color: #38bdf8;
-  font-size: 12px;
-  letter-spacing: 1px;
-  margin-bottom: 25px;
+  display:inline-block;
+  border:1px solid #334155;
+  padding:8px 18px;
+  border-radius:50px;
+  color:#38bdf8;
+  font-size:12px;
+  letter-spacing:1px;
+  margin-bottom:25px;
 }
 
 .hero h1 {
-  font-size: clamp(42px, 7vw, 80px);
-  line-height: 1.1;
-  max-width: 900px;
-  margin: auto;
+  font-size:clamp(42px,7vw,80px);
+  line-height:1.1;
+  max-width:900px;
+  margin:auto;
 }
 
 .hero h1 span {
-  background: linear-gradient(90deg, #60a5fa, #a78bfa);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background:linear-gradient(90deg,#60a5fa,#a78bfa);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
 
 .hero p {
-  max-width: 650px;
-  margin: 25px auto 35px;
-  color: #94a3b8;
-  font-size: 18px;
+  max-width:650px;
+  margin:25px auto 35px;
+  color:#94a3b8;
+  font-size:18px;
 }
 
 /* Sections */
 
-.section {
-  padding: 90px 7%;
-}
+.section {padding:90px 7%}
 
 .section-title {
-  text-align: center;
-  margin-bottom: 50px;
+  text-align:center;
+  margin-bottom:50px;
 }
 
-.section-title h2 {
-  font-size: 40px;
-}
+.section-title h2 {font-size:40px}
 
-.section-title p {
-  color: #94a3b8;
-}
+.section-title p {color:#94a3b8}
 
-/* Feature cards */
+/* Cards */
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
 }
 
 .card {
-  padding: 30px;
-  border-radius: 18px;
+  padding:30px;
+  border-radius:18px;
 }
 
-.card h3 {
-  font-size: 21px;
-}
+.card h3 {font-size:21px}
 
 .card p {
-  color: #94a3b8;
-  font-size: 15px;
+  color:#94a3b8;
+  font-size:15px;
 }
 
 .icon {
-  font-size: 30px;
-  margin-bottom: 15px;
+  font-size:30px;
+  margin-bottom:15px;
 }
 
 /* About */
 
 .about {
-  text-align: center;
-  padding: 90px 20px;
+  text-align:center;
+  padding:90px 20px;
 }
 
-.about h2 {
-  font-size: 38px;
-}
+.about h2 {font-size:38px}
 
 .about p {
-  max-width: 750px;
-  margin: auto;
-  color: #94a3b8;
+  max-width:750px;
+  margin:auto;
+  color:#94a3b8;
 }
 
 /* CTA */
 
 .cta {
-  text-align: center;
-  padding: 90px 20px;
+  text-align:center;
+  padding:90px 20px;
 }
 
-.cta h2 {
-  font-size: 40px;
-}
+.cta h2 {font-size:40px}
 
 .cta p {
-  color: #94a3b8;
-  margin-bottom: 30px;
+  color:#94a3b8;
+  margin-bottom:30px;
 }
 
 /* Footer */
 
 footer {
-  padding: 30px 7%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
+  padding:30px 7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:20px;
 }
 
 .footer-logo {
-  font-size: 22px;
-  font-weight: 800;
-  color: white;
+  font-size:22px;
+  font-weight:800;
+  color:white;
 }
 
-.footer-logo span {
-  color: #38bdf8;
-}
+.footer-logo span {color:#38bdf8}
 
 /* Mobile */
 
-@media (max-width: 768px) {
+@media(max-width:768px) {
+  nav {padding:18px 5%}
 
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .nav-links {display:none}
 
-  .nav-links {
-    display: none;
-  }
+  .hero {padding:80px 20px}
 
-  .hero {
-    padding: 80px 20px;
-  }
-
+  .cards {grid-template-columns:repeat(2,1fr)}
 }
 
-@media (max-width: 500px) {
+@media(max-width:500px) {
+  .cards {grid-template-columns:1fr}
 
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
-  .hero h1 {
-    letter-spacing: -1px;
-  }
+  .hero h1 {letter-spacing:-1px}
 
   .section-title h2,
-  .cta h2 {
-    font-size: 30px;
-  }
+  .cta h2 {font-size:30px}
 
   footer {
-    flex-direction: column;
-    text-align: center;
+    flex-direction:column;
+    text-align:center;
   }
-
 }
 </style>
-
 </head>
 
 <body>
@@ -272,9 +251,17 @@ footer {
     <a href="#contact">Contact</a>
   </div>
 
-  <a href="#features" class="btn">
-    Explore Platform
-  </a>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+
+    <a href="login.html" class="auth-btn">
+      Login / Signup
+    </a>
+
+    <a href="dashboard.html" class="btn">
+      Dashboard →
+    </a>
+
+  </div>
 
 </nav>
 
@@ -339,6 +326,9 @@ footer {
         Create professional identity cards with
         modern templates and smart tools.
       </p>
+      <a href="id-card-generator.html" class="auth-btn">
+        Open Generator →
+      </a>
     </div>
 
     <div class="card">
@@ -366,6 +356,9 @@ footer {
         Access important information through
         a centralized workspace.
       </p>
+      <a href="dashboard.html" class="auth-btn">
+        Open Dashboard →
+      </a>
     </div>
 
     <div class="card">
@@ -406,8 +399,8 @@ footer {
     Your smarter digital experience starts here.
   </p>
 
-  <a href="mailto:contact@example.com" class="btn">
-    Contact Us →
+  <a href="login.html" class="btn">
+    Create Your Account →
   </a>
 
 </section>
