@@ -4,63 +4,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KK World | ID Card Generator</title>
+
+<title>KK World | Professional ID Card Generator</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
+:root{
+  --bg:#080d1b;
+  --surface:#111a2d;
+  --border:#26334d;
+  --blue:#2563eb;
+  --cyan:#38bdf8;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+}
+
 body{
   font-family:Arial,sans-serif;
-  background:#080d1b;
-  color:#f8fafc;
+  background:var(--bg);
+  color:var(--text);
   padding:25px;
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-}
+.container{max-width:1250px;margin:auto}
 
 header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:30px;
-  flex-wrap:wrap;
   gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
 }
 
 header h1{font-size:28px}
-header a{color:#38bdf8;text-decoration:none}
+header span{color:var(--cyan)}
+header a{color:var(--cyan);text-decoration:none}
 
 .main{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:360px 1fr;
   gap:25px;
+  align-items:start;
 }
 
 .panel{
-  background:#111a2d;
+  background:var(--surface);
+  border:1px solid var(--border);
   padding:25px;
-  border:1px solid #26334d;
   border-radius:16px;
 }
 
-.panel h2{margin-bottom:20px}
+.panel h2{margin-bottom:20px;font-size:21px}
 
 label{
   display:block;
   margin:15px 0 7px;
   color:#cbd5e1;
+  font-size:14px;
 }
 
-input,select{
+input,select,textarea{
   width:100%;
   padding:12px;
   border-radius:8px;
   border:1px solid #334155;
   background:#080d1b;
   color:white;
+  font:inherit;
+}
+
+textarea{resize:vertical;min-height:70px}
+
+input:focus,select:focus,textarea:focus{
+  outline:1px solid var(--cyan);
+  border-color:var(--cyan);
 }
 
 button{
@@ -77,37 +96,67 @@ button{
   color:white;
 }
 
-.secondary{
-  background:#26334d;
-  color:white;
+.secondary{background:#26334d;color:white}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions button{flex:1}
+
+.preview-panel{min-width:0}
+
+.preview-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
 }
+
+.preview-toolbar select{max-width:220px}
 
 .card-wrap{
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:400px;
+  min-height:450px;
+  padding:20px;
+  background:#080d1b;
+  border:1px solid #26334d;
+  border-radius:14px;
+  overflow:auto;
 }
 
+/* ID CARD */
+
 .id-card{
-  width:340px;
-  min-height:215px;
+  width:350px;
+  min-height:220px;
   background:white;
   color:#172033;
   border-radius:12px;
   overflow:hidden;
   box-shadow:0 15px 40px #0006;
+  flex-shrink:0;
+  font-family:Arial,sans-serif;
+  position:relative;
 }
 
+.id-card.landscape{width:420px;min-height:260px}
+
 .card-header{
-  background:linear-gradient(135deg,#5865f2,#2563eb);
+  background:linear-gradient(135deg,#1d4ed8,#38bdf8);
   color:white;
   text-align:center;
   padding:15px;
 }
 
-.card-header h3{font-size:20px}
-.card-header p{font-size:11px;margin-top:5px}
+.card-header h3{
+  font-size:19px;
+  text-transform:uppercase;
+  overflow-wrap:anywhere;
+}
+
+.card-header p{font-size:10px;margin-top:5px;letter-spacing:2px}
 
 .card-content{
   display:flex;
@@ -120,14 +169,16 @@ button{
   width:90px;
   height:110px;
   object-fit:cover;
-  border:2px solid #5865f2;
+  border:2px solid #2563eb;
   border-radius:6px;
+  flex-shrink:0;
 }
 
 .details{
-  font-size:12px;
+  font-size:11px;
   line-height:1.8;
   overflow-wrap:anywhere;
+  min-width:0;
 }
 
 .details strong{
@@ -135,6 +186,7 @@ button{
   font-size:16px;
   color:#2563eb;
   margin-bottom:5px;
+  text-transform:uppercase;
 }
 
 .card-footer{
@@ -145,18 +197,103 @@ button{
   color:#475569;
 }
 
-@media(max-width:800px){
-  .main{grid-template-columns:1fr}
-  body{padding:15px}
+.id-card.theme-green .card-header{
+  background:linear-gradient(135deg,#047857,#10b981);
+}
+.id-card.theme-green .photo{border-color:#059669}
+.id-card.theme-green .details strong{color:#047857}
+
+.id-card.theme-red .card-header{
+  background:linear-gradient(135deg,#991b1b,#ef4444);
+}
+.id-card.theme-red .photo{border-color:#dc2626}
+.id-card.theme-red .details strong{color:#b91c1c}
+
+.id-card.theme-gold .card-header{
+  background:linear-gradient(135deg,#854d0e,#eab308);
+}
+.id-card.theme-gold .photo{border-color:#ca8a04}
+.id-card.theme-gold .details strong{color:#a16207}
+
+.id-card.theme-purple .card-header{
+  background:linear-gradient(135deg,#581c87,#a855f7);
+}
+.id-card.theme-purple .photo{border-color:#9333ea}
+.id-card.theme-purple .details strong{color:#7e22ce}
+
+.id-card.portrait{
+  width:300px;
+  min-height:390px;
 }
 
+.id-card.portrait .card-content{
+  flex-direction:column;
+  text-align:center;
+}
+
+.id-card.portrait .photo{
+  width:110px;
+  height:130px;
+}
+
+.id-card.portrait .details{text-align:left;width:100%}
+
+.status{
+  margin-top:15px;
+  font-size:13px;
+  color:var(--cyan);
+  line-height:1.5;
+}
+
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
+  .form-panel{order:1}
+  .preview-panel{order:2}
+}
+
+@media(max-width:500px){
+  body{padding:12px}
+  .panel{padding:16px}
+  .card-wrap{padding:10px;min-height:350px}
+  .id-card{transform-origin:center;max-width:100%}
+}
+
+/* PRINT */
+
 @media print{
-  body{background:white;padding:0}
-  header,.form-panel,.print-button{display:none!important}
-  .main{display:block}
-  .panel{background:white;border:none;padding:0}
-  .card-wrap{min-height:0}
-  .id-card{box-shadow:none;border:1px solid #ddd}
+  @page{size:auto;margin:10mm}
+
+  body{background:white;padding:0;color:black}
+
+  header,.form-panel,.preview-toolbar,.print-button,
+  .status,.panel>h2{
+    display:none!important;
+  }
+
+  .container,.main,.preview-panel,.panel{
+    display:block;
+    width:auto;
+    max-width:none;
+    margin:0;
+    padding:0;
+    border:0;
+    background:white;
+    box-shadow:none;
+  }
+
+  .card-wrap{
+    min-height:0;
+    padding:0;
+    border:0;
+    background:white;
+    overflow:visible;
+  }
+
+  .id-card{
+    box-shadow:none;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
 }
 </style>
 </head>
@@ -166,130 +303,324 @@ button{
 <div class="container">
 
 <header>
-  <h1>KK World <span style="color:#38bdf8">ID Generator</span></h1>
+  <h1>KK <span>World</span> | ID Card Generator</h1>
   <a href="dashboard.html">← Back to Dashboard</a>
 </header>
 
 <div class="main">
 
+<!-- FORM -->
+
 <section class="panel form-panel">
-  <h2>Enter ID Card Details</h2>
 
-  <label>Organization / School Name</label>
-  <input id="organization" placeholder="KK World Organization">
+<h2>Customize ID Card</h2>
 
-  <label>Full Name</label>
-  <input id="name" placeholder="Enter full name">
+<label>Card Type</label>
+<select id="cardType">
+  <option value="School ID">School ID Card</option>
+  <option value="College ID">College ID Card</option>
+  <option value="Employee ID">Company Employee ID</option>
+  <option value="Organization ID">Organization ID</option>
+  <option value="Member ID">Membership Card</option>
+</select>
 
-  <label>ID Number</label>
-  <input id="idNumber" placeholder="KKW-001">
+<label>Organization Name *</label>
+<input id="organization" placeholder="School / Company Name">
 
-  <label>Designation / Class</label>
-  <input id="designation" placeholder="Student / Employee">
+<label>Card Subtitle</label>
+<input id="subtitle" placeholder="IDENTITY CARD">
 
-  <label>Phone Number</label>
-  <input id="phone" placeholder="Phone number">
+<label>Full Name *</label>
+<input id="name" placeholder="Enter full name">
 
-  <label>Address</label>
-  <input id="address" placeholder="Enter address">
+<label>ID Number</label>
+<input id="idNumber" placeholder="Auto generated">
 
-  <label>Photo</label>
-  <input id="photoInput" type="file" accept="image/*">
+<label>Designation / Class</label>
+<input id="designation" placeholder="Student / Employee">
 
-  <button class="primary" onclick="updateCard()">Update ID Card</button>
+<label>Department</label>
+<input id="department" placeholder="Department / Branch">
+
+<label>Phone Number</label>
+<input id="phone" type="tel" placeholder="Phone number">
+
+<label>Date of Birth</label>
+<input id="dob" type="date">
+
+<label>Blood Group</label>
+<select id="blood">
+  <option value="">Not specified</option>
+  <option>A+</option><option>A-</option>
+  <option>B+</option><option>B-</option>
+  <option>AB+</option><option>AB-</option>
+  <option>O+</option><option>O-</option>
+</select>
+
+<label>Address</label>
+<textarea id="address" placeholder="Enter address"></textarea>
+
+<label>Photo</label>
+<input id="photoInput" type="file" accept="image/*">
+
+<label>Card Layout</label>
+<select id="layout">
+  <option value="landscape">Landscape</option>
+  <option value="portrait">Portrait</option>
+</select>
+
+<label>Card Theme</label>
+<select id="theme">
+  <option value="blue">Royal Blue</option>
+  <option value="green">Emerald Green</option>
+  <option value="red">Professional Red</option>
+  <option value="gold">Premium Gold</option>
+  <option value="purple">Royal Purple</option>
+</select>
+
+<div class="actions">
+  <button class="primary" onclick="updateCard()">Update Card</button>
   <button class="secondary" onclick="resetForm()">Reset</button>
+</div>
+
+<p class="status" id="status"></p>
+
 </section>
 
-<section class="panel">
+<!-- PREVIEW -->
+
+<section class="panel preview-panel">
+
+<div class="preview-toolbar">
   <h2>ID Card Preview</h2>
+  <select id="previewScale">
+    <option value="1">100% Preview</option>
+    <option value="0.9">90% Preview</option>
+    <option value="0.75">75% Preview</option>
+  </select>
+</div>
 
-  <div class="card-wrap">
-    <div class="id-card" id="idCard">
+<div class="card-wrap">
 
-      <div class="card-header">
-        <h3 id="previewOrg">KK WORLD</h3>
-        <p>IDENTITY CARD</p>
-      </div>
+<div class="id-card" id="idCard">
 
-      <div class="card-content">
-        <img id="previewPhoto" class="photo"
-          src="https://placehold.co/200x250/e2e8f0/64748b?text=PHOTO">
-
-        <div class="details">
-          <strong id="previewName">Your Name</strong>
-          <div>ID: <span id="previewId">KKW-001</span></div>
-          <div>Role: <span id="previewDesignation">Student / Employee</span></div>
-          <div>Phone: <span id="previewPhone">-</span></div>
-          <div id="previewAddress">Address: -</div>
-        </div>
-      </div>
-
-      <div class="card-footer">
-        KK WORLD • DIGITAL IDENTITY
-      </div>
-
-    </div>
+  <div class="card-header">
+    <h3 id="previewOrg">KK WORLD</h3>
+    <p id="previewSubtitle">IDENTITY CARD</p>
   </div>
 
-  <button class="primary print-button" onclick="window.print()">
-    🖨️ Print ID Card
-  </button>
+  <div class="card-content">
+
+    <img id="previewPhoto" class="photo"
+      src="https://placehold.co/200x250/e2e8f0/64748b?text=PHOTO"
+      alt="ID photo">
+
+    <div class="details">
+      <strong id="previewName">YOUR NAME</strong>
+
+      <div>ID: <span id="previewId">KKW-000001</span></div>
+      <div>Type: <span id="previewType">School ID</span></div>
+      <div>Role: <span id="previewDesignation">Student</span></div>
+      <div>Department: <span id="previewDepartment">-</span></div>
+      <div>Phone: <span id="previewPhone">-</span></div>
+      <div>DOB: <span id="previewDob">-</span></div>
+      <div>Blood: <span id="previewBlood">-</span></div>
+      <div id="previewAddress">Address: -</div>
+    </div>
+
+  </div>
+
+  <div class="card-footer">
+    KK WORLD • DIGITAL IDENTITY
+  </div>
+
+</div>
+
+</div>
+
+<div class="actions print-button">
+  <button class="primary" onclick="printCard()">🖨️ Print / Save PDF</button>
+  <button class="secondary" onclick="downloadCardInfo()">Download Details</button>
+</div>
+
 </section>
 
 </div>
 </div>
 
 <script>
+const $ = id => document.getElementById(id);
+
+let uploadedPhoto = "";
+let generatedId = "KKW-" + String(Date.now()).slice(-6);
+
+$("idNumber").value = generatedId;
+
 function updateCard(){
-  document.getElementById("previewOrg").textContent =
-    document.getElementById("organization").value || "KK WORLD";
 
-  document.getElementById("previewName").textContent =
-    document.getElementById("name").value || "Your Name";
+  $("previewOrg").textContent =
+    $("organization").value.trim() || "KK WORLD";
 
-  document.getElementById("previewId").textContent =
-    document.getElementById("idNumber").value || "KKW-001";
+  $("previewSubtitle").textContent =
+    $("subtitle").value.trim() || $("cardType").value.toUpperCase();
 
-  document.getElementById("previewDesignation").textContent =
-    document.getElementById("designation").value || "Student / Employee";
+  $("previewName").textContent =
+    $("name").value.trim() || "YOUR NAME";
 
-  document.getElementById("previewPhone").textContent =
-    document.getElementById("phone").value || "-";
+  $("previewId").textContent =
+    $("idNumber").value.trim() || generatedId;
 
-  document.getElementById("previewAddress").textContent =
-    "Address: " + (document.getElementById("address").value || "-");
+  $("previewType").textContent = $("cardType").value;
+
+  $("previewDesignation").textContent =
+    $("designation").value.trim() || "-";
+
+  $("previewDepartment").textContent =
+    $("department").value.trim() || "-";
+
+  $("previewPhone").textContent =
+    $("phone").value.trim() || "-";
+
+  $("previewDob").textContent =
+    $("dob").value || "-";
+
+  $("previewBlood").textContent =
+    $("blood").value || "-";
+
+  $("previewAddress").textContent =
+    "Address: " + ($("address").value.trim() || "-");
+
+  const card = $("idCard");
+
+  card.className = "id-card";
+
+  if($("layout").value === "portrait"){
+    card.classList.add("portrait");
+  }else{
+    card.classList.add("landscape");
+  }
+
+  card.classList.add("theme-" + $("theme").value);
+
+  $("status").textContent = "Preview updated successfully.";
 }
 
-document.querySelectorAll("input:not([type=file])").forEach(input=>{
-  input.addEventListener("input",updateCard);
+$("cardType").addEventListener("change",function(){
+  $("subtitle").value = this.value.toUpperCase();
+  updateCard();
 });
 
-document.getElementById("photoInput").addEventListener("change",function(){
-  const file=this.files[0];
+document.querySelectorAll(
+  "input:not([type=file]),select,textarea"
+).forEach(element=>{
+  element.addEventListener("input",updateCard);
+  element.addEventListener("change",updateCard);
+});
 
-  if(file){
-    if(!file.type.startsWith("image/")){
-      alert("Please select an image file.");
-      return;
-    }
+$("photoInput").addEventListener("change",function(){
 
-    const reader=new FileReader();
+  const file = this.files[0];
 
-    reader.onload=function(e){
-      document.getElementById("previewPhoto").src=e.target.result;
-    };
-
-    reader.readAsDataURL(file);
+  if(!file){
+    uploadedPhoto = "";
+    return;
   }
+
+  if(!file.type.startsWith("image/")){
+    alert("Please select a valid image file.");
+    this.value = "";
+    return;
+  }
+
+  if(file.size > 5 * 1024 * 1024){
+    alert("Please select an image smaller than 5 MB.");
+    this.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(event){
+    uploadedPhoto = event.target.result;
+    $("previewPhoto").src = uploadedPhoto;
+    $("status").textContent = "Photo uploaded successfully.";
+  };
+
+  reader.readAsDataURL(file);
 });
 
-function resetForm(){
-  document.querySelectorAll("input").forEach(input=>input.value="");
+$("previewScale").addEventListener("change",function(){
+  $("idCard").style.transform = "scale(" + this.value + ")";
+});
 
-  document.getElementById("previewPhoto").src=
-    "https://placehold.co/200x250/e2e8f0/64748b?text=PHOTO";
+function printCard(){
+
+  if(!$("name").value.trim()){
+    alert("Please enter the person's name first.");
+    $("name").focus();
+    return;
+  }
 
   updateCard();
+  window.print();
+}
+
+function resetForm(){
+
+  document.querySelectorAll(
+    "input:not([type=file]),select,textarea"
+  ).forEach(element=>element.value="");
+
+  $("cardType").value="School ID";
+  $("layout").value="landscape";
+  $("theme").value="blue";
+  $("previewScale").value="1";
+
+  generatedId="KKW-"+String(Date.now()).slice(-6);
+  $("idNumber").value=generatedId;
+
+  $("photoInput").value="";
+  uploadedPhoto="";
+
+  $("previewPhoto").src=
+    "https://placehold.co/200x250/e2e8f0/64748b?text=PHOTO";
+
+  $("idCard").style.transform="scale(1)";
+
+  updateCard();
+  $("status").textContent="Form reset successfully.";
+}
+
+function downloadCardInfo(){
+
+  if(!$("name").value.trim()){
+    alert("Please enter the person's name first.");
+    return;
+  }
+
+  const info = [
+    "KK WORLD ID CARD DETAILS",
+    "Organization: " + $("organization").value,
+    "Name: " + $("name").value,
+    "ID: " + $("idNumber").value,
+    "Card Type: " + $("cardType").value,
+    "Designation: " + $("designation").value,
+    "Department: " + $("department").value,
+    "Phone: " + $("phone").value,
+    "Date of Birth: " + $("dob").value,
+    "Blood Group: " + $("blood").value,
+    "Address: " + $("address").value
+  ].join("\n");
+
+  const blob = new Blob([info],{type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href=url;
+  link.download="KK-World-ID-Details.txt";
+  link.click();
+
+  URL.revokeObjectURL(url);
 }
 
 updateCard();
