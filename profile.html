@@ -114,7 +114,6 @@ input:disabled{
     <a href="dashboard.html" class="btn">Dashboard →</a>
   </div>
 
-  <!-- PROFILE -->
   <div class="card">
 
     <h2>👤 My Profile</h2>
@@ -151,7 +150,6 @@ input:disabled{
 
   </div>
 
-  <!-- PASSWORD -->
   <div class="card">
 
     <h2>🔐 Change Password</h2>
@@ -178,7 +176,6 @@ input:disabled{
 
   </div>
 
-  <!-- ACCOUNT -->
   <div class="card">
 
     <h2>📋 Account Information</h2>
@@ -203,35 +200,57 @@ input:disabled{
 </div>
 
 <script>
-const user = JSON.parse(
-  sessionStorage.getItem("kkworldUser") || "null"
-);
-
-if (!user || !user.userId) {
-  window.location.href = "login.html";
-}
-
-// Fill profile
-if (user && user.userId) {
-  document.getElementById("name").value = user.name || "";
-  document.getElementById("mobile").value = user.mobile || "";
-  document.getElementById("organization").value = user.organization || "";
-  document.getElementById("userId").value = user.userId;
-  document.getElementById("accountId").textContent = user.userId;
-}
-
-// Find saved account
 function getAccounts(){
-  return JSON.parse(localStorage.getItem("kkworldUsers") || "[]");
+  try {
+    return JSON.parse(localStorage.getItem("kkworldUsers") || "[]");
+  } catch {
+    return [];
+  }
 }
 
 function saveAccounts(accounts){
   localStorage.setItem("kkworldUsers", JSON.stringify(accounts));
 }
 
+// Read current login session
+let user;
+
+try {
+  user = JSON.parse(sessionStorage.getItem("kkworldUser") || "null");
+} catch {
+  user = null;
+}
+
+if(!user || !user.userId){
+  window.location.replace("login.html");
+} else {
+
+  const accounts = getAccounts();
+
+  // Find account using current User ID
+  const account = accounts.find(a => a.userId === user.userId);
+
+  // Use saved account details when available
+  if(account){
+    user.name = account.name || user.name || "";
+    user.mobile = account.mobile || user.mobile || "";
+    user.organization = account.organization || user.organization || "";
+  }
+
+  document.getElementById("name").value = user.name || "";
+  document.getElementById("mobile").value = user.mobile || "";
+  document.getElementById("organization").value = user.organization || "";
+  document.getElementById("userId").value = user.userId;
+  document.getElementById("accountId").textContent = user.userId;
+
+  sessionStorage.setItem("kkworldUser", JSON.stringify(user));
+}
+
 // Save profile
-document.getElementById("profileForm").addEventListener("submit", function(e){
+document.getElementById("profileForm").addEventListener("submit",function(e){
   e.preventDefault();
+
+  if(!user || !user.userId) return;
 
   const name = document.getElementById("name").value.trim();
   const mobile = document.getElementById("mobile").value.trim();
@@ -243,14 +262,14 @@ document.getElementById("profileForm").addEventListener("submit", function(e){
     return;
   }
 
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.userId === user.userId);
+
   user.name = name;
   user.mobile = mobile;
   user.organization = organization;
 
-  sessionStorage.setItem("kkworldUser", JSON.stringify(user));
-
-  const accounts = getAccounts();
-  const account = accounts.find(a => a.userId === user.userId);
+  sessionStorage.setItem("kkworldUser",JSON.stringify(user));
 
   if(account){
     account.name = name;
@@ -261,12 +280,13 @@ document.getElementById("profileForm").addEventListener("submit", function(e){
 
   document.getElementById("profileMessage").textContent =
     "Profile updated successfully!";
-
 });
 
 // Change password
-document.getElementById("passwordForm").addEventListener("submit", function(e){
+document.getElementById("passwordForm").addEventListener("submit",function(e){
   e.preventDefault();
+
+  if(!user || !user.userId) return;
 
   const current = document.getElementById("currentPassword").value;
   const newPass = document.getElementById("newPassword").value;
@@ -287,8 +307,7 @@ document.getElementById("passwordForm").addEventListener("submit", function(e){
   const account = accounts.find(a => a.userId === user.userId);
 
   if(!account){
-    message.textContent =
-      "Account record not found. Password change is unavailable.";
+    message.textContent = "Account record not found.";
     return;
   }
 
@@ -301,11 +320,9 @@ document.getElementById("passwordForm").addEventListener("submit", function(e){
   saveAccounts(accounts);
 
   message.textContent = "Password updated successfully!";
-
   document.getElementById("passwordForm").reset();
 });
 
-// Logout
 function logout(){
   sessionStorage.removeItem("kkworldUser");
   window.location.href = "login.html";
