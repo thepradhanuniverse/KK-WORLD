@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KK World | Login & Signup</title>
+<title>KK World | Account</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -20,10 +20,7 @@ body{
   padding:20px;
 }
 
-.container{
-  width:100%;
-  max-width:420px;
-}
+.container{width:100%;max-width:440px}
 
 .logo{
   text-align:center;
@@ -39,24 +36,13 @@ body{
   border:1px solid #26334d;
   padding:30px;
   border-radius:18px;
-  box-shadow:0 20px 50px #0004;
 }
 
-.tabs{
-  display:flex;
-  gap:10px;
-  margin-bottom:25px;
-}
+.tabs{display:flex;gap:10px;margin-bottom:25px}
 
 .tabs button{
-  flex:1;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  background:#1e293b;
-  color:#94a3b8;
-  cursor:pointer;
-  font-weight:bold;
+  flex:1;padding:12px;border:0;border-radius:8px;
+  background:#1e293b;color:#94a3b8;cursor:pointer;
 }
 
 .tabs button.active{
@@ -64,168 +50,235 @@ body{
   color:white;
 }
 
-h2{
-  margin-bottom:10px;
-}
+h2{margin-bottom:10px}
+.subtitle{color:#94a3b8;margin-bottom:22px;font-size:14px}
 
-.subtitle{
-  color:#94a3b8;
-  margin-bottom:25px;
-  font-size:14px;
-}
-
-label{
-  display:block;
-  margin:15px 0 7px;
-  font-size:14px;
-}
+label{display:block;margin:15px 0 7px;font-size:14px}
 
 input{
-  width:100%;
-  padding:13px;
-  background:#080d1b;
-  border:1px solid #334155;
-  border-radius:8px;
-  color:white;
-  outline:none;
+  width:100%;padding:13px;background:#080d1b;
+  border:1px solid #334155;border-radius:8px;color:white;
 }
 
-input:focus{
-  border-color:#5865f2;
-}
-
-.submit{
-  width:100%;
-  padding:14px;
-  margin-top:22px;
+button.submit{
+  width:100%;padding:14px;margin-top:22px;
   background:linear-gradient(135deg,#5865f2,#2563eb);
-  border:none;
-  border-radius:8px;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.message{
-  margin-top:15px;
-  font-size:13px;
-  text-align:center;
-  color:#38bdf8;
-}
-
-.back{
-  display:block;
-  text-align:center;
-  margin-top:20px;
-  color:#38bdf8;
-  text-decoration:none;
+  border:0;border-radius:8px;color:white;
+  font-weight:bold;cursor:pointer;
 }
 
 .hidden{display:none}
+
+.message{margin-top:15px;text-align:center;color:#38bdf8;font-size:14px}
+
+.captcha-box{
+  display:flex;align-items:center;justify-content:space-between;
+  background:#080d1b;padding:12px;border-radius:8px;
+  margin-top:8px;gap:10px;
+}
+
+.captcha-code{
+  font-size:22px;font-weight:bold;letter-spacing:5px;
+  font-style:italic;color:#38bdf8;
+}
+
+.captcha-box button{
+  background:#26334d;color:white;border:0;padding:8px;
+  border-radius:6px;cursor:pointer;
+}
+
+.credentials{
+  background:#071827;border:1px solid #38bdf8;
+  border-radius:10px;padding:18px;margin-top:20px;
+  overflow-wrap:anywhere;
+}
+
+.credentials p{margin:10px 0}
+.credentials strong{color:#38bdf8}
+
+.copy{
+  background:#2563eb;color:white;border:0;
+  padding:10px 15px;border-radius:7px;cursor:pointer;
+}
+
+.back{
+  display:block;text-align:center;margin-top:20px;
+  color:#38bdf8;text-decoration:none;
+}
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-  <div class="logo">KK <span>World</span></div>
+<div class="logo">KK <span>World</span></div>
 
-  <div class="card">
+<div class="card">
 
-    <div class="tabs">
-      <button id="loginTab" class="active" onclick="showLogin()">Login</button>
-      <button id="signupTab" onclick="showSignup()">Sign Up</button>
-    </div>
+<div class="tabs">
+<button id="loginTab" class="active" onclick="showLogin()">Login</button>
+<button id="signupTab" onclick="showSignup()">Sign Up</button>
+</div>
 
-    <!-- LOGIN -->
-    <form id="loginForm">
+<!-- LOGIN -->
+<form id="loginForm">
+<h2>Welcome Back 👋</h2>
+<p class="subtitle">Login using your KK World credentials.</p>
 
-      <h2>Welcome Back 👋</h2>
-      <p class="subtitle">Login to your KK World account.</p>
+<label>User ID</label>
+<input id="loginId" placeholder="KKW-100001" required>
 
-      <label>Email Address</label>
-      <input type="email" id="loginEmail" placeholder="Enter your email" required>
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter password" required>
 
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="Enter password" required>
+<label>Captcha</label>
+<div class="captcha-box">
+<span class="captcha-code" id="loginCaptcha"></span>
+<button type="button" onclick="generateCaptcha('login')">↻ Refresh</button>
+</div>
+<input id="loginCaptchaInput" placeholder="Enter captcha" required>
 
-      <button class="submit" type="submit">Login</button>
+<button class="submit" type="submit">Login</button>
+<p class="message" id="loginMessage"></p>
+</form>
 
-      <p class="message" id="loginMessage"></p>
+<!-- SIGNUP -->
+<form id="signupForm" class="hidden">
+<h2>Create Account 🚀</h2>
+<p class="subtitle">Create your KK World account.</p>
 
-    </form>
+<label>Full Name *</label>
+<input id="signupName" placeholder="Enter full name" required>
 
-    <!-- SIGNUP -->
-    <form id="signupForm" class="hidden">
+<label>Mobile Number *</label>
+<input id="signupMobile" type="tel" inputmode="numeric"
+maxlength="10" pattern="[0-9]{10}"
+placeholder="10-digit mobile number" required>
 
-      <h2>Create Account 🚀</h2>
-      <p class="subtitle">Join KK World today.</p>
+<label>Organization Name (Optional)</label>
+<input id="signupOrganization" placeholder="School / Company / Organization">
 
-      <label>Full Name</label>
-      <input type="text" id="signupName" placeholder="Enter full name" required>
+<label>Captcha</label>
+<div class="captcha-box">
+<span class="captcha-code" id="signupCaptcha"></span>
+<button type="button" onclick="generateCaptcha('signup')">↻ Refresh</button>
+</div>
+<input id="signupCaptchaInput" placeholder="Enter captcha" required>
 
-      <label>Email Address</label>
-      <input type="email" id="signupEmail" placeholder="Enter email" required>
+<button class="submit" type="submit">Create Account</button>
+<p class="message" id="signupMessage"></p>
 
-      <label>Password</label>
-      <input type="password" id="signupPassword" placeholder="Create password" minlength="8" required>
-
-      <label>Confirm Password</label>
-      <input type="password" id="confirmPassword" placeholder="Confirm password" minlength="8" required>
-
-      <button class="submit" type="submit">Create Account</button>
-
-      <p class="message" id="signupMessage"></p>
-
-    </form>
-
-  </div>
-
-  <a href="index.html" class="back">← Back to KK World</a>
+<div id="credentials" class="credentials hidden">
+<h3>Account Created!</h3>
+<p>Save your credentials safely.</p>
+<p><strong>User ID:</strong> <span id="newUserId"></span></p>
+<p><strong>Password:</strong> <span id="newPassword"></span></p>
+<button type="button" class="copy" onclick="copyCredentials()">Copy Credentials</button>
+</div>
+</form>
 
 </div>
 
-<script>
-function showLogin(){
-  document.getElementById("loginForm").classList.remove("hidden");
-  document.getElementById("signupForm").classList.add("hidden");
+<a href="index.html" class="back">← Back to KK World</a>
+</div>
 
-  document.getElementById("loginTab").classList.add("active");
-  document.getElementById("signupTab").classList.remove("active");
+<script>
+let loginCaptchaValue="";
+let signupCaptchaValue="";
+
+function generateCaptcha(type){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let captcha="";
+
+  for(let i=0;i<5;i++){
+    captcha+=chars[Math.floor(Math.random()*chars.length)];
+  }
+
+  if(type==="login"){
+    loginCaptchaValue=captcha;
+    document.getElementById("loginCaptcha").textContent=captcha;
+  }else{
+    signupCaptchaValue=captcha;
+    document.getElementById("signupCaptcha").textContent=captcha;
+  }
+}
+
+function showLogin(){
+  loginForm.classList.remove("hidden");
+  signupForm.classList.add("hidden");
+  loginTab.classList.add("active");
+  signupTab.classList.remove("active");
 }
 
 function showSignup(){
-  document.getElementById("signupForm").classList.remove("hidden");
-  document.getElementById("loginForm").classList.add("hidden");
-
-  document.getElementById("signupTab").classList.add("active");
-  document.getElementById("loginTab").classList.remove("active");
+  signupForm.classList.remove("hidden");
+  loginForm.classList.add("hidden");
+  signupTab.classList.add("active");
+  loginTab.classList.remove("active");
 }
 
-document.getElementById("signupForm").addEventListener("submit",function(e){
+function randomPassword(){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$";
+  let password="";
+  for(let i=0;i<12;i++){
+    password+=chars[Math.floor(Math.random()*chars.length)];
+  }
+  return password;
+}
+
+function copyCredentials(){
+  const text="User ID: "+newUserId.textContent+
+    "\nPassword: "+newPassword.textContent;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Credentials copied!"))
+    .catch(()=>alert(text));
+}
+
+signupForm.addEventListener("submit",function(e){
   e.preventDefault();
 
-  const password=document.getElementById("signupPassword").value;
-  const confirm=document.getElementById("confirmPassword").value;
+  const mobile=signupMobile.value.trim();
+  const captcha=signupCaptchaInput.value.trim().toUpperCase();
 
-  if(password!==confirm){
-    document.getElementById("signupMessage").textContent=
-      "Passwords do not match!";
+  if(!/^[0-9]{10}$/.test(mobile)){
+    signupMessage.textContent="Enter a valid 10-digit mobile number.";
     return;
   }
 
-  document.getElementById("signupMessage").textContent=
-    "Signup UI ready! Backend authentication is not connected yet.";
+  if(captcha!==signupCaptchaValue){
+    signupMessage.textContent="Incorrect captcha. Please try again.";
+    generateCaptcha("signup");
+    return;
+  }
+
+  const userId="KKW-"+Math.floor(100000+Math.random()*900000);
+  const password=randomPassword();
+
+  newUserId.textContent=userId;
+  newPassword.textContent=password;
+
+  credentials.classList.remove("hidden");
+  signupMessage.textContent="Demo credentials generated.";
 });
 
-document.getElementById("loginForm").addEventListener("submit",function(e){
+loginForm.addEventListener("submit",function(e){
   e.preventDefault();
 
-  document.getElementById("loginMessage").textContent=
-    "Login UI ready! Backend authentication is not connected yet.";
-});
-</script>
+  const captcha=loginCaptchaInput.value.trim().toUpperCase();
 
+  if(captcha!==loginCaptchaValue){
+    loginMessage.textContent="Incorrect captcha.";
+    generateCaptcha("login");
+    return;
+  }
+
+  loginMessage.textContent=
+    "Frontend ready. Real account login requires backend connection.";
+});
+
+generateCaptcha("login");
+generateCaptcha("signup");
+</script>
 </body>
 </html>
