@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>KK World | Account</title>
 
 <style>
@@ -21,7 +22,14 @@ body{
 }
 
 .container{width:100%;max-width:440px}
-.logo{text-align:center;font-size:32px;font-weight:bold;margin-bottom:25px}
+
+.logo{
+  text-align:center;
+  font-size:32px;
+  font-weight:bold;
+  margin-bottom:25px;
+}
+
 .logo span{color:#38bdf8}
 
 .card{
@@ -34,8 +42,13 @@ body{
 .tabs{display:flex;gap:10px;margin-bottom:25px}
 
 .tabs button{
-  flex:1;padding:12px;border:0;border-radius:8px;
-  background:#1e293b;color:#94a3b8;cursor:pointer;
+  flex:1;
+  padding:12px;
+  border:0;
+  border-radius:8px;
+  background:#1e293b;
+  color:#94a3b8;
+  cursor:pointer;
 }
 
 .tabs button.active{
@@ -44,44 +57,84 @@ body{
 }
 
 h2{margin-bottom:10px}
-.subtitle{color:#94a3b8;margin-bottom:22px;font-size:14px}
 
-label{display:block;margin:15px 0 7px;font-size:14px}
+.subtitle{
+  color:#94a3b8;
+  margin-bottom:22px;
+  font-size:14px;
+}
+
+label{
+  display:block;
+  margin:15px 0 7px;
+  font-size:14px;
+}
 
 input{
-  width:100%;padding:13px;background:#080d1b;
-  border:1px solid #334155;border-radius:8px;color:white;
+  width:100%;
+  padding:13px;
+  background:#080d1b;
+  border:1px solid #334155;
+  border-radius:8px;
+  color:white;
 }
 
 button.submit{
-  width:100%;padding:14px;margin-top:22px;
+  width:100%;
+  padding:14px;
+  margin-top:22px;
   background:linear-gradient(135deg,#5865f2,#2563eb);
-  border:0;border-radius:8px;color:white;
-  font-weight:bold;cursor:pointer;
+  border:0;
+  border-radius:8px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .hidden{display:none!important}
-.message{margin-top:15px;text-align:center;color:#38bdf8;font-size:14px}
+
+.message{
+  margin-top:15px;
+  text-align:center;
+  color:#38bdf8;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
 
 .captcha-box{
-  display:flex;align-items:center;justify-content:space-between;
-  background:#080d1b;padding:12px;border-radius:8px;
-  margin-top:8px;gap:10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#080d1b;
+  padding:12px;
+  border-radius:8px;
+  margin-top:8px;
+  gap:10px;
 }
 
 .captcha-code{
-  font-size:22px;font-weight:bold;letter-spacing:5px;
-  font-style:italic;color:#38bdf8;
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:5px;
+  font-style:italic;
+  color:#38bdf8;
 }
 
 .captcha-box button{
-  background:#26334d;color:white;border:0;padding:8px;
-  border-radius:6px;cursor:pointer;
+  background:#26334d;
+  color:white;
+  border:0;
+  padding:8px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
 .credentials{
-  background:#071827;border:1px solid #38bdf8;
-  border-radius:10px;padding:18px;margin-top:20px;
+  background:#071827;
+  border:1px solid #38bdf8;
+  border-radius:10px;
+  padding:18px;
+  margin-top:20px;
   overflow-wrap:anywhere;
 }
 
@@ -89,22 +142,24 @@ button.submit{
 .credentials strong{color:#38bdf8}
 
 .copy{
-  background:#2563eb;color:white;border:0;
-  padding:10px 15px;border-radius:7px;cursor:pointer;
+  background:#2563eb;
+  color:white;
+  border:0;
+  padding:10px 15px;
+  border-radius:7px;
+  cursor:pointer;
 }
 
 .back{
-  display:block;text-align:center;margin-top:20px;
-  color:#38bdf8;text-decoration:none;
-}
-
-.dashboard-link{
-  display:inline-block;
+  display:block;
   text-align:center;
-  margin-top:15px;
+  margin-top:20px;
   color:#38bdf8;
   text-decoration:none;
-  width:100%;
+}
+
+@media(max-width:480px){
+  .card{padding:22px}
 }
 </style>
 </head>
@@ -118,8 +173,8 @@ button.submit{
 <div class="card">
 
 <div class="tabs">
-<button id="loginTab" class="active" type="button" onclick="showLogin()">Login</button>
-<button id="signupTab" type="button" onclick="showSignup()">Sign Up</button>
+<button id="loginTab" class="active" type="button">Login</button>
+<button id="signupTab" type="button">Sign Up</button>
 </div>
 
 <!-- LOGIN -->
@@ -139,7 +194,7 @@ button.submit{
 
 <div class="captcha-box">
 <span class="captcha-code" id="loginCaptcha"></span>
-<button type="button" onclick="generateCaptcha('login')">↻ Refresh</button>
+<button type="button" id="refreshLogin">↻ Refresh</button>
 </div>
 
 <input id="loginCaptchaInput" placeholder="Enter captcha" required>
@@ -161,9 +216,14 @@ button.submit{
 <input id="signupName" placeholder="Enter full name" required>
 
 <label>Mobile Number *</label>
-<input id="signupMobile" type="tel" inputmode="numeric"
-maxlength="10" pattern="[0-9]{10}"
-placeholder="10-digit mobile number" required>
+<input
+id="signupMobile"
+type="tel"
+inputmode="numeric"
+maxlength="10"
+pattern="[0-9]{10}"
+placeholder="10-digit mobile number"
+required>
 
 <label>Organization Name (Optional)</label>
 <input id="signupOrganization" placeholder="School / Company / Organization">
@@ -172,7 +232,7 @@ placeholder="10-digit mobile number" required>
 
 <div class="captcha-box">
 <span class="captcha-code" id="signupCaptcha"></span>
-<button type="button" onclick="generateCaptcha('signup')">↻ Refresh</button>
+<button type="button" id="refreshSignup">↻ Refresh</button>
 </div>
 
 <input id="signupCaptchaInput" placeholder="Enter captcha" required>
@@ -190,11 +250,11 @@ placeholder="10-digit mobile number" required>
 <p><strong>User ID:</strong> <span id="newUserId"></span></p>
 <p><strong>Password:</strong> <span id="newPassword"></span></p>
 
-<button type="button" class="copy" onclick="copyCredentials()">
+<button type="button" class="copy" id="copyCredentials">
 Copy Credentials
 </button>
 
-<button type="button" class="submit" onclick="goToLogin()">
+<button type="button" class="submit" id="continueLogin">
 Continue to Login
 </button>
 
@@ -202,15 +262,25 @@ Continue to Login
 
 </form>
 
+<!-- LOGIN SUCCESS -->
+
 <div id="loginSuccess" class="credentials hidden">
+
 <h3>Login Successful! 🎉</h3>
+
 <p>Welcome to KK World.</p>
+
 <p><strong>Name:</strong> <span id="welcomeName"></span></p>
 <p><strong>User ID:</strong> <span id="welcomeId"></span></p>
 
-<button class="submit" type="button" onclick="goDashboard()">
+<button class="submit" type="button" id="openDashboard">
 Open Dashboard →
 </button>
+
+<button class="submit" type="button" id="logoutButton">
+Logout
+</button>
+
 </div>
 
 </div>
@@ -220,37 +290,57 @@ Open Dashboard →
 </div>
 
 <script>
-const loginForm=document.getElementById("loginForm");
-const signupForm=document.getElementById("signupForm");
-const loginTab=document.getElementById("loginTab");
-const signupTab=document.getElementById("signupTab");
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const loginTab = document.getElementById("loginTab");
+const signupTab = document.getElementById("signupTab");
 
-let loginCaptchaValue="";
-let signupCaptchaValue="";
+const loginMessage = document.getElementById("loginMessage");
+const signupMessage = document.getElementById("signupMessage");
 
-let currentUser=null;
+let loginCaptchaValue = "";
+let signupCaptchaValue = "";
+
+const STORAGE_KEY = "kkworld_accounts";
+const SESSION_KEY = "kkworldUser";
+
+/* ACCOUNT STORAGE */
+
+function getAccounts(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  }catch(error){
+    return [];
+  }
+}
+
+function saveAccounts(accounts){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+}
 
 /* CAPTCHA */
 
 function generateCaptcha(type){
 
-  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let captcha="";
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let captcha = "";
 
   for(let i=0;i<5;i++){
-    captcha+=chars[Math.floor(Math.random()*chars.length)];
+    captcha += chars[Math.floor(Math.random()*chars.length)];
   }
 
   if(type==="login"){
-    loginCaptchaValue=captcha;
-    document.getElementById("loginCaptcha").textContent=captcha;
+    loginCaptchaValue = captcha;
+    document.getElementById("loginCaptcha").textContent = captcha;
+    document.getElementById("loginCaptchaInput").value = "";
   }else{
-    signupCaptchaValue=captcha;
-    document.getElementById("signupCaptcha").textContent=captcha;
+    signupCaptchaValue = captcha;
+    document.getElementById("signupCaptcha").textContent = captcha;
+    document.getElementById("signupCaptchaInput").value = "";
   }
 }
 
-/* SWITCH TABS */
+/* TAB SWITCHING */
 
 function showLogin(){
 
@@ -261,6 +351,8 @@ function showLogin(){
 
   loginTab.classList.add("active");
   signupTab.classList.remove("active");
+
+  loginMessage.textContent="";
 }
 
 function showSignup(){
@@ -272,36 +364,56 @@ function showSignup(){
 
   signupTab.classList.add("active");
   loginTab.classList.remove("active");
+
+  signupMessage.textContent="";
 }
 
 /* PASSWORD GENERATOR */
 
 function randomPassword(){
 
-  const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$";
-  let password="";
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$";
+  let password = "";
 
   for(let i=0;i<12;i++){
-    password+=chars[Math.floor(Math.random()*chars.length)];
+    password += chars[Math.floor(Math.random()*chars.length)];
   }
 
   return password;
 }
 
+/* UNIQUE USER ID */
+
+function generateUserId(){
+
+  const accounts = getAccounts();
+  let userId;
+
+  do{
+    userId = "KKW-" + Math.floor(100000+Math.random()*900000);
+  }while(accounts.some(account => account.userId === userId));
+
+  return userId;
+}
+
 /* COPY CREDENTIALS */
 
-function copyCredentials(){
+document.getElementById("copyCredentials").addEventListener("click",function(){
 
-  const text=
+  const text =
     "KK World Account\n"+
     "Name: "+document.getElementById("newName").textContent+"\n"+
     "User ID: "+document.getElementById("newUserId").textContent+"\n"+
     "Password: "+document.getElementById("newPassword").textContent;
 
-  navigator.clipboard.writeText(text)
-    .then(()=>alert("Credentials copied!"))
-    .catch(()=>alert(text));
-}
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text)
+      .then(()=>alert("Credentials copied!"))
+      .catch(()=>alert(text));
+  }else{
+    alert(text);
+  }
+});
 
 /* SIGNUP */
 
@@ -309,63 +421,82 @@ signupForm.addEventListener("submit",function(e){
 
   e.preventDefault();
 
-  const name=document.getElementById("signupName").value.trim();
-  const mobile=document.getElementById("signupMobile").value.trim();
-  const organization=document.getElementById("signupOrganization").value.trim();
-  const captcha=document.getElementById("signupCaptchaInput").value.trim().toUpperCase();
+  const name = document.getElementById("signupName").value.trim();
+  const mobile = document.getElementById("signupMobile").value.trim();
+  const organization = document.getElementById("signupOrganization").value.trim();
+  const captcha = document.getElementById("signupCaptchaInput").value.trim().toUpperCase();
 
   if(!/^[0-9]{10}$/.test(mobile)){
-    document.getElementById("signupMessage").textContent=
-      "Enter a valid 10-digit mobile number.";
+    signupMessage.textContent = "Enter a valid 10-digit mobile number.";
     return;
   }
 
-  if(captcha!==signupCaptchaValue){
-    document.getElementById("signupMessage").textContent=
-      "Incorrect captcha. Please try again.";
-
+  if(captcha !== signupCaptchaValue){
+    signupMessage.textContent = "Incorrect captcha. Please try again.";
     generateCaptcha("signup");
     return;
   }
 
-  const userId="KKW-"+Math.floor(100000+Math.random()*900000);
-  const password=randomPassword();
+  const accounts = getAccounts();
 
-  currentUser={
-    name:name,
-    mobile:mobile,
-    organization:organization,
-    userId:userId,
-    password:password
+  /* Prevent duplicate mobile signup */
+
+  if(accounts.some(account => account.mobile === mobile)){
+    signupMessage.textContent = "This mobile number already has an account. Please login.";
+    generateCaptcha("signup");
+    return;
+  }
+
+  const userId = generateUserId();
+  const password = randomPassword();
+
+  const newAccount = {
+    name,
+    mobile,
+    organization,
+    userId,
+    password,
+    createdAt: new Date().toISOString()
   };
 
-  document.getElementById("newName").textContent=name;
-  document.getElementById("newUserId").textContent=userId;
-  document.getElementById("newPassword").textContent=password;
+  accounts.push(newAccount);
+
+  try{
+    saveAccounts(accounts);
+  }catch(error){
+    signupMessage.textContent = "Could not save account in this browser.";
+    return;
+  }
+
+  document.getElementById("newName").textContent = name;
+  document.getElementById("newUserId").textContent = userId;
+  document.getElementById("newPassword").textContent = password;
 
   document.getElementById("credentials").classList.remove("hidden");
 
-  document.getElementById("signupMessage").textContent=
-    "Demo account generated successfully.";
+  signupMessage.textContent = "Account saved successfully in this browser.";
+
+  generateCaptcha("signup");
 
 });
 
 /* CONTINUE TO LOGIN */
 
-function goToLogin(){
+document.getElementById("continueLogin").addEventListener("click",function(){
 
-  if(!currentUser)return;
+  const userId = document.getElementById("newUserId").textContent;
+  const password = document.getElementById("newPassword").textContent;
 
   showLogin();
 
-  document.getElementById("loginId").value=currentUser.userId;
-  document.getElementById("loginPassword").value=currentUser.password;
+  document.getElementById("loginId").value = userId;
+  document.getElementById("loginPassword").value = password;
 
-  document.getElementById("loginMessage").textContent=
-    "Credentials filled. Enter captcha and login.";
+  loginMessage.textContent = "Credentials filled. Enter captcha and login.";
 
   generateCaptcha("login");
-}
+
+});
 
 /* LOGIN */
 
@@ -373,61 +504,93 @@ loginForm.addEventListener("submit",function(e){
 
   e.preventDefault();
 
-  const userId=document.getElementById("loginId").value.trim();
-  const password=document.getElementById("loginPassword").value;
-  const captcha=document.getElementById("loginCaptchaInput").value.trim().toUpperCase();
+  const userId = document.getElementById("loginId").value.trim().toUpperCase();
+  const password = document.getElementById("loginPassword").value;
+  const captcha = document.getElementById("loginCaptchaInput").value.trim().toUpperCase();
 
-  if(captcha!==loginCaptchaValue){
+  if(captcha !== loginCaptchaValue){
 
-    document.getElementById("loginMessage").textContent=
-      "Incorrect captcha. Please try again.";
-
+    loginMessage.textContent = "Incorrect captcha. Please try again.";
     generateCaptcha("login");
     return;
   }
 
-  if(!currentUser){
+  const accounts = getAccounts();
 
-    document.getElementById("loginMessage").textContent=
-      "Demo account not found. Please create an account first.";
+  const account = accounts.find(function(item){
+    return item.userId === userId && item.password === password;
+  });
 
+  if(!account){
+
+    loginMessage.textContent = "Incorrect User ID or Password.";
+    generateCaptcha("login");
     return;
   }
 
-  if(userId!==currentUser.userId || password!==currentUser.password){
+  /* Store current login session */
 
-    document.getElementById("loginMessage").textContent=
-      "Incorrect User ID or Password.";
-
-    return;
-  }
-
-  sessionStorage.setItem("kkworldUser",JSON.stringify({
-    name:currentUser.name,
-    userId:currentUser.userId
+  sessionStorage.setItem(SESSION_KEY,JSON.stringify({
+    name:account.name,
+    userId:account.userId
   }));
 
-  document.getElementById("loginMessage").textContent="";
-
   loginForm.classList.add("hidden");
-
-  document.getElementById("welcomeName").textContent=currentUser.name;
-  document.getElementById("welcomeId").textContent=currentUser.userId;
+  signupForm.classList.add("hidden");
 
   document.getElementById("loginSuccess").classList.remove("hidden");
+
+  document.getElementById("welcomeName").textContent = account.name;
+  document.getElementById("welcomeId").textContent = account.userId;
+
+  loginMessage.textContent="";
+
+});
+
+/* LOGOUT */
+
+document.getElementById("logoutButton").addEventListener("click",function(){
+
+  sessionStorage.removeItem(SESSION_KEY);
+
+  document.getElementById("loginSuccess").classList.add("hidden");
+
+  loginForm.reset();
+
+  showLogin();
+
+  generateCaptcha("login");
+
+  loginMessage.textContent="You have been logged out successfully.";
 
 });
 
 /* DASHBOARD */
 
-function goDashboard(){
+document.getElementById("openDashboard").addEventListener("click",function(){
 
   window.location.href="dashboard.html";
 
-}
+});
+
+/* BUTTONS */
+
+loginTab.addEventListener("click",showLogin);
+signupTab.addEventListener("click",showSignup);
+
+document.getElementById("refreshLogin").addEventListener("click",function(){
+  generateCaptcha("login");
+});
+
+document.getElementById("refreshSignup").addEventListener("click",function(){
+  generateCaptcha("signup");
+});
+
+/* INITIALIZE */
 
 generateCaptcha("login");
 generateCaptcha("signup");
+
 </script>
 
 </body>
