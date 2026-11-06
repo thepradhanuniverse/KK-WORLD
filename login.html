@@ -4,8 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>KK World | Account</title>
+<title>KK World | My Profile</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -15,60 +14,46 @@ body{
   background:#080d1b;
   color:#f8fafc;
   min-height:100vh;
+  padding:25px;
+}
+
+.container{max-width:850px;margin:auto}
+
+.header{
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  justify-content:center;
-  padding:20px;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
 }
 
-.container{width:100%;max-width:440px}
-
-.logo{
-  text-align:center;
-  font-size:32px;
-  font-weight:bold;
-  margin-bottom:25px;
-}
-
+.logo{font-size:27px;font-weight:bold}
 .logo span{color:#38bdf8}
+
+.btn{
+  border:0;
+  padding:12px 18px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+  cursor:pointer;
+}
 
 .card{
   background:#111a2d;
   border:1px solid #26334d;
-  padding:30px;
-  border-radius:18px;
+  border-radius:16px;
+  padding:28px;
+  margin-bottom:25px;
 }
 
-.tabs{display:flex;gap:10px;margin-bottom:25px}
+h2{margin-bottom:8px}
+.subtitle{color:#94a3b8;margin-bottom:25px;font-size:14px}
 
-.tabs button{
-  flex:1;
-  padding:12px;
-  border:0;
-  border-radius:8px;
-  background:#1e293b;
-  color:#94a3b8;
-  cursor:pointer;
-}
-
-.tabs button.active{
-  background:linear-gradient(135deg,#5865f2,#2563eb);
-  color:white;
-}
-
-h2{margin-bottom:10px}
-
-.subtitle{
-  color:#94a3b8;
-  margin-bottom:22px;
-  font-size:14px;
-}
-
-label{
-  display:block;
-  margin:15px 0 7px;
-  font-size:14px;
-}
+label{display:block;margin:16px 0 8px;font-size:14px}
 
 input{
   width:100%;
@@ -77,89 +62,37 @@ input{
   border:1px solid #334155;
   border-radius:8px;
   color:white;
+  outline:none;
 }
 
-button.submit{
-  width:100%;
-  padding:14px;
-  margin-top:22px;
-  background:linear-gradient(135deg,#5865f2,#2563eb);
-  border:0;
-  border-radius:8px;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
+input:focus{border-color:#38bdf8}
+input:disabled{opacity:.65}
 
-.hidden{display:none!important}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
 
 .message{
   margin-top:15px;
-  text-align:center;
   color:#38bdf8;
   font-size:14px;
-  overflow-wrap:anywhere;
 }
 
-.captcha-box{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#080d1b;
-  padding:12px;
-  border-radius:8px;
-  margin-top:8px;
-  gap:10px;
-}
-
-.captcha-code{
-  font-size:22px;
-  font-weight:bold;
-  letter-spacing:5px;
-  font-style:italic;
-  color:#38bdf8;
-}
-
-.captcha-box button{
-  background:#26334d;
-  color:white;
-  border:0;
-  padding:8px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.credentials{
-  background:#071827;
-  border:1px solid #38bdf8;
-  border-radius:10px;
-  padding:18px;
-  margin-top:20px;
-  overflow-wrap:anywhere;
-}
-
-.credentials p{margin:10px 0}
-.credentials strong{color:#38bdf8}
-
-.copy{
-  background:#2563eb;
-  color:white;
-  border:0;
-  padding:10px 15px;
-  border-radius:7px;
-  cursor:pointer;
-}
+.danger{background:#991b1b}
 
 .back{
-  display:block;
-  text-align:center;
-  margin-top:20px;
+  display:inline-block;
+  margin-top:10px;
   color:#38bdf8;
   text-decoration:none;
 }
 
-@media(max-width:480px){
-  .card{padding:22px}
+@media(max-width:600px){
+  body{padding:15px}
+  .grid{grid-template-columns:1fr}
+  .card{padding:20px}
 }
 </style>
 </head>
@@ -168,148 +101,99 @@ button.submit{
 
 <div class="container">
 
-<div class="logo">KK <span>World</span></div>
+  <div class="header">
+    <div class="logo">KK <span>World</span></div>
+    <a href="dashboard.html" class="btn">Dashboard →</a>
+  </div>
 
-<div class="card">
+  <!-- PROFILE -->
+  <div class="card">
+    <h2>👤 My Profile</h2>
+    <p class="subtitle">Manage your personal information.</p>
 
-<div class="tabs">
-<button id="loginTab" class="active" type="button">Login</button>
-<button id="signupTab" type="button">Sign Up</button>
-</div>
+    <form id="profileForm">
 
-<!-- LOGIN -->
+      <div class="grid">
+        <div>
+          <label>Full Name</label>
+          <input id="name" required maxlength="80">
+        </div>
 
-<form id="loginForm">
+        <div>
+          <label>Mobile Number</label>
+          <input id="mobile" type="tel" inputmode="numeric"
+          maxlength="10" pattern="[0-9]{10}" required>
+        </div>
+      </div>
 
-<h2>Welcome Back 👋</h2>
-<p class="subtitle">Login using your KK World credentials.</p>
+      <label>User ID</label>
+      <input id="userId" disabled>
 
-<label>User ID</label>
-<input id="loginId" placeholder="KKW-100001" required>
+      <label>Organization</label>
+      <input id="organization" maxlength="100">
 
-<label>Password</label>
-<input id="loginPassword" type="password" placeholder="Enter password" required>
+      <button class="btn" type="submit" style="margin-top:22px">
+        Save Profile
+      </button>
 
-<label>Captcha</label>
+      <p class="message" id="profileMessage"></p>
+    </form>
+  </div>
 
-<div class="captcha-box">
-<span class="captcha-code" id="loginCaptcha"></span>
-<button type="button" id="refreshLogin">↻ Refresh</button>
-</div>
+  <!-- PASSWORD -->
+  <div class="card">
+    <h2>🔐 Change Password</h2>
+    <p class="subtitle">Update your account password.</p>
 
-<input id="loginCaptchaInput" placeholder="Enter captcha" required>
+    <form id="passwordForm">
 
-<button class="submit" type="submit">Login</button>
+      <label>Current Password</label>
+      <input id="currentPassword" type="password" required>
 
-<p class="message" id="loginMessage"></p>
+      <label>New Password</label>
+      <input id="newPassword" type="password" minlength="8" required>
 
-</form>
+      <label>Confirm New Password</label>
+      <input id="confirmPassword" type="password" minlength="8" required>
 
-<!-- SIGNUP -->
+      <button class="btn" type="submit" style="margin-top:22px">
+        Change Password
+      </button>
 
-<form id="signupForm" class="hidden">
+      <p class="message" id="passwordMessage"></p>
+    </form>
+  </div>
 
-<h2>Create Account 🚀</h2>
-<p class="subtitle">Create your KK World account.</p>
+  <!-- ACCOUNT -->
+  <div class="card">
+    <h2>📋 Account Information</h2>
+    <p class="subtitle">Your KK World account details.</p>
 
-<label>Full Name *</label>
-<input id="signupName" placeholder="Enter full name" required>
+    <p style="margin:12px 0">
+      <strong>User ID:</strong> <span id="accountId"></span>
+    </p>
 
-<label>Mobile Number *</label>
-<input
-id="signupMobile"
-type="tel"
-inputmode="numeric"
-maxlength="10"
-pattern="[0-9]{10}"
-placeholder="10-digit mobile number"
-required>
+    <p style="margin:12px 0">
+      <strong>Account Type:</strong> Standard User
+    </p>
 
-<label>Organization Name (Optional)</label>
-<input id="signupOrganization" placeholder="School / Company / Organization">
+    <button class="btn danger" onclick="logout()" style="margin-top:20px">
+      Logout
+    </button>
+  </div>
 
-<label>Captcha</label>
-
-<div class="captcha-box">
-<span class="captcha-code" id="signupCaptcha"></span>
-<button type="button" id="refreshSignup">↻ Refresh</button>
-</div>
-
-<input id="signupCaptchaInput" placeholder="Enter captcha" required>
-
-<button class="submit" type="submit">Create Account</button>
-
-<p class="message" id="signupMessage"></p>
-
-<div id="credentials" class="credentials hidden">
-
-<h3>🎉 Account Created!</h3>
-<p>Save your credentials safely.</p>
-
-<p><strong>Name:</strong> <span id="newName"></span></p>
-<p><strong>User ID:</strong> <span id="newUserId"></span></p>
-<p><strong>Password:</strong> <span id="newPassword"></span></p>
-
-<button type="button" class="copy" id="copyCredentials">
-Copy Credentials
-</button>
-
-<button type="button" class="submit" id="continueLogin">
-Continue to Login
-</button>
-
-</div>
-
-</form>
-
-<!-- LOGIN SUCCESS -->
-
-<div id="loginSuccess" class="credentials hidden">
-
-<h3>Login Successful! 🎉</h3>
-
-<p>Welcome to KK World.</p>
-
-<p><strong>Name:</strong> <span id="welcomeName"></span></p>
-<p><strong>User ID:</strong> <span id="welcomeId"></span></p>
-
-<button class="submit" type="button" id="openDashboard">
-Open Dashboard →
-</button>
-
-<button class="submit" type="button" id="logoutButton">
-Logout
-</button>
-
-</div>
-
-</div>
-
-<a href="index.html" class="back">← Back to KK World</a>
+  <a href="dashboard.html" class="back">← Back to Dashboard</a>
 
 </div>
 
 <script>
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
-const loginTab = document.getElementById("loginTab");
-const signupTab = document.getElementById("signupTab");
-
-const loginMessage = document.getElementById("loginMessage");
-const signupMessage = document.getElementById("signupMessage");
-
-let loginCaptchaValue = "";
-let signupCaptchaValue = "";
-
 const STORAGE_KEY = "kkworld_accounts";
 const SESSION_KEY = "kkworldUser";
-
-/* ACCOUNT STORAGE */
 
 function getAccounts(){
   try{
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  }catch(error){
+  }catch{
     return [];
   }
 }
@@ -318,279 +202,135 @@ function saveAccounts(accounts){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
 }
 
-/* CAPTCHA */
+// Check login session
+let user;
 
-function generateCaptcha(type){
-
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let captcha = "";
-
-  for(let i=0;i<5;i++){
-    captcha += chars[Math.floor(Math.random()*chars.length)];
-  }
-
-  if(type==="login"){
-    loginCaptchaValue = captcha;
-    document.getElementById("loginCaptcha").textContent = captcha;
-    document.getElementById("loginCaptchaInput").value = "";
-  }else{
-    signupCaptchaValue = captcha;
-    document.getElementById("signupCaptcha").textContent = captcha;
-    document.getElementById("signupCaptchaInput").value = "";
-  }
+try{
+  user = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+}catch{
+  user = null;
 }
 
-/* TAB SWITCHING */
-
-function showLogin(){
-
-  loginForm.classList.remove("hidden");
-  signupForm.classList.add("hidden");
-
-  document.getElementById("loginSuccess").classList.add("hidden");
-
-  loginTab.classList.add("active");
-  signupTab.classList.remove("active");
-
-  loginMessage.textContent="";
-}
-
-function showSignup(){
-
-  signupForm.classList.remove("hidden");
-  loginForm.classList.add("hidden");
-
-  document.getElementById("loginSuccess").classList.add("hidden");
-
-  signupTab.classList.add("active");
-  loginTab.classList.remove("active");
-
-  signupMessage.textContent="";
-}
-
-/* PASSWORD GENERATOR */
-
-function randomPassword(){
-
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$";
-  let password = "";
-
-  for(let i=0;i<12;i++){
-    password += chars[Math.floor(Math.random()*chars.length)];
-  }
-
-  return password;
-}
-
-/* UNIQUE USER ID */
-
-function generateUserId(){
+if(!user || !user.userId){
+  window.location.replace("login.html");
+}else{
 
   const accounts = getAccounts();
-  let userId;
-
-  do{
-    userId = "KKW-" + Math.floor(100000+Math.random()*900000);
-  }while(accounts.some(account => account.userId === userId));
-
-  return userId;
-}
-
-/* COPY CREDENTIALS */
-
-document.getElementById("copyCredentials").addEventListener("click",function(){
-
-  const text =
-    "KK World Account\n"+
-    "Name: "+document.getElementById("newName").textContent+"\n"+
-    "User ID: "+document.getElementById("newUserId").textContent+"\n"+
-    "Password: "+document.getElementById("newPassword").textContent;
-
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text)
-      .then(()=>alert("Credentials copied!"))
-      .catch(()=>alert(text));
-  }else{
-    alert(text);
-  }
-});
-
-/* SIGNUP */
-
-signupForm.addEventListener("submit",function(e){
-
-  e.preventDefault();
-
-  const name = document.getElementById("signupName").value.trim();
-  const mobile = document.getElementById("signupMobile").value.trim();
-  const organization = document.getElementById("signupOrganization").value.trim();
-  const captcha = document.getElementById("signupCaptchaInput").value.trim().toUpperCase();
-
-  if(!/^[0-9]{10}$/.test(mobile)){
-    signupMessage.textContent = "Enter a valid 10-digit mobile number.";
-    return;
-  }
-
-  if(captcha !== signupCaptchaValue){
-    signupMessage.textContent = "Incorrect captcha. Please try again.";
-    generateCaptcha("signup");
-    return;
-  }
-
-  const accounts = getAccounts();
-
-  /* Prevent duplicate mobile signup */
-
-  if(accounts.some(account => account.mobile === mobile)){
-    signupMessage.textContent = "This mobile number already has an account. Please login.";
-    generateCaptcha("signup");
-    return;
-  }
-
-  const userId = generateUserId();
-  const password = randomPassword();
-
-  const newAccount = {
-    name,
-    mobile,
-    organization,
-    userId,
-    password,
-    createdAt: new Date().toISOString()
-  };
-
-  accounts.push(newAccount);
-
-  try{
-    saveAccounts(accounts);
-  }catch(error){
-    signupMessage.textContent = "Could not save account in this browser.";
-    return;
-  }
-
-  document.getElementById("newName").textContent = name;
-  document.getElementById("newUserId").textContent = userId;
-  document.getElementById("newPassword").textContent = password;
-
-  document.getElementById("credentials").classList.remove("hidden");
-
-  signupMessage.textContent = "Account saved successfully in this browser.";
-
-  generateCaptcha("signup");
-
-});
-
-/* CONTINUE TO LOGIN */
-
-document.getElementById("continueLogin").addEventListener("click",function(){
-
-  const userId = document.getElementById("newUserId").textContent;
-  const password = document.getElementById("newPassword").textContent;
-
-  showLogin();
-
-  document.getElementById("loginId").value = userId;
-  document.getElementById("loginPassword").value = password;
-
-  loginMessage.textContent = "Credentials filled. Enter captcha and login.";
-
-  generateCaptcha("login");
-
-});
-
-/* LOGIN */
-
-loginForm.addEventListener("submit",function(e){
-
-  e.preventDefault();
-
-  const userId = document.getElementById("loginId").value.trim().toUpperCase();
-  const password = document.getElementById("loginPassword").value;
-  const captcha = document.getElementById("loginCaptchaInput").value.trim().toUpperCase();
-
-  if(captcha !== loginCaptchaValue){
-
-    loginMessage.textContent = "Incorrect captcha. Please try again.";
-    generateCaptcha("login");
-    return;
-  }
-
-  const accounts = getAccounts();
-
-  const account = accounts.find(function(item){
-    return item.userId === userId && item.password === password;
-  });
+  const account = accounts.find(a => a.userId === user.userId);
 
   if(!account){
+    alert("Account not found in this browser. Please login again.");
+    sessionStorage.removeItem(SESSION_KEY);
+    window.location.replace("login.html");
+  }else{
 
-    loginMessage.textContent = "Incorrect User ID or Password.";
-    generateCaptcha("login");
+    // Load complete account details
+    user.name = account.name || "";
+    user.userId = account.userId;
+    user.mobile = account.mobile || "";
+    user.organization = account.organization || "";
+
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+
+    document.getElementById("name").value = user.name;
+    document.getElementById("mobile").value = user.mobile;
+    document.getElementById("organization").value = user.organization;
+    document.getElementById("userId").value = user.userId;
+    document.getElementById("accountId").textContent = user.userId;
+  }
+}
+
+// Save profile
+document.getElementById("profileForm").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  if(!user || !user.userId) return;
+
+  const name = document.getElementById("name").value.trim();
+  const mobile = document.getElementById("mobile").value.trim();
+  const organization = document.getElementById("organization").value.trim();
+
+  const message = document.getElementById("profileMessage");
+
+  if(!name){
+    message.textContent = "Please enter your name.";
     return;
   }
 
-  /* Store current login session */
+  if(!/^[0-9]{10}$/.test(mobile)){
+    message.textContent = "Enter a valid 10-digit mobile number.";
+    return;
+  }
 
-  sessionStorage.setItem(SESSION_KEY,JSON.stringify({
-    name:account.name,
-    userId:account.userId
-  }));
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.userId === user.userId);
 
-  loginForm.classList.add("hidden");
-  signupForm.classList.add("hidden");
+  if(!account){
+    message.textContent = "Account not found.";
+    return;
+  }
 
-  document.getElementById("loginSuccess").classList.remove("hidden");
+  account.name = name;
+  account.mobile = mobile;
+  account.organization = organization;
 
-  document.getElementById("welcomeName").textContent = account.name;
-  document.getElementById("welcomeId").textContent = account.userId;
+  saveAccounts(accounts);
 
-  loginMessage.textContent="";
+  user.name = name;
+  user.mobile = mobile;
+  user.organization = organization;
 
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+
+  message.textContent = "Profile updated successfully!";
 });
 
-/* LOGOUT */
+// Change password
+document.getElementById("passwordForm").addEventListener("submit",function(e){
+  e.preventDefault();
 
-document.getElementById("logoutButton").addEventListener("click",function(){
+  if(!user || !user.userId) return;
 
+  const current = document.getElementById("currentPassword").value;
+  const newPass = document.getElementById("newPassword").value;
+  const confirm = document.getElementById("confirmPassword").value;
+  const message = document.getElementById("passwordMessage");
+
+  if(newPass.length < 8){
+    message.textContent = "Password must be at least 8 characters.";
+    return;
+  }
+
+  if(newPass !== confirm){
+    message.textContent = "New passwords do not match.";
+    return;
+  }
+
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.userId === user.userId);
+
+  if(!account){
+    message.textContent = "Account not found.";
+    return;
+  }
+
+  if(account.password !== current){
+    message.textContent = "Current password is incorrect.";
+    return;
+  }
+
+  account.password = newPass;
+  saveAccounts(accounts);
+
+  message.textContent = "Password changed successfully!";
+  document.getElementById("passwordForm").reset();
+});
+
+// Logout
+function logout(){
   sessionStorage.removeItem(SESSION_KEY);
-
-  document.getElementById("loginSuccess").classList.add("hidden");
-
-  loginForm.reset();
-
-  showLogin();
-
-  generateCaptcha("login");
-
-  loginMessage.textContent="You have been logged out successfully.";
-
-});
-
-/* DASHBOARD */
-
-document.getElementById("openDashboard").addEventListener("click",function(){
-
-  window.location.href="dashboard.html";
-
-});
-
-/* BUTTONS */
-
-loginTab.addEventListener("click",showLogin);
-signupTab.addEventListener("click",showSignup);
-
-document.getElementById("refreshLogin").addEventListener("click",function(){
-  generateCaptcha("login");
-});
-
-document.getElementById("refreshSignup").addEventListener("click",function(){
-  generateCaptcha("signup");
-});
-
-/* INITIALIZE */
-
-generateCaptcha("login");
-generateCaptcha("signup");
-
+  window.location.href = "login.html";
+}
 </script>
 
 </body>
