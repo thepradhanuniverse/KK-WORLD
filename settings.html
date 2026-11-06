@@ -1,0 +1,383 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KK World | Settings</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#080d1b;
+  color:#f8fafc;
+  font-family:Arial,sans-serif;
+}
+
+.dashboard{display:flex;min-height:100vh}
+
+.sidebar{
+  width:250px;
+  background:#0c1322;
+  border-right:1px solid #26334d;
+  padding:30px 20px;
+  flex-shrink:0;
+}
+
+.logo{font-size:25px;font-weight:bold;margin-bottom:35px}
+.logo span{color:#38bdf8}
+
+.sidebar a{
+  display:block;
+  padding:14px;
+  margin-bottom:8px;
+  color:#94a3b8;
+  text-decoration:none;
+  border-radius:10px;
+}
+
+.sidebar a:hover,.sidebar a.active{
+  background:#17243b;
+  color:#38bdf8;
+}
+
+.main{flex:1;padding:30px;min-width:0}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
+}
+
+.btn{
+  border:0;
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.logout{background:#7f1d1d}
+
+.settings-card{
+  background:#111a2d;
+  border:1px solid #26334d;
+  border-radius:16px;
+  padding:25px;
+  margin-bottom:22px;
+}
+
+.settings-card h2{margin-bottom:10px}
+
+.settings-card p{
+  color:#94a3b8;
+  line-height:1.6;
+  margin-bottom:20px;
+}
+
+.field{margin-bottom:18px}
+
+.field label{
+  display:block;
+  margin-bottom:8px;
+  color:#cbd5e1;
+}
+
+.field input,.field select{
+  width:100%;
+  padding:13px;
+  background:#080d1b;
+  border:1px solid #26334d;
+  border-radius:9px;
+  color:#f8fafc;
+  outline:none;
+}
+
+.field input:focus,.field select:focus{
+  border-color:#38bdf8;
+}
+
+.toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:15px 0;
+  border-bottom:1px solid #26334d;
+}
+
+.toggle-row:last-child{border-bottom:none}
+
+.toggle-row p{margin:5px 0 0}
+
+input[type="checkbox"]{
+  width:20px;
+  height:20px;
+  accent-color:#38bdf8;
+  cursor:pointer;
+}
+
+.status{
+  margin-top:15px;
+  color:#38bdf8;
+  font-size:14px;
+}
+
+footer{
+  margin-top:35px;
+  color:#64748b;
+  font-size:13px;
+}
+
+@media(max-width:768px){
+  .dashboard{flex-direction:column}
+
+  .sidebar{
+    width:100%;
+    border-right:none;
+    border-bottom:1px solid #26334d;
+    padding:20px;
+  }
+
+  .logo{margin-bottom:20px}
+
+  .sidebar a{
+    display:inline-block;
+    margin:3px;
+    padding:10px;
+  }
+
+  .main{padding:20px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<aside class="sidebar">
+
+  <div class="logo">KK <span>World</span></div>
+
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="profile.html">👤 My Profile</a>
+  <a href="settings.html" class="active">⚙️ Settings</a>
+  <a href="dashboard.html#applications">📦 Applications</a>
+  <a href="index.html">🌐 Main Website</a>
+
+</aside>
+
+<main class="main">
+
+  <div class="topbar">
+    <div>
+      <h1>Settings</h1>
+      <p style="color:#94a3b8;margin-top:6px">
+        Manage your KK World preferences
+      </p>
+    </div>
+
+    <a href="dashboard.html" class="btn">← Dashboard</a>
+  </div>
+
+  <!-- Account Settings -->
+  <section class="settings-card">
+
+    <h2>👤 Account Settings</h2>
+    <p>Manage your account information.</p>
+
+    <div class="field">
+      <label>Logged-in User</label>
+      <input type="text" id="userName" readonly>
+    </div>
+
+    <div class="field">
+      <label>User ID</label>
+      <input type="text" id="userId" readonly>
+    </div>
+
+    <a href="profile.html" class="btn">Edit Profile</a>
+
+  </section>
+
+  <!-- Security -->
+  <section class="settings-card">
+
+    <h2>🔐 Password & Security</h2>
+    <p>Manage your account password.</p>
+
+    <a href="profile.html" class="btn">Change Password</a>
+
+    <p style="margin-top:15px">
+      Password changes are managed from your Profile page.
+    </p>
+
+  </section>
+
+  <!-- Notifications -->
+  <section class="settings-card">
+
+    <h2>🔔 Notifications</h2>
+    <p>Choose your notification preferences.</p>
+
+    <div class="toggle-row">
+      <div>
+        <strong>Email Notifications</strong>
+        <p>Receive updates through email.</p>
+      </div>
+
+      <input type="checkbox" id="emailNotifications">
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <strong>Product Updates</strong>
+        <p>Get information about new KK World features.</p>
+      </div>
+
+      <input type="checkbox" id="productUpdates">
+    </div>
+
+    <button class="btn" style="margin-top:20px" onclick="saveNotifications()">
+      Save Preferences
+    </button>
+
+    <div class="status" id="notificationStatus"></div>
+
+  </section>
+
+  <!-- Appearance -->
+  <section class="settings-card">
+
+    <h2>🎨 Appearance</h2>
+    <p>Choose your preferred dashboard theme.</p>
+
+    <div class="field">
+      <label>Theme</label>
+
+      <select id="themeSelect">
+        <option value="dark">Dark Theme</option>
+        <option value="light">Light Theme</option>
+      </select>
+    </div>
+
+    <button class="btn" onclick="saveTheme()">Save Theme</button>
+
+    <div class="status" id="themeStatus"></div>
+
+  </section>
+
+  <!-- Logout -->
+  <section class="settings-card">
+
+    <h2>🚪 Logout</h2>
+    <p>Sign out from your current KK World session.</p>
+
+    <button class="btn logout" onclick="logout()">Logout</button>
+
+  </section>
+
+  <footer>
+    © 2026 KK World. All rights reserved.
+  </footer>
+
+</main>
+</div>
+
+<script>
+
+// Login session
+const user = JSON.parse(
+  sessionStorage.getItem("kkworldUser") || "null"
+);
+
+if(!user || !user.userId){
+
+  window.location.href = "login.html";
+
+}else{
+
+  document.getElementById("userName").value =
+    user.name || "KK World User";
+
+  document.getElementById("userId").value =
+    user.userId;
+
+}
+
+// Load notification preferences
+const notificationSettings = JSON.parse(
+  localStorage.getItem("kkworldNotifications") || "{}"
+);
+
+document.getElementById("emailNotifications").checked =
+  notificationSettings.email ?? false;
+
+document.getElementById("productUpdates").checked =
+  notificationSettings.updates ?? false;
+
+// Save notifications
+function saveNotifications(){
+
+  const settings = {
+    email: document.getElementById("emailNotifications").checked,
+    updates: document.getElementById("productUpdates").checked
+  };
+
+  localStorage.setItem(
+    "kkworldNotifications",
+    JSON.stringify(settings)
+  );
+
+  document.getElementById("notificationStatus").textContent =
+    "Preferences saved successfully!";
+
+}
+
+// Load theme
+const savedTheme = localStorage.getItem("kkworldTheme") || "dark";
+
+document.getElementById("themeSelect").value = savedTheme;
+
+// Save theme preference
+function saveTheme(){
+
+  const theme = document.getElementById("themeSelect").value;
+
+  localStorage.setItem("kkworldTheme", theme);
+
+  document.getElementById("themeStatus").textContent =
+    "Theme preference saved!";
+
+  if(theme === "light"){
+    alert("Light theme preference saved. Full light theme will be added later.");
+  }else{
+    alert("Dark theme preference saved!");
+  }
+
+}
+
+// Logout
+function logout(){
+
+  sessionStorage.removeItem("kkworldUser");
+
+  window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+</html>
+```
