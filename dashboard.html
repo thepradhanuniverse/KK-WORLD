@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,9 +122,27 @@ footer{margin-top:40px;color:#64748b;font-size:13px}
 
 @media(max-width:768px){
   .dashboard{flex-direction:column}
-  .sidebar{width:100%;border-right:none;border-bottom:1px solid #26334d}
-  .sidebar a{display:inline-block;margin:3px;padding:10px}
+
+  .sidebar{
+    width:100%;
+    border-right:none;
+    border-bottom:1px solid #26334d;
+    padding:20px;
+  }
+
+  .logo{margin-bottom:20px}
+
+  .sidebar a{
+    display:inline-block;
+    margin:3px;
+    padding:10px;
+  }
+
   .main{padding:20px}
+
+  .topbar{align-items:flex-start}
+
+  .logout{margin-left:0;margin-top:8px}
 }
 </style>
 </head>
@@ -134,16 +152,20 @@ footer{margin-top:40px;color:#64748b;font-size:13px}
 <div class="dashboard">
 
 <aside class="sidebar">
+
   <div class="logo">KK <span>World</span></div>
 
   <a href="dashboard.html" class="active">🏠 Dashboard</a>
+  <a href="profile.html">👤 My Profile</a>
   <a href="#applications">📦 Applications</a>
   <a href="index.html">🌐 Main Website</a>
+
 </aside>
 
 <main class="main">
 
   <div class="topbar">
+
     <div>
       <h1>Dashboard</h1>
       <p style="color:#94a3b8;margin-top:6px">
@@ -152,9 +174,11 @@ footer{margin-top:40px;color:#64748b;font-size:13px}
     </div>
 
     <div>
+      <a href="profile.html" class="btn">👤 My Profile</a>
       <a href="index.html" class="btn">Visit Website ↗</a>
       <button class="btn logout" onclick="logout()">Logout</button>
     </div>
+
   </div>
 
   <div class="user-box">
@@ -164,17 +188,24 @@ footer{margin-top:40px;color:#64748b;font-size:13px}
   </div>
 
   <section class="welcome" style="margin-top:25px">
-    <h2>Welcome to KK World, <span id="welcomeName">User</span> 🚀</h2>
+
+    <h2>
+      Welcome to KK World,
+      <span id="welcomeName">User</span> 🚀
+    </h2>
+
     <p>
       Your digital workspace for smart tools, applications,
       education management and organization solutions.
     </p>
+
   </section>
 
   <section id="applications">
 
     <div class="section-title">
       <h2>Our Applications</h2>
+
       <p style="color:#94a3b8;margin-top:8px">
         Explore your available KK World tools.
       </p>
@@ -222,28 +253,49 @@ footer{margin-top:40px;color:#64748b;font-size:13px}
 </div>
 
 <script>
+
 // Check logged-in user
-const user = JSON.parse(sessionStorage.getItem("kkworldUser") || "null");
+const user = JSON.parse(
+  sessionStorage.getItem("kkworldUser") || "null"
+);
 
 if (!user || !user.userId) {
+
   window.location.href = "login.html";
+
 } else {
-  document.getElementById("userName").textContent = user.name || "KK World User";
-  document.getElementById("welcomeName").textContent = user.name || "User";
-  document.getElementById("userId").textContent = "User ID: " + user.userId;
+
+  document.getElementById("userName").textContent =
+    user.name || "KK World User";
+
+  document.getElementById("welcomeName").textContent =
+    user.name || "User";
+
+  document.getElementById("userId").textContent =
+    "User ID: " + user.userId;
+
 }
 
 // Logout
 function logout() {
+
   sessionStorage.removeItem("kkworldUser");
+
   window.location.href = "login.html";
+
 }
 
+// Coming soon
 function comingSoon(event) {
+
   event.preventDefault();
+
   alert("This application is coming soon!");
+
 }
+
 </script>
 
 </body>
 </html>
+```
