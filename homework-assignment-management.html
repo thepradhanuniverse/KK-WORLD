@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK WORLD | Homework & Assignment Management</title>
+<style>
+:root{--bg:#080d1b;--panel:#111a2d;--line:#26334d;--text:#eef4ff;--muted:#94a3b8;--blue:#5865f2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:24px clamp(16px,4vw,42px);border-bottom:1px solid var(--line);background:linear-gradient(120deg,#111a2d,#10152a)}
+h1{margin:0;font-size:clamp(24px,3vw,32px)}.sub{color:var(--muted);margin-top:6px}
+main{max-width:1450px;margin:auto;padding:24px clamp(12px,3vw,32px)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:150px}
+label{font-size:12px;color:var(--muted);font-weight:700}input,select,textarea{width:100%;background:#080f1e;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit}textarea{min-height:90px;resize:vertical}
+button{border:0;border-radius:9px;padding:11px 15px;background:linear-gradient(135deg,var(--blue),#2563eb);color:white;font-weight:700;cursor:pointer}button.secondary{background:#1c2941;border:1px solid var(--line)}button.danger{background:#7f1d1d}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px}.stat strong{display:block;font-size:25px}.stat span{color:var(--muted);font-size:13px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:900px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#0c1322;color:#b9c8df;font-size:12px;text-transform:uppercase}tr:last-child td{border-bottom:0}.badge{display:inline-block;background:#1d3150;color:#7dd3fc;padding:3px 8px;border-radius:99px;font-size:12px}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:7px 10px;font-size:12px}.hint{color:var(--muted);font-size:13px;margin-top:10px}.empty{text-align:center;color:var(--muted);padding:28px}
+@media print{body{background:white;color:#111}header,.formpanel,.stats,.filters,.actions,.hint,.noprint{display:none!important}main{padding:0}.panel{background:white;border:0;padding:0}th{background:#eee;color:#111}td,th{border:1px solid #bbb;color:#111}table{min-width:0}}
+</style></head>
+<body>
+<header><h1>📚 Homework & Assignment Management</h1><div class="sub">KK WORLD • Assign homework, track deadlines and student submissions</div></header>
+<main>
+<section class="stats">
+<div class="stat"><strong id="total">0</strong><span>Total assignments</span></div>
+<div class="stat"><strong id="pending">0</strong><span>Upcoming / pending</span></div>
+<div class="stat"><strong id="overdue">0</strong><span>Past due</span></div>
+<div class="stat"><strong id="classes">0</strong><span>Classes covered</span></div>
+</section>
+<section class="panel formpanel">
+<h2 id="formTitle" style="margin-top:0">Create Assignment</h2>
+<form id="assignmentForm"><input type="hidden" id="editId">
+<div class="row">
+<div class="field"><label>Assignment Title *</label><input id="title" required placeholder="e.g. Chapter 4 Worksheet"></div>
+<div class="field"><label>Class / Course *</label><input id="className" required placeholder="e.g. Class 10 / BCA 1st Year"></div>
+<div class="field"><label>Section</label><input id="section" placeholder="e.g. A"></div>
+<div class="field"><label>Subject *</label><input id="subject" required placeholder="e.g. Mathematics"></div>
+</div>
+<div class="row" style="margin-top:12px">
+<div class="field"><label>Assigned Date *</label><input type="date" id="assignedDate" required></div>
+<div class="field"><label>Due Date *</label><input type="date" id="dueDate" required></div>
+<div class="field"><label>Teacher / Assigned By</label><select id="teacher"><option value="">— Select teacher —</option></select></div>
+<div class="field"><label>Priority</label><select id="priority"><option>Normal</option><option>High</option><option>Urgent</option></select></div>
+</div>
+<div class="row" style="margin-top:12px">
+<div class="field"><label>Assignment Instructions / Description</label><textarea id="description" placeholder="Write homework details, chapters, pages, submission instructions…"></textarea></div>
+</div>
+<div class="row" style="margin-top:14px"><button id="saveBtn" type="submit">＋ Create Assignment</button><button class="secondary" type="button" id="cancelEdit" style="display:none">Cancel Edit</button><button class="secondary" type="button" id="clearForm">Clear Form</button></div>
+<div class="hint">Teacher dropdown uses staff from Teacher & Staff Management. Data is saved in this browser’s localStorage.</div>
+</form></section>
+<section class="panel">
+<div class="row filters">
+<div class="field"><label>Filter Class</label><select id="filterClass"><option value="">All classes</option></select></div>
+<div class="field"><label>Filter Subject</label><select id="filterSubject"><option value="">All subjects</option></select></div>
+<div class="field"><label>Status</label><select id="filterStatus"><option value="">All statuses</option><option>Pending</option><option>Completed</option><option>Overdue</option></select></div>
+<div class="field"><label>Search</label><input id="search" placeholder="Title, class, teacher…"></div>
+<button class="secondary" id="printBtn">🖨️ Print</button><button class="secondary" id="csvBtn">⬇ Export CSV</button>
+</div>
+<div class="row" style="justify-content:space-between;margin:18px 0 12px"><h2 style="margin:0">Assignments</h2><span class="badge">Manage homework and status</span></div>
+<div class="tablewrap"><table><thead><tr><th>Assignment</th><th>Class / Section</th><th>Subject</th><th>Assigned</th><th>Due Date</th><th>Teacher</th><th>Priority</th><th>Status</th><th class="noprint">Actions</th></tr></thead><tbody id="tbody"></tbody></table></div>
+<div class="hint">Mark an assignment completed when students have finished/submitted it. “Overdue” is calculated automatically from the due date.</div>
+</section>
+</main>
+<script>
+const KEY='kkworld_assignments', STAFF_KEY='kkworld_staff';
+const $=id=>document.getElementById(id);
+let items=JSON.parse(localStorage.getItem(KEY)||'[]');
+const today=()=>new Date().toISOString().slice(0,10);
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function staff(){try{return JSON.parse(localStorage.getItem(STAFF_KEY)||'[]')}catch{return []}}
+function refreshTeachers(){let s=$('teacher'),old=s.value;s.innerHTML='<option value="">— Select teacher —</option>';staff().filter(x=>String(x.status||'Active').toLowerCase()!=='inactive').forEach(x=>{let n=x.fullName||x.name||'Staff',o=document.createElement('option');o.value=n;o.textContent=n+(x.staffId?' ('+x.staffId+')':'');s.appendChild(o)});if([...s.options].some(o=>o.value===old))s.value=old}
+function unique(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>x.localeCompare(y))}
+function status(x){if(x.completed)return 'Completed';return x.dueDate<today()?'Overdue':'Pending'}
+function refreshFilters(){function fill(id,arr,label){let e=$(id),v=e.value;e.innerHTML=`<option value="">${label}</option>`+arr.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if(arr.includes(v))e.value=v}fill('filterClass',unique(items.map(x=>x.className)),'All classes');fill('filterSubject',unique(items.map(x=>x.subject)),'All subjects')}
+function render(){refreshFilters();let cls=$('filterClass').value,sub=$('filterSubject').value,st=$('filterStatus').value,q=$('search').value.toLowerCase();
+let list=items.filter(x=>(!cls||x.className===cls)&&(!sub||x.subject===sub)&&(!st||status(x)===st)&&(!q||[x.title,x.className,x.section,x.subject,x.teacher,x.description].join(' ').toLowerCase().includes(q)));
+list.sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+$('tbody').innerHTML=list.length?list.map(x=>`<tr><td><strong>${esc(x.title)}</strong><br><small>${esc(x.description||'')}</small></td><td>${esc(x.className)}${x.section?' / '+esc(x.section):''}</td><td>${esc(x.subject)}</td><td>${esc(x.assignedDate)}</td><td>${esc(x.dueDate)}</td><td>${esc(x.teacher||'—')}</td><td>${esc(x.priority)}</td><td><span class="badge">${status(x)}</span></td><td class="noprint"><div class="actions"><button class="secondary" onclick="toggleComplete('${x.id}')">${x.completed?'Reopen':'Complete'}</button><button class="secondary" onclick="editItem('${x.id}')">Edit</button><button class="danger" onclick="deleteItem('${x.id}')">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="9" class="empty">No assignments found. Create your first assignment above.</td></tr>';
+$('total').textContent=items.length;$('pending').textContent=items.filter(x=>status(x)==='Pending').length;$('overdue').textContent=items.filter(x=>status(x)==='Overdue').length;$('classes').textContent=new Set(items.map(x=>x.className+'|'+(x.section||''))).size}
+function persist(){localStorage.setItem(KEY,JSON.stringify(items));render()}
+$('assignmentForm').addEventListener('submit',e=>{e.preventDefault();if($('dueDate').value<$('assignedDate').value){alert('Due date assigned date se pehle nahi ho sakti.');return}
+let id=$('editId').value||'as_'+Date.now(),obj={id,title:$('title').value.trim(),className:$('className').value.trim(),section:$('section').value.trim(),subject:$('subject').value.trim(),assignedDate:$('assignedDate').value,dueDate:$('dueDate').value,teacher:$('teacher').value,priority:$('priority').value,description:$('description').value.trim(),completed:false,updatedAt:new Date().toISOString()};
+let i=items.findIndex(x=>x.id===id);if(i>=0){obj.completed=items[i].completed;items[i]=obj}else items.push(obj);persist();resetForm();alert(i>=0?'Assignment updated!':'Assignment created!')});
+function editItem(id){let x=items.find(a=>a.id===id);if(!x)return;['title','className','section','subject','assignedDate','dueDate','teacher','priority','description'].forEach(k=>$(k).value=x[k]||'');$('editId').value=id;$('formTitle').textContent='Edit Assignment';$('saveBtn').textContent='Save Changes';$('cancelEdit').style.display='inline-block';window.scrollTo({top:0,behavior:'smooth'})}
+function toggleComplete(id){let x=items.find(a=>a.id===id);if(x){x.completed=!x.completed;persist()}}
+function deleteItem(id){if(confirm('Delete this assignment?')){items=items.filter(x=>x.id!==id);persist();if($('editId').value===id)resetForm()}}
+function resetForm(){$('assignmentForm').reset();$('editId').value='';$('assignedDate').value=today();$('dueDate').value=today();$('formTitle').textContent='Create Assignment';$('saveBtn').textContent='＋ Create Assignment';$('cancelEdit').style.display='none'}
+$('cancelEdit').onclick=resetForm;$('clearForm').onclick=resetForm;
+['filterClass','filterSubject','filterStatus','search'].forEach(id=>$(id).addEventListener('input',render));
+$('printBtn').onclick=()=>window.print();
+$('csvBtn').onclick=()=>{let headers=['Title','Class','Section','Subject','Assigned Date','Due Date','Teacher','Priority','Status','Description'];let rows=items.map(x=>[x.title,x.className,x.section,x.subject,x.assignedDate,x.dueDate,x.teacher,x.priority,status(x),x.description]);let csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='kk-world-assignments.csv';a.click();URL.revokeObjectURL(url)};
+refreshTeachers();$('assignedDate').value=today();$('dueDate').value=today();render();
+</script>
+</body></html>
