@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | Student Attendance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{background:#080d1b;color:#f8fafc;font-family:Arial,sans-serif}
+.layout{display:flex;min-height:100vh}.sidebar{width:250px;flex-shrink:0;background:#0c1322;border-right:1px solid #26334d;padding:28px 18px}
+.logo{font-size:25px;font-weight:bold;margin:0 0 30px}.logo span{color:#38bdf8}.sidebar a{display:block;color:#94a3b8;text-decoration:none;padding:13px;border-radius:9px;margin-bottom:7px}.sidebar a:hover,.sidebar a.active{background:#17243b;color:#38bdf8}
+main{flex:1;min-width:0;padding:28px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}.sub{color:#94a3b8;margin-top:7px;line-height:1.5}
+.btn{display:inline-block;border:0;border-radius:9px;padding:11px 16px;background:linear-gradient(135deg,#5865f2,#2563eb);color:white;text-decoration:none;font-weight:bold;cursor:pointer}.btn.secondary{background:#1e293b;border:1px solid #334155}.btn.danger{background:#7f1d1d}
+.panel,.stat,.table-wrap{background:#111a2d;border:1px solid #26334d;border-radius:15px;padding:20px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}.stat small{display:block;color:#94a3b8;margin-bottom:9px}.stat strong{font-size:28px;color:#38bdf8}
+.panel{margin-bottom:20px}h2{font-size:19px;margin-bottom:15px}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:7px}input,select{width:100%;padding:11px;background:#080d1b;border:1px solid #334155;border-radius:8px;color:#f8fafc;outline:none}input:focus,select:focus{border-color:#38bdf8}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.notice{color:#94a3b8;font-size:13px;line-height:1.6;margin-top:12px}.filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:15px}.filters input,.filters select{max-width:260px}
+.table-wrap{overflow-x:auto;padding:0}table{width:100%;border-collapse:collapse;min-width:700px}th,td{text-align:left;padding:13px 15px;border-bottom:1px solid #26334d;font-size:14px}th{color:#94a3b8;background:#0c1322}td{color:#e2e8f0}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}.Present{background:#064e3b;color:#6ee7b7}.Absent{background:#7f1d1d;color:#fecaca}.Late{background:#78350f;color:#fde68a}.Not-marked{background:#334155;color:#cbd5e1}
+.empty{text-align:center;padding:30px;color:#94a3b8}footer{margin-top:25px;color:#64748b;font-size:12px}
+@media(max-width:760px){.layout{flex-direction:column}.sidebar{width:100%;border-right:0;border-bottom:1px solid #26334d;padding:18px}.logo{margin-bottom:15px}.sidebar a{display:inline-block;margin:3px;padding:9px}main{padding:18px}}
+</style></head><body>
+<div class="layout"><aside class="sidebar"><div class="logo">KK <span>World</span></div>
+<a href="dashboard.html">🏠 Dashboard</a><a href="education-management.html">🎓 Student Management</a><a href="attendance-management.html" class="active">📅 Attendance</a><a href="profile.html">👤 My Profile</a><a href="index.html">🌐 Main Website</a></aside>
+<main><header><div><h1>Student Attendance</h1><p class="sub">Mark and manage daily student attendance.</p></div>
+<div class="actions" style="margin-top:0"><a class="btn secondary" href="education-management.html">← Student Management</a><a class="btn" href="dashboard.html">Dashboard</a></div></header>
+<section class="stats"><div class="stat"><small>Total Students</small><strong id="totalStudents">0</strong></div><div class="stat"><small>Present Today</small><strong id="presentCount">0</strong></div><div class="stat"><small>Absent Today</small><strong id="absentCount">0</strong></div><div class="stat"><small>Late Today</small><strong id="lateCount">0</strong></div></section>
+<section class="panel"><h2>Mark Attendance</h2><div class="form-grid">
+<div><label for="attendanceDate">Attendance Date</label><input type="date" id="attendanceDate"></div>
+<div><label for="studentSelect">Select Student</label><select id="studentSelect"><option value="">Loading students...</option></select></div>
+<div><label for="attendanceStatus">Status</label><select id="attendanceStatus"><option>Present</option><option>Absent</option><option>Late</option></select></div></div>
+<div class="actions"><button class="btn" onclick="saveAttendance()">Save Attendance</button><button class="btn secondary" onclick="markAllPresent()">Mark All Present</button></div>
+<p class="notice">Attendance records are saved in this browser's localStorage. They are not synced across devices or users.</p><p class="notice" id="message" role="status"></p></section>
+<section class="panel"><h2>Attendance Records</h2><div class="filters"><input type="search" id="searchInput" placeholder="Search student name / ID..." oninput="renderTable()">
+<select id="statusFilter" onchange="renderTable()"><option value="">All statuses</option><option>Present</option><option>Absent</option><option>Late</option><option>Not marked</option></select><button class="btn secondary" onclick="exportCSV()">Export CSV</button></div>
+<div class="table-wrap"><table><thead><tr><th>Student</th><th>Student ID</th><th>Class / Course</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="attendanceBody"></tbody></table></div>
+<div id="emptyState" class="empty" style="display:none"></div></section><footer>© 2026 KK World. Attendance data is stored locally in this browser.</footer></main></div>
+<script>
+const STUDENTS_KEY="kkworld_students", ATTENDANCE_KEY="kkworld_attendance";
+const students=readJSON(STUDENTS_KEY,[]);let attendance=readJSON(ATTENDANCE_KEY,[]);
+function readJSON(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||"null");return Array.isArray(v)?v:fallback}catch(e){return fallback}}
+function todayISO(){const n=new Date(),local=new Date(n.getTime()-n.getTimezoneOffset()*60000);return local.toISOString().slice(0,10)}
+document.getElementById("attendanceDate").value=todayISO();
+function studentId(s){return String(s.studentId||s.rollNo||s.id||"")}
+function studentName(s){return s.name||s.fullName||"Unnamed Student"}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function selectedDate(){return document.getElementById("attendanceDate").value||todayISO()}
+function findStudent(id){return students.find(s=>studentId(s)===String(id))}
+function fillSelect(){const sel=document.getElementById("studentSelect"),active=students.filter(s=>String(s.status||"Active").toLowerCase()!=="inactive");sel.innerHTML=active.length?'<option value="">Choose a student</option>'+active.map(s=>`<option value="${esc(studentId(s))}">${esc(studentName(s))} — ${esc(studentId(s))}</option>`).join(""):'<option value="">No students found</option>'}
+function saveRecords(){localStorage.setItem(ATTENDANCE_KEY,JSON.stringify(attendance))}
+function showMessage(t){document.getElementById("message").textContent=t}
+function saveAttendance(){const id=document.getElementById("studentSelect").value,status=document.getElementById("attendanceStatus").value,date=selectedDate();if(!id){showMessage("Pehle student select karo.");return}const s=findStudent(id);if(!s){showMessage("Student record nahi mila. Student Management check karo.");return}
+const i=attendance.findIndex(r=>String(r.studentId)===id&&r.date===date),record={studentId:id,studentName:studentName(s),date,status,updatedAt:new Date().toISOString()};if(i>=0)attendance[i]=record;else attendance.push(record);saveRecords();showMessage("Attendance save ho gayi!");updateStats();renderTable()}
+function markAllPresent(){const date=selectedDate(),active=students.filter(s=>String(s.status||"Active").toLowerCase()!=="inactive");if(!active.length){showMessage("Student Management mein pehle students add karo.");return}
+active.forEach(s=>{const id=studentId(s);if(!id)return;const i=attendance.findIndex(r=>String(r.studentId)===id&&r.date===date),rec={studentId:id,studentName:studentName(s),date,status:"Present",updatedAt:new Date().toISOString()};if(i>=0)attendance[i]=rec;else attendance.push(rec)});saveRecords();showMessage("Selected date ke sabhi active students Present mark ho gaye.");updateStats();renderTable()}
+function deleteRecord(id,date){if(!confirm("Is attendance record ko delete karna hai?"))return;attendance=attendance.filter(r=>!(String(r.studentId)===String(id)&&r.date===date));saveRecords();updateStats();renderTable()}
+function updateStats(){const r=attendance.filter(x=>x.date===selectedDate());document.getElementById("totalStudents").textContent=students.filter(s=>String(s.status||"Active").toLowerCase()!=="inactive").length;document.getElementById("presentCount").textContent=r.filter(x=>x.status==="Present").length;document.getElementById("absentCount").textContent=r.filter(x=>x.status==="Absent").length;document.getElementById("lateCount").textContent=r.filter(x=>x.status==="Late").length}
+function renderTable(){const date=selectedDate(),q=document.getElementById("searchInput").value.trim().toLowerCase(),f=document.getElementById("statusFilter").value,recMap=new Map(attendance.filter(r=>r.date===date).map(r=>[String(r.studentId),r]));
+const active=students.filter(s=>String(s.status||"Active").toLowerCase()!=="inactive");const rows=active.map(s=>{const id=studentId(s),r=recMap.get(id);return{student:s,id,record:r,status:r?r.status:"Not marked"}}).filter(x=>(!q||studentName(x.student).toLowerCase().includes(q)||x.id.toLowerCase().includes(q))&&(!f||x.status===f));
+document.getElementById("attendanceBody").innerHTML=rows.map(x=>{const s=x.student,r=x.record,cls=s.className||s.class||s.course||"—";return `<tr><td>${esc(studentName(s))}</td><td>${esc(x.id||"—")}</td><td>${esc(cls)}</td><td>${esc(date)}</td><td><span class="status ${x.status.replace(/\s/g,"-")}">${esc(x.status)}</span></td><td>${r?`<button class="btn danger" style="padding:7px 10px;font-size:12px" onclick="deleteRecord('${esc(x.id)}','${esc(date)}')">Delete</button>`:"—"}</td></tr>`}).join("");
+const empty=document.getElementById("emptyState");empty.style.display=rows.length?"none":"block";empty.textContent=students.length?"Is date ke liye matching students nahi mile.":"Abhi students add nahi hain. Pehle Student Management mein students add karo."}
+function exportCSV(){const date=selectedDate(),rows=[["Student Name","Student ID","Class/Course","Date","Status"]];students.filter(s=>String(s.status||"Active").toLowerCase()!=="inactive").forEach(s=>{const id=studentId(s),r=attendance.find(x=>String(x.studentId)===id&&x.date===date);rows.push([studentName(s),id,s.className||s.class||s.course||"",date,r?r.status:"Not marked"])});
+const csv=rows.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`KK-World-Attendance-${date}.csv`;a.click();URL.revokeObjectURL(url)}
+document.getElementById("attendanceDate").addEventListener("change",()=>{updateStats();renderTable()});fillSelect();updateStats();renderTable();
+</script></body></html>
