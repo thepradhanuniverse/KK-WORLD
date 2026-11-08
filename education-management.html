@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | Education Management</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080d1b;--surface:#111a2d;--border:#26334d;--cyan:#38bdf8;--muted:#94a3b8;--text:#f8fafc}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:245px;flex-shrink:0;background:#0c1322;border-right:1px solid var(--border);padding:25px 18px}
+.logo{font-size:25px;font-weight:bold;margin-bottom:28px}.logo span{color:var(--cyan)}
+.sidebar a{display:block;text-decoration:none;color:var(--muted);padding:13px;border-radius:9px;margin-bottom:7px}
+.sidebar a:hover,.sidebar a.active{background:#17243b;color:var(--cyan)}
+.main{flex:1;min-width:0;padding:28px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}
+.topbar p{color:var(--muted);margin-top:6px}
+.btn{border:0;padding:11px 16px;border-radius:8px;background:linear-gradient(135deg,#5865f2,#2563eb);color:white;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.secondary{background:#26334d}.btn.danger{background:#991b1b}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:15px;margin-bottom:25px}
+.stat,.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
+.stat p{color:var(--muted);font-size:13px;margin-bottom:10px}.stat strong{font-size:27px;color:var(--cyan)}
+.panel{margin-bottom:22px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:7px}
+input,select{width:100%;padding:11px;background:#080d1b;border:1px solid #334155;border-radius:8px;color:white;font:inherit}
+input:focus,select:focus{outline:1px solid var(--cyan);border-color:var(--cyan)}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
+.searchbar{max-width:360px;width:100%}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{text-align:left;padding:13px 11px;border-bottom:1px solid var(--border);font-size:14px}
+th{color:var(--muted);font-weight:600}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.small-btn{padding:7px 10px;border:0;border-radius:6px;cursor:pointer;color:white;background:#26334d;margin:2px}
+.small-btn.delete{background:#7f1d1d}
+.status{font-size:14px;margin-top:12px;min-height:18px;color:var(--cyan)}
+footer{color:#64748b;font-size:12px;margin-top:25px}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:750px){.layout{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid var(--border);padding:18px}.logo{margin-bottom:14px}.sidebar a{display:inline-block;padding:9px;margin:2px}.main{padding:16px}}
+@media(max-width:480px){.stats,.form-grid{grid-template-columns:1fr}.topbar{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="logo">KK <span>World</span></div>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="profile.html">👤 My Profile</a>
+  <a href="settings.html">⚙️ Settings</a>
+  <a href="id-card-generator.html">🪪 ID Card Generator</a>
+  <a class="active" href="education-management.html">🎓 Education Management</a>
+  <a href="index.html">🌐 Main Website</a>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <h1>🎓 Education Management</h1>
+      <p>Student records and basic school / institute management.</p>
+    </div>
+    <a class="btn" href="dashboard.html">← Dashboard</a>
+  </div>
+
+  <section class="stats">
+    <div class="stat"><p>Total Students</p><strong id="totalStudents">0</strong></div>
+    <div class="stat"><p>Active Students</p><strong id="activeStudents">0</strong></div>
+    <div class="stat"><p>Classes</p><strong id="totalClasses">0</strong></div>
+    <div class="stat"><p>Institutions</p><strong id="totalInstitutions">0</strong></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2 id="formTitle">➕ Add Student</h2><p style="color:#94a3b8;font-size:13px;margin-top:6px">Fill student details and save the record.</p></div>
+    <button class="btn secondary" id="cancelEdit" style="display:none">Cancel Edit</button>
+  </div>
+  <form id="studentForm">
+    <input type="hidden" id="editStudentId">
+    <div class="form-grid">
+      <div><label for="studentName">Student Full Name *</label><input id="studentName" maxlength="100" required></div>
+      <div><label for="studentId">Student ID / Roll Number *</label><input id="studentId" maxlength="40" required></div>
+      <div><label for="institution">School / Institution *</label><input id="institution" maxlength="120" required></div>
+      <div><label for="className">Class / Course *</label><input id="className" maxlength="60" placeholder="e.g. Class 10 / BCA" required></div>
+      <div><label for="section">Section</label><input id="section" maxlength="30" placeholder="e.g. A"></div>
+      <div><label for="phone">Parent / Student Mobile</label><input id="phone" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}"></div>
+      <div><label for="email">Email (optional)</label><input id="email" type="email" maxlength="120"></div>
+      <div><label for="admissionDate">Admission Date</label><input id="admissionDate" type="date"></div>
+      <div><label for="studentStatus">Status</label><select id="studentStatus"><option>Active</option><option>Inactive</option></select></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" type="submit" id="saveStudentBtn">Save Student</button>
+      <button class="btn secondary" type="reset" id="resetFormBtn">Clear Form</button>
+    </div>
+    <p class="status" id="formMessage" aria-live="polite"></p>
+  </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>👨‍🎓 Student Records</h2><p style="color:#94a3b8;font-size:13px;margin-top:6px">Search, edit, delete or export your saved students.</p></div>
+      <input class="searchbar" id="searchStudents" placeholder="Search name, roll no, class, institution...">
+    </div>
+    <div class="form-actions" style="margin:0 0 15px">
+      <button class="btn secondary" id="exportCsv">⬇ Export CSV</button>
+      <button class="btn secondary" id="refreshRecords">↻ Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Student ID</th><th>Institution</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="studentTableBody"><tr><td colspan="6" class="empty">No students added yet.</td></tr></tbody>
+      </table>
+    </div>
+    <p class="status" id="tableMessage" aria-live="polite"></p>
+  </section>
+  <footer>© 2026 KK World • Education Management Demo</footer>
+</main>
+</div>
+
+<script>
+const STORAGE_KEY = "kkworld_students";
+const $ = id => document.getElementById(id);
+
+function getStudents(){
+  try{
+    const value=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    return Array.isArray(value)?value:[];
+  }catch{return [];}
+}
+function saveStudents(items){localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}
+function setMessage(id,text,isError=false){
+  $(id).textContent=text;
+  $(id).style.color=isError?"#fca5a5":"#38bdf8";
+}
+function safeText(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+}
+function updateStats(students){
+  $("totalStudents").textContent=students.length;
+  $("activeStudents").textContent=students.filter(s=>s.status==="Active").length;
+  $("totalClasses").textContent=new Set(students.map(s=>s.className.trim()).filter(Boolean)).size;
+  $("totalInstitutions").textContent=new Set(students.map(s=>s.institution.trim()).filter(Boolean)).size;
+}
+function renderStudents(){
+  const students=getStudents();
+  updateStats(students);
+  const query=$("searchStudents").value.trim().toLowerCase();
+  const filtered=students.filter(s=>[s.name,s.studentId,s.institution,s.className,s.section,s.phone,s.email].some(v=>String(v||"").toLowerCase().includes(query)));
+  const tbody=$("studentTableBody");
+  if(!filtered.length){
+    tbody.innerHTML='<tr><td colspan="6" class="empty">'+(query?"No matching students found.":"No students added yet.")+'</td></tr>';
+    return;
+  }
+  tbody.innerHTML=filtered.map(s=>`<tr>
+    <td>${safeText(s.name)}</td><td>${safeText(s.studentId)}</td><td>${safeText(s.institution)}</td>
+    <td>${safeText(s.className)}${s.section?" - "+safeText(s.section):""}</td>
+    <td>${safeText(s.status)}</td>
+    <td><button class="small-btn" data-action="edit" data-id="${safeText(s.id)}">Edit</button>
+    <button class="small-btn delete" data-action="delete" data-id="${safeText(s.id)}">Delete</button></td>
+  </tr>`).join("");
+}
+function resetStudentForm(){
+  $("studentForm").reset();
+  $("editStudentId").value="";
+  $("formTitle").textContent="➕ Add Student";
+  $("saveStudentBtn").textContent="Save Student";
+  $("cancelEdit").style.display="none";
+}
+$("studentForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("studentName").value.trim();
+  const studentId=$("studentId").value.trim();
+  const institution=$("institution").value.trim();
+  const className=$("className").value.trim();
+  const phone=$("phone").value.trim();
+  if(!name||!studentId||!institution||!className){
+    setMessage("formMessage","Please fill all required fields.",true);return;
+  }
+  if(phone&&!/^[0-9]{10}$/.test(phone)){
+    setMessage("formMessage","Mobile number must be 10 digits.",true);return;
+  }
+  const students=getStudents();
+  const editingId=$("editStudentId").value;
+  if(students.some(s=>s.studentId.toLowerCase()===studentId.toLowerCase()&&s.id!==editingId)){
+    setMessage("formMessage","This Student ID / Roll Number already exists.",true);return;
+  }
+  const record={
+    id:editingId||("STU-"+Date.now()+"-"+Math.random().toString(36).slice(2,7)),
+    name,studentId,institution,className,section:$("section").value.trim(),
+    phone,email:$("email").value.trim(),admissionDate:$("admissionDate").value,
+    status:$("studentStatus").value,
+    updatedAt:new Date().toISOString()
+  };
+  if(editingId){
+    const index=students.findIndex(s=>s.id===editingId);
+    if(index<0){setMessage("formMessage","Student record not found.",true);return;}
+    students[index]={...students[index],...record};
+    setMessage("formMessage","Student record updated.");
+  }else{
+    record.createdAt=new Date().toISOString();
+    students.push(record);
+    setMessage("formMessage","Student added successfully.");
+  }
+  try{saveStudents(students);}catch{setMessage("formMessage","Could not save. Browser storage may be full.",true);return;}
+  renderStudents();
+  resetStudentForm();
+});
+$("studentTableBody").addEventListener("click",e=>{
+  const button=e.target.closest("button[data-action]");
+  if(!button)return;
+  const id=button.dataset.id;
+  const students=getStudents();
+  const student=students.find(s=>s.id===id);
+  if(!student)return;
+  if(button.dataset.action==="edit"){
+    $("editStudentId").value=student.id;
+    $("studentName").value=student.name||"";
+    $("studentId").value=student.studentId||"";
+    $("institution").value=student.institution||"";
+    $("className").value=student.className||"";
+    $("section").value=student.section||"";
+    $("phone").value=student.phone||"";
+    $("email").value=student.email||"";
+    $("admissionDate").value=student.admissionDate||"";
+    $("studentStatus").value=student.status||"Active";
+    $("formTitle").textContent="✏️ Edit Student";
+    $("saveStudentBtn").textContent="Update Student";
+    $("cancelEdit").style.display="inline-block";
+    window.scrollTo({top:0,behavior:"smooth"});
+  }else if(button.dataset.action==="delete"){
+    if(!confirm("Delete student "+student.name+"? This cannot be undone."))return;
+    saveStudents(students.filter(s=>s.id!==id));
+    renderStudents();
+    setMessage("tableMessage","Student record deleted.");
+  }
+});
+$("cancelEdit").addEventListener("click",resetStudentForm);
+$("searchStudents").addEventListener("input",renderStudents);
+$("refreshRecords").addEventListener("click",()=>{renderStudents();setMessage("tableMessage","Student records refreshed.");});
+$("resetFormBtn").addEventListener("click",()=>setTimeout(()=>{resetStudentForm();setMessage("formMessage","Form cleared.");},0));
+$("exportCsv").addEventListener("click",()=>{
+  const students=getStudents();
+  if(!students.length){setMessage("tableMessage","No student records to export.",true);return;}
+  const headers=["Name","Student ID","Institution","Class","Section","Phone","Email","Admission Date","Status"];
+  const rows=students.map(s=>[s.name,s.studentId,s.institution,s.className,s.section,s.phone,s.email,s.admissionDate,s.status]);
+  const csv=[headers,...rows].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");link.href=url;link.download="KK-World-Students.csv";link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  setMessage("tableMessage","Student CSV exported.");
+});
+renderStudents();
+</script>
+</body>
+</html>
