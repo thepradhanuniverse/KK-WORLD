@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | Teacher & Staff Management</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080d1b;--panel:#111a2d;--border:#26334d;--cyan:#38bdf8;--muted:#94a3b8;--blue:#5865f2}
+body{background:var(--bg);color:#f8fafc;font-family:Arial,sans-serif}
+.layout{display:flex;min-height:100vh}.sidebar{width:245px;background:#0c1322;border-right:1px solid var(--border);padding:25px 18px;flex-shrink:0}
+.logo{font-size:25px;font-weight:bold;margin-bottom:28px}.logo span{color:var(--cyan)}
+.sidebar a{display:block;padding:12px;margin-bottom:6px;color:#94a3b8;text-decoration:none;border-radius:9px}
+.sidebar a:hover,.sidebar a.active{background:#17243b;color:var(--cyan)}
+main{flex:1;padding:28px;min-width:0;max-width:1600px}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}
+h1{font-size:28px;margin-bottom:7px}.sub{color:var(--muted);line-height:1.6}
+.btn{display:inline-block;border:0;padding:11px 16px;border-radius:9px;background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;text-decoration:none;font-weight:bold;cursor:pointer}
+.btn.secondary{background:#26334d}.btn.danger{background:#7f1d1d}.btn.small{padding:7px 10px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:15px;margin-bottom:22px}
+.stat,.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}
+.stat small{color:var(--muted);display:block;margin-bottom:9px}.stat strong{font-size:24px;color:var(--cyan)}
+.panel{margin-bottom:22px}.panel h2{font-size:19px;margin-bottom:17px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:7px}
+input,select,textarea{width:100%;padding:11px 12px;background:#080d1b;border:1px solid #334155;border-radius:8px;color:white;font:inherit}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--cyan)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.notice{font-size:13px;color:var(--cyan);margin-top:12px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.filters input{flex:1;min-width:180px}.filters select{max-width:210px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:950px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);font-size:13px}
+th{background:#0c1322;color:var(--muted)}td{color:#e2e8f0}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold}
+.Active{background:#064e3b;color:#6ee7b7}.Inactive{background:#7f1d1d;color:#fecaca}.OnLeave{background:#78350f;color:#fde68a}
+.empty{text-align:center;padding:28px;color:var(--muted)}
+footer{color:#64748b;font-size:12px;margin-top:25px}
+@media(max-width:850px){.layout{flex-direction:column}.sidebar{width:100%;border-right:0;border-bottom:1px solid var(--border);padding:15px}.logo{margin-bottom:12px}.sidebar a{display:inline-block;padding:9px;margin:2px}main{padding:18px}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="logo">KK <span>World</span></div>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="education-management.html">🎓 Student Management</a>
+  <a href="attendance-management.html">📅 Attendance</a>
+  <a href="fees-management.html">💰 Fees Management</a>
+  <a href="teacher-staff-management.html" class="active">👨‍🏫 Teacher & Staff</a>
+  <a href="profile.html">👤 My Profile</a>
+  <a href="index.html">🌐 Main Website</a>
+</aside>
+<main>
+<header>
+ <div><h1>👨‍🏫 Teacher & Staff Management</h1><p class="sub">Manage teacher and staff profiles, designations, employment details and contact information.</p></div>
+ <div class="actions" style="margin-top:0"><a class="btn secondary" href="dashboard.html">← Dashboard</a></div>
+</header>
+<section class="stats">
+ <div class="stat"><small>Total Staff</small><strong id="totalStaff">0</strong></div>
+ <div class="stat"><small>Active</small><strong id="activeStaff">0</strong></div>
+ <div class="stat"><small>Teachers</small><strong id="teacherCount">0</strong></div>
+ <div class="stat"><small>Other Staff</small><strong id="otherCount">0</strong></div>
+</section>
+<section class="panel">
+<h2 id="formTitle">Add Teacher / Staff Member</h2>
+<form id="staffForm">
+<input type="hidden" id="editId">
+<div class="form-grid">
+ <div><label for="fullName">Full Name *</label><input id="fullName" required placeholder="Employee full name"></div>
+ <div><label for="staffId">Staff ID *</label><input id="staffId" required placeholder="e.g. KK-TCH-001"></div>
+ <div><label for="role">Role / Designation *</label><select id="role" required><option value="">Select role</option><option>Teacher</option><option>Principal</option><option>Vice Principal</option><option>Coordinator</option><option>Accountant</option><option>Receptionist</option><option>Administrator</option><option>Support Staff</option><option>Other</option></select></div>
+ <div><label for="department">Department / Subject</label><input id="department" placeholder="e.g. Mathematics"></div>
+ <div><label for="phone">Phone</label><input id="phone" type="tel" placeholder="Contact number"></div>
+ <div><label for="email">Email</label><input id="email" type="email" placeholder="name@example.com"></div>
+ <div><label for="joiningDate">Joining Date</label><input id="joiningDate" type="date"></div>
+ <div><label for="employmentType">Employment Type</label><select id="employmentType"><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Temporary</option></select></div>
+ <div><label for="salary">Monthly Salary (₹)</label><input id="salary" type="number" min="0" step="0.01" placeholder="Optional"></div>
+ <div><label for="status">Status</label><select id="status"><option>Active</option><option>Inactive</option><option>OnLeave</option></select></div>
+ <div><label for="qualification">Qualification</label><input id="qualification" placeholder="e.g. B.Ed, M.Sc."></div>
+ <div><label for="address">Address</label><input id="address" placeholder="City / address"></div>
+</div>
+<div class="actions"><button class="btn" id="saveBtn" type="submit">Save Staff Record</button><button class="btn secondary" type="button" id="clearBtn">Clear Form</button></div>
+<p class="notice" id="formMessage" role="status"></p>
+</form>
+</section>
+<section class="panel">
+<h2>Staff Directory</h2>
+<div class="filters">
+ <input id="searchInput" type="search" placeholder="Search name, staff ID, role, department..." />
+ <select id="roleFilter"><option value="">All roles</option><option>Teacher</option><option>Principal</option><option>Vice Principal</option><option>Coordinator</option><option>Accountant</option><option>Receptionist</option><option>Administrator</option><option>Support Staff</option><option>Other</option></select>
+ <select id="statusFilter"><option value="">All statuses</option><option>Active</option><option>Inactive</option><option>OnLeave</option></select>
+ <button class="btn secondary" id="exportBtn" type="button">Export CSV</button>
+</div>
+<div class="table-wrap"><table><thead><tr><th>Name</th><th>Staff ID</th><th>Role</th><th>Department</th><th>Phone</th><th>Joining Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="staffBody"></tbody></table></div>
+<div class="empty" id="emptyState" style="display:none">No staff records found. Add your first staff member above.</div>
+<p class="notice">Staff records are stored in this browser only (localStorage). Salary is optional. This demo is not a secure HR/payroll system.</p>
+</section>
+<footer>© 2026 KK World. Staff data is stored locally in this browser.</footer>
+</main>
+</div>
+<script>
+const KEY="kkworld_staff";
+let staff=readStaff();
+const $=id=>document.getElementById(id);
+function readStaff(){try{let a=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(staff))}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showMsg(t){$("formMessage").textContent=t}
+function resetForm(){ $("staffForm").reset();$("editId").value="";$("formTitle").textContent="Add Teacher / Staff Member";$("saveBtn").textContent="Save Staff Record";showMsg("")}
+function updateStats(){
+ $("totalStaff").textContent=staff.length;
+ $("activeStaff").textContent=staff.filter(x=>x.status==="Active").length;
+ $("teacherCount").textContent=staff.filter(x=>x.role==="Teacher").length;
+ $("otherCount").textContent=staff.filter(x=>x.role!=="Teacher").length;
+}
+function render(){
+ const q=$("searchInput").value.trim().toLowerCase(),role=$("roleFilter").value,status=$("statusFilter").value;
+ const arr=staff.filter(x=>(!q||[x.fullName,x.staffId,x.role,x.department,x.phone,x.email].join(" ").toLowerCase().includes(q))&&(!role||x.role===role)&&(!status||x.status===status));
+ $("staffBody").innerHTML=arr.map(x=>`<tr>
+ <td><strong>${esc(x.fullName)}</strong><br><span style="color:#94a3b8">${esc(x.email||"")}</span></td>
+ <td>${esc(x.staffId)}</td><td>${esc(x.role)}</td><td>${esc(x.department||"—")}</td><td>${esc(x.phone||"—")}</td><td>${esc(x.joiningDate||"—")}</td>
+ <td><span class="badge ${x.status}">${esc(x.status)}</span></td>
+ <td><button class="btn small" onclick="editStaff('${esc(x.id)}')">Edit</button> <button class="btn small danger" onclick="deleteStaff('${esc(x.id)}')">Delete</button></td></tr>`).join("");
+ $("emptyState").style.display=arr.length?"none":"block";updateStats();
+}
+$("staffForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const editId=$("editId").value,staffId=$("staffId").value.trim();
+ if(staff.some(x=>x.staffId.toLowerCase()===staffId.toLowerCase()&&x.id!==editId)){showMsg("This Staff ID already exists. Please use a unique ID.");return}
+ const item={id:editId||"STAFF-"+Date.now().toString(36).toUpperCase(),fullName:$("fullName").value.trim(),staffId,role:$("role").value,department:$("department").value.trim(),phone:$("phone").value.trim(),email:$("email").value.trim(),joiningDate:$("joiningDate").value,employmentType:$("employmentType").value,salary:Number($("salary").value)||0,status:$("status").value,qualification:$("qualification").value.trim(),address:$("address").value.trim(),updatedAt:new Date().toISOString()};
+ const i=staff.findIndex(x=>x.id===editId);if(i>=0)staff[i]=item;else staff.unshift(item);
+ persist();resetForm();render();showMsg(i>=0?"Staff record updated successfully.":"Staff record added successfully.");
+});
+function editStaff(id){
+ const x=staff.find(s=>s.id===id);if(!x)return;
+ ["fullName","staffId","role","department","phone","email","joiningDate","employmentType","salary","status","qualification","address"].forEach(k=>$(k).value=x[k]??"");
+ $("editId").value=x.id;$("formTitle").textContent="Edit Staff Record";$("saveBtn").textContent="Update Staff Record";window.scrollTo({top:0,behavior:"smooth"});
+}
+function deleteStaff(id){if(!confirm("Delete this staff record?"))return;staff=staff.filter(x=>x.id!==id);persist();render()}
+function exportCSV(){
+ const headers=["Full Name","Staff ID","Role","Department","Phone","Email","Joining Date","Employment Type","Monthly Salary","Status","Qualification","Address"];
+ const keys=["fullName","staffId","role","department","phone","email","joiningDate","employmentType","salary","status","qualification","address"];
+ const rows=[headers,...staff.map(x=>keys.map(k=>x[k]??""))];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="kk-world-teacher-staff.csv";a.click();URL.revokeObjectURL(url);
+}
+$("clearBtn").addEventListener("click",resetForm);
+["searchInput","roleFilter","statusFilter"].forEach(id=>$(id).addEventListener(id==="searchInput"?"input":"change",render));
+$("exportBtn").addEventListener("click",exportCSV);
+render();
+</script>
+</body>
+</html>
