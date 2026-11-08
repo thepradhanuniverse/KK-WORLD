@@ -305,6 +305,45 @@ footer{
     max-width:100%;
   }
 }
+
+/* KK World module access */
+.module-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+  margin-top:18px;
+}
+.module-card{
+  background:#080d1b;
+  border:1px solid #26334d;
+  border-radius:12px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-width:0;
+}
+.module-card h3{font-size:16px;color:#f8fafc}
+.module-card p{font-size:13px;color:#94a3b8;line-height:1.6;flex:1}
+.module-card .btn{align-self:flex-start;font-size:13px;padding:10px 14px}
+.module-label{
+  display:inline-block;
+  color:#38bdf8;
+  background:#172554;
+  padding:5px 8px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:bold;
+  width:fit-content;
+}
+.sidebar .nav-heading{
+  color:#64748b;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1px;
+  margin:20px 10px 8px;
+}
+
 </style>
 </head>
 
@@ -320,6 +359,19 @@ footer{
   <a href="#users">👥 User Management</a>
   <a href="#statistics">📊 Statistics</a>
   <a href="#management">⚙️ Website Management</a>
+
+  <div class="nav-heading">SCHOOL MODULES</div>
+  <a href="education-management.html">🎓 Student Management</a>
+  <a href="attendance-management.html">📅 Attendance</a>
+  <a href="fees-management.html">💰 Fees Management</a>
+  <a href="exam-marks-management.html">📝 Exam & Marks</a>
+  <a href="student-report-card-generator.html">📄 Report Card Generator</a>
+  <a href="fee-receipt-generator.html">🧾 Fee Receipt Generator</a>
+  <a href="teacher-staff-management.html">👨‍🏫 Teacher & Staff</a>
+  <a href="timetable-management.html">🗓️ Timetable</a>
+  <a href="homework-assignment-management.html">📚 Homework & Assignments</a>
+  <a href="library-management.html">📖 Library Management</a>
+
   <a href="dashboard.html">🏠 User Dashboard</a>
   <a href="index.html">🌐 Main Website</a>
 
@@ -437,21 +489,74 @@ footer{
 
   </section>
 
-  <!-- Website Management -->
+  <!-- School Module Access -->
 
   <section class="section" id="management">
+    <h2>🏫 School Module Management</h2>
+    <p>Admin quick access to all 10 KK World school modules. Open a module to view or manage its available records.</p>
 
-    <h2>⚙️ Website Management</h2>
-
-    <p>
-      Website configuration, application management and admin controls
-      will be added in future development.
-    </p>
-
-    <br>
-
-    <span class="badge">Coming Soon</span>
-
+    <div class="module-grid">
+      <div class="module-card">
+        <span class="module-label">MODULE 01</span>
+        <h3>🎓 Student Management</h3>
+        <p>Open student records and education management.</p>
+        <a class="btn" href="education-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 02</span>
+        <h3>📅 Attendance Management</h3>
+        <p>Access daily attendance and student attendance records.</p>
+        <a class="btn" href="attendance-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 03</span>
+        <h3>💰 Fees Management</h3>
+        <p>View fee records, payments and pending balances.</p>
+        <a class="btn" href="fees-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 04</span>
+        <h3>📝 Exam & Marks</h3>
+        <p>Manage exam marks and academic results.</p>
+        <a class="btn" href="exam-marks-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 05</span>
+        <h3>📄 Student Report Card</h3>
+        <p>Generate student report cards.</p>
+        <a class="btn" href="student-report-card-generator.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 06</span>
+        <h3>🧾 Fee Receipt Generator</h3>
+        <p>Create and print fee receipts.</p>
+        <a class="btn" href="fee-receipt-generator.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 07</span>
+        <h3>👨‍🏫 Teacher & Staff</h3>
+        <p>Access teacher and staff records.</p>
+        <a class="btn" href="teacher-staff-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 08</span>
+        <h3>🗓️ Timetable Management</h3>
+        <p>View and manage class timetables.</p>
+        <a class="btn" href="timetable-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 09</span>
+        <h3>📚 Homework & Assignments</h3>
+        <p>Access homework and assignment records.</p>
+        <a class="btn" href="homework-assignment-management.html">Open Module →</a>
+      </div>
+      <div class="module-card">
+        <span class="module-label">MODULE 10</span>
+        <h3>📖 Library Management</h3>
+        <p>Manage books, issue/return records and overdue books.</p>
+        <a class="btn" href="library-management.html">Open Module →</a>
+      </div>
+    </div>
   </section>
 
   <!-- Quick Actions -->
@@ -461,7 +566,7 @@ footer{
     <h2>🚀 Quick Actions</h2>
 
     <p style="margin-bottom:20px">
-      Navigate to other KK World sections.
+      Quick links to your KK World workspace and account pages.
     </p>
 
     <a href="dashboard.html" class="btn">Open User Dashboard</a>
