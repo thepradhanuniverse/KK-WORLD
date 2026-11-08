@@ -1,0 +1,235 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KK World | Admin Login</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#080d1b;
+  color:#f8fafc;
+  font-family:Arial,sans-serif;
+}
+
+.login-container{
+  width:100%;
+  max-width:430px;
+  background:#111a2d;
+  border:1px solid #26334d;
+  border-radius:20px;
+  padding:35px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+.logo{
+  text-align:center;
+  font-size:32px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.logo span{color:#38bdf8}
+
+.subtitle{
+  text-align:center;
+  color:#94a3b8;
+  margin-bottom:30px;
+  line-height:1.6;
+}
+
+.admin-icon{
+  text-align:center;
+  font-size:55px;
+  margin-bottom:15px;
+}
+
+.field{margin-bottom:20px}
+
+.field label{
+  display:block;
+  margin-bottom:9px;
+  color:#cbd5e1;
+}
+
+.field input{
+  width:100%;
+  padding:14px;
+  background:#080d1b;
+  border:1px solid #26334d;
+  border-radius:10px;
+  color:white;
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#38bdf8;
+}
+
+.login-btn{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:linear-gradient(135deg,#5865f2,#2563eb);
+  color:white;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.login-btn:hover{opacity:.9}
+
+.message{
+  margin-top:18px;
+  text-align:center;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.back-link{
+  display:block;
+  text-align:center;
+  margin-top:25px;
+  color:#38bdf8;
+  text-decoration:none;
+}
+
+.warning{
+  margin-top:25px;
+  padding:12px;
+  background:#422006;
+  border:1px solid #92400e;
+  border-radius:9px;
+  color:#fde68a;
+  font-size:12px;
+  line-height:1.6;
+}
+
+@media(max-width:480px){
+  .login-container{padding:25px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+  <div class="admin-icon">👑</div>
+
+  <div class="logo">
+    KK <span>World</span>
+  </div>
+
+  <p class="subtitle">
+    Administration Portal<br>
+    Authorized Access Only
+  </p>
+
+  <form id="adminLoginForm">
+
+    <div class="field">
+      <label for="adminId">Admin ID</label>
+
+      <input
+        type="text"
+        id="adminId"
+        placeholder="Enter Admin ID"
+        autocomplete="username"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label for="adminPassword">Password</label>
+
+      <input
+        type="password"
+        id="adminPassword"
+        placeholder="Enter Admin Password"
+        autocomplete="current-password"
+        required
+      >
+    </div>
+
+    <button type="submit" class="login-btn">
+      Login to Admin Panel →
+    </button>
+
+  </form>
+
+  <div class="message" id="loginMessage"></div>
+
+  <a href="index.html" class="back-link">
+    ← Back to Main Website
+  </a>
+
+  <div class="warning">
+    ⚠️ Demo login only. Do not use real or sensitive passwords here.
+    Production admin authentication requires a secure backend.
+  </div>
+
+</div>
+
+<script>
+
+// DEMO ONLY — NOT SECURE AUTHENTICATION
+// Replace with backend authentication before production.
+
+const DEMO_ADMIN_ID = "KKADMIN";
+const DEMO_ADMIN_PASSWORD = "KKDemo2026";
+
+document.getElementById("adminLoginForm")
+.addEventListener("submit",function(event){
+
+  event.preventDefault();
+
+  const adminId = document.getElementById("adminId").value.trim();
+  const password = document.getElementById("adminPassword").value;
+
+  const message = document.getElementById("loginMessage");
+
+  if(
+    adminId === DEMO_ADMIN_ID &&
+    password === DEMO_ADMIN_PASSWORD
+  ){
+
+    sessionStorage.setItem("kkworldAdminDemo","true");
+
+    message.style.color="#38bdf8";
+    message.textContent="Demo login successful! Opening Admin Panel...";
+
+    setTimeout(function(){
+
+      window.location.href="admin.html";
+
+    },700);
+
+  }else{
+
+    message.style.color="#f87171";
+    message.textContent="Invalid Admin ID or Password.";
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
+```
