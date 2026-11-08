@@ -66,6 +66,8 @@ body{
   cursor:pointer;
 }
 
+.logout-btn{background:#7f1d1d}
+
 .stats{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -219,7 +221,12 @@ footer{
       </p>
     </div>
 
-    <a href="dashboard.html" class="btn">User Dashboard →</a>
+    <div>
+      <a href="dashboard.html" class="btn">User Dashboard →</a>
+      <button class="btn logout-btn" onclick="adminLogout()">
+        Logout
+      </button>
+    </div>
 
   </div>
 
@@ -256,9 +263,7 @@ footer{
 
     <h2>👥 User Management</h2>
 
-    <p>
-      View registered accounts stored in this browser.
-    </p>
+    <p>View registered accounts stored in this browser.</p>
 
     <input
       type="text"
@@ -283,15 +288,7 @@ footer{
           </tr>
         </thead>
 
-        <tbody id="userTable">
-
-          <tr>
-            <td colspan="6" class="empty">
-              Loading users...
-            </td>
-          </tr>
-
-        </tbody>
+        <tbody id="userTable"></tbody>
 
       </table>
 
@@ -330,13 +327,9 @@ footer{
 
     <a href="dashboard.html" class="btn">Open User Dashboard</a>
 
-    <a href="profile.html" class="btn" style="margin-left:8px">
-      Open Profile
-    </a>
+    <a href="profile.html" class="btn">Open Profile</a>
 
-    <a href="settings.html" class="btn" style="margin-left:8px">
-      Open Settings
-    </a>
+    <a href="settings.html" class="btn">Open Settings</a>
 
   </section>
 
@@ -348,6 +341,24 @@ footer{
 </div>
 
 <script>
+
+// DEMO SESSION CHECK
+// Frontend-only protection; not secure authentication.
+
+if(sessionStorage.getItem("kkworldAdminDemo") !== "true"){
+
+  window.location.replace("admin-login.html");
+
+}
+
+// Admin Logout
+function adminLogout(){
+
+  sessionStorage.removeItem("kkworldAdminDemo");
+
+  window.location.replace("admin-login.html");
+
+}
 
 // Read registered accounts
 function getAccounts(){
@@ -401,12 +412,10 @@ function renderUsers(){
   const filteredAccounts = accounts.filter(account=>{
 
     const searchableText = [
-
       account.name,
       account.userId,
       account.mobile,
       account.organization
-
     ].join(" ").toLowerCase();
 
     return searchableText.includes(search);
@@ -426,9 +435,7 @@ function renderUsers(){
 
     table.innerHTML = `
       <tr>
-        <td colspan="6" class="empty">
-          No users found.
-        </td>
+        <td colspan="6" class="empty">No users found.</td>
       </tr>
     `;
 
@@ -440,23 +447,16 @@ function renderUsers(){
 
     return `
       <tr>
-
         <td>${index+1}</td>
-
         <td>${escapeHTML(account.name || "Not available")}</td>
-
         <td>
           <span class="badge">
             ${escapeHTML(account.userId || "N/A")}
           </span>
         </td>
-
         <td>${escapeHTML(account.mobile || "Not available")}</td>
-
         <td>${escapeHTML(account.organization || "Not available")}</td>
-
         <td>${formatDate(account.createdAt)}</td>
-
       </tr>
     `;
 
@@ -464,7 +464,7 @@ function renderUsers(){
 
 }
 
-// Protect HTML from user-entered text
+// Escape HTML
 function escapeHTML(value){
 
   return String(value).replace(/[&<>"']/g,function(char){
@@ -481,8 +481,10 @@ function escapeHTML(value){
 
 }
 
-// Initial load
-renderUsers();
+// Load users only after session check
+if(sessionStorage.getItem("kkworldAdminDemo") === "true"){
+  renderUsers();
+}
 
 </script>
 
