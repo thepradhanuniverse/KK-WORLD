@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,7 +132,7 @@ body{
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:750px;
+  min-width:900px;
 }
 
 th,td{
@@ -164,10 +164,94 @@ td{color:#cbd5e1}
   font-size:12px;
 }
 
+.view-btn{
+  padding:8px 12px;
+  font-size:12px;
+  white-space:nowrap;
+}
+
 footer{
   margin-top:35px;
   color:#64748b;
   font-size:13px;
+}
+
+/* User Details Modal */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.78);
+  padding:20px;
+  overflow-y:auto;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal.show{display:flex}
+
+.modal-content{
+  width:100%;
+  max-width:550px;
+  background:#111a2d;
+  border:1px solid #26334d;
+  border-radius:18px;
+  padding:25px;
+  margin:auto;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.close-btn{
+  background:#26334d;
+  border:0;
+  color:white;
+  border-radius:8px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.user-avatar{
+  width:75px;
+  height:75px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#5865f2,#38bdf8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 0;
+  border-bottom:1px solid #26334d;
+}
+
+.detail-label{color:#94a3b8}
+.detail-value{
+  text-align:right;
+  overflow-wrap:anywhere;
+  max-width:65%;
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:20px;
 }
 
 @media(max-width:768px){
@@ -189,6 +273,18 @@ footer{
   }
 
   .main{padding:20px}
+
+  .modal-content{padding:20px}
+
+  .detail-row{
+    flex-direction:column;
+    gap:6px;
+  }
+
+  .detail-value{
+    text-align:left;
+    max-width:100%;
+  }
 }
 </style>
 </head>
@@ -285,6 +381,7 @@ footer{
             <th>Mobile</th>
             <th>Organization</th>
             <th>Created At</th>
+            <th>Action</th>
           </tr>
         </thead>
 
@@ -340,31 +437,67 @@ footer{
 </main>
 </div>
 
+<!-- User Details Modal -->
+
+<div class="modal" id="userModal" onclick="closeModalOutside(event)">
+
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h2>👤 User Details</h2>
+      <button class="close-btn" onclick="closeUserDetails()">✕</button>
+    </div>
+
+    <div class="user-avatar" id="detailAvatar">U</div>
+
+    <h2 id="detailName" style="margin-bottom:8px">User Name</h2>
+
+    <p style="margin-bottom:20px">
+      <span class="badge" id="detailUserId">User ID</span>
+    </p>
+
+    <div class="detail-row">
+      <span class="detail-label">📱 Mobile</span>
+      <span class="detail-value" id="detailMobile">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">🏢 Organization</span>
+      <span class="detail-value" id="detailOrganization">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">📅 Account Created</span>
+      <span class="detail-value" id="detailCreated">—</span>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn" onclick="closeUserDetails()">Close</button>
+    </div>
+
+  </div>
+
+</div>
+
 <script>
 
 // DEMO SESSION CHECK
 // Frontend-only protection; not secure authentication.
 
 if(sessionStorage.getItem("kkworldAdminDemo") !== "true"){
-
   window.location.replace("admin-login.html");
-
 }
 
 // Admin Logout
 function adminLogout(){
-
   sessionStorage.removeItem("kkworldAdminDemo");
-
   window.location.replace("admin-login.html");
-
 }
 
 // Read registered accounts
 function getAccounts(){
 
   try{
-
     const accounts = JSON.parse(
       localStorage.getItem("kkworld_accounts") || "[]"
     );
@@ -372,9 +505,7 @@ function getAccounts(){
     return Array.isArray(accounts) ? accounts : [];
 
   }catch(error){
-
     return [];
-
   }
 
 }
@@ -390,10 +521,12 @@ function formatDate(date){
     return "Not available";
   }
 
-  return parsedDate.toLocaleDateString("en-IN",{
+  return parsedDate.toLocaleString("en-IN",{
     day:"2-digit",
     month:"short",
-    year:"numeric"
+    year:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
   });
 
 }
@@ -435,7 +568,7 @@ function renderUsers(){
 
     table.innerHTML = `
       <tr>
-        <td colspan="6" class="empty">No users found.</td>
+        <td colspan="7" class="empty">No users found.</td>
       </tr>
     `;
 
@@ -448,19 +581,83 @@ function renderUsers(){
     return `
       <tr>
         <td>${index+1}</td>
+
         <td>${escapeHTML(account.name || "Not available")}</td>
+
         <td>
           <span class="badge">
             ${escapeHTML(account.userId || "N/A")}
           </span>
         </td>
+
         <td>${escapeHTML(account.mobile || "Not available")}</td>
+
         <td>${escapeHTML(account.organization || "Not available")}</td>
-        <td>${formatDate(account.createdAt)}</td>
+
+        <td>${escapeHTML(formatDate(account.createdAt))}</td>
+
+        <td>
+          <button
+            class="btn view-btn"
+            onclick="viewUserDetails('${escapeHTML(account.userId || "")}')"
+          >
+            View Details
+          </button>
+        </td>
       </tr>
     `;
 
   }).join("");
+
+}
+
+// View user details
+function viewUserDetails(userId){
+
+  const accounts = getAccounts();
+
+  const account = accounts.find(user =>
+    String(user.userId || "") === String(userId)
+  );
+
+  if(!account){
+    alert("User account not found!");
+    return;
+  }
+
+  document.getElementById("detailAvatar").textContent =
+    (account.name || "U").charAt(0).toUpperCase();
+
+  document.getElementById("detailName").textContent =
+    account.name || "Not available";
+
+  document.getElementById("detailUserId").textContent =
+    account.userId || "Not available";
+
+  document.getElementById("detailMobile").textContent =
+    account.mobile || "Not available";
+
+  document.getElementById("detailOrganization").textContent =
+    account.organization || "Not available";
+
+  document.getElementById("detailCreated").textContent =
+    formatDate(account.createdAt);
+
+  document.getElementById("userModal").classList.add("show");
+
+}
+
+// Close modal
+function closeUserDetails(){
+  document.getElementById("userModal").classList.remove("show");
+}
+
+// Close when clicking outside popup
+function closeModalOutside(event){
+
+  if(event.target.id === "userModal"){
+    closeUserDetails();
+  }
 
 }
 
@@ -481,6 +678,15 @@ function escapeHTML(value){
 
 }
 
+// Close modal with Escape key
+document.addEventListener("keydown",function(event){
+
+  if(event.key === "Escape"){
+    closeUserDetails();
+  }
+
+});
+
 // Load users only after session check
 if(sessionStorage.getItem("kkworldAdminDemo") === "true"){
   renderUsers();
@@ -490,4 +696,3 @@ if(sessionStorage.getItem("kkworldAdminDemo") === "true"){
 
 </body>
 </html>
-```
