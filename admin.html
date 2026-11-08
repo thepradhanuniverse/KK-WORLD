@@ -361,6 +361,10 @@ footer{
 
     <p>View registered accounts stored in this browser.</p>
 
+    <button class="btn" onclick="exportUsers()" style="margin-top:15px">
+      📥 Export Users CSV
+    </button>
+
     <input
       type="text"
       id="userSearch"
@@ -477,6 +481,40 @@ footer{
 
   </div>
 
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal" id="editModal" onclick="closeEditModalOutside(event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>✏️ Edit User</h2>
+      <button class="close-btn" onclick="closeEditModal()">✕</button>
+    </div>
+
+    <form id="editUserForm" onsubmit="saveUserChanges(event)">
+      <input type="hidden" id="editUserId">
+
+      <div class="form-group">
+        <label for="editName">Full Name</label>
+        <input id="editName" type="text" required maxlength="100">
+      </div>
+
+      <div class="form-group">
+        <label for="editMobile">Mobile Number</label>
+        <input id="editMobile" type="tel" maxlength="30">
+      </div>
+
+      <div class="form-group">
+        <label for="editOrganization">Organization</label>
+        <input id="editOrganization" type="text" maxlength="150">
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" class="close-btn" onclick="closeEditModal()">Cancel</button>
+        <button type="submit" class="btn">Save Changes</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
@@ -598,17 +636,189 @@ function renderUsers(){
 
         <td>
           <button
-            class="btn view-btn"
+            class="btn view-btn action-btn"
             onclick="viewUserDetails('${escapeHTML(account.userId || "")}')"
-          >
-            View Details
-          </button>
+          >View</button>
+
+          <button
+            class="btn edit-btn action-btn"
+            onclick="editUser('${escapeHTML(account.userId || "")}')"
+          >Edit</button>
+
+          <button
+            class="btn delete-btn action-btn"
+            onclick="deleteUser('${escapeHTML(account.userId || "")}')"
+          >Delete</button>
         </td>
       </tr>
     `;
 
   }).join("");
 
+}
+
+// Find user by User ID
+function findUser(userId){
+  return getAccounts().find(user =>
+    String(user.userId || "") === String(userId)
+  );
+}
+
+// Edit user: open modal and populate fields
+function editUser(userId){
+  const account = findUser(userId);
+
+  if(!account){
+    alert("User account not found!");
+    return;
+  }
+
+  document.getElementById("editUserId").value = account.userId || "";
+  document.getElementById("editName").value = account.name || "";
+  document.getElementById("editMobile").value = account.mobile || "";
+  document.getElementById("editOrganization").value = account.organization || "";
+
+  document.getElementById("editModal").classList.add("show");
+}
+
+// Save edited user
+function saveUserChanges(event){
+  event.preventDefault();
+
+  const userId = document.getElementById("editUserId").value;
+  const name = document.getElementById("editName").value.trim();
+  const mobile = document.getElementById("editMobile").value.trim();
+  const organization = document.getElementById("editOrganization").value.trim();
+
+  if(!name){
+    alert("Please enter the user's name.");
+    return;
+  }
+
+  const accounts = getAccounts();
+  const index = accounts.findIndex(user =>
+    String(user.userId || "") === String(userId)
+  );
+
+  if(index === -1){
+    alert("User account not found!");
+    return;
+  }
+
+  accounts[index] = {
+    ...accounts[index],
+    name,
+    mobile,
+    organization
+  };
+
+  localStorage.setItem("kkworld_accounts", JSON.stringify(accounts));
+
+  // Update the current user's session name if it matches
+  try{
+    const sessionUser = JSON.parse(sessionStorage.getItem("kkworldUser") || "null");
+    if(sessionUser && String(sessionUser.userId) === String(userId)){
+      sessionUser.name = name;
+      sessionStorage.setItem("kkworldUser", JSON.stringify(sessionUser));
+    }
+  }catch(error){}
+
+  closeEditModal();
+  renderUsers();
+  alert("User details updated successfully!");
+}
+
+// Close edit modal
+function closeEditModal(){
+  document.getElementById("editModal").classList.remove("show");
+}
+
+function closeEditModalOutside(event){
+  if(event.target.id === "editModal"){
+    closeEditModal();
+  }
+}
+
+// Delete user with confirmation
+function deleteUser(userId){
+  const account = findUser(userId);
+
+  if(!account){
+    alert("User account not found!");
+    return;
+  }
+
+  const confirmed = confirm(
+    "Delete account for " + (account.name || userId) +
+    " (" + userId + ")? This action cannot be undone."
+  );
+
+  if(!confirmed) return;
+
+  const accounts = getAccounts().filter(user =>
+    String(user.userId || "") !== String(userId)
+  );
+
+  localStorage.setItem("kkworld_accounts", JSON.stringify(accounts));
+
+  // Remove active user session if this is the deleted account
+  try{
+    const sessionUser = JSON.parse(sessionStorage.getItem("kkworldUser") || "null");
+    if(sessionUser && String(sessionUser.userId) === String(userId)){
+      sessionStorage.removeItem("kkworldUser");
+    }
+  }catch(error){}
+
+  closeUserDetails();
+  closeEditModal();
+  renderUsers();
+  alert("User account deleted.");
+}
+
+// Export users to CSV
+function exportUsers(){
+  const accounts = getAccounts();
+
+  if(accounts.length === 0){
+    alert("No users available to export.");
+    return;
+  }
+
+  const headers = ["Name","User ID","Mobile","Organization","Created At"];
+
+  function csvCell(value){
+    let text = String(value ?? "");
+    // Prevent spreadsheet formula injection
+    if(/^[=+@\-\t\r]/.test(text)){
+      text = "'" + text;
+    }
+    return '"' + text.replace(/"/g, '""') + '"';
+  }
+
+  const rows = accounts.map(account => [
+    account.name || "",
+    account.userId || "",
+    account.mobile || "",
+    account.organization || "",
+    account.createdAt || ""
+  ]);
+
+  const csvContent = [headers, ...rows]
+    .map(row => row.map(csvCell).join(","))
+    .join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + csvContent], {
+    type:"text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "KK-World-Users-" + new Date().toISOString().slice(0,10) + ".csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 // View user details
@@ -683,6 +893,7 @@ document.addEventListener("keydown",function(event){
 
   if(event.key === "Escape"){
     closeUserDetails();
+    closeEditModal();
   }
 
 });
