@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK WORLD | Library Management</title>
+<style>
+:root{--bg:#080d1b;--panel:#111a2d;--line:#26334d;--text:#eef4ff;--muted:#94a3b8;--blue:#5865f2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:24px clamp(16px,4vw,42px);border-bottom:1px solid var(--line);background:linear-gradient(120deg,#111a2d,#10152a)}
+h1{margin:0;font-size:clamp(24px,3vw,32px)}.sub{color:var(--muted);margin-top:6px}main{max-width:1450px;margin:auto;padding:24px clamp(12px,3vw,32px)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:150px}
+label{font-size:12px;color:var(--muted);font-weight:700}input,select,textarea{width:100%;background:#080f1e;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit}button{border:0;border-radius:9px;padding:11px 15px;background:linear-gradient(135deg,var(--blue),#2563eb);color:white;font-weight:700;cursor:pointer}button.secondary{background:#1c2941;border:1px solid var(--line)}button.danger{background:#7f1d1d}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px}.stat strong{display:block;font-size:25px}.stat span{color:var(--muted);font-size:13px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:950px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#0c1322;color:#b9c8df;font-size:12px;text-transform:uppercase}tr:last-child td{border-bottom:0}.badge{display:inline-block;background:#1d3150;color:#7dd3fc;padding:3px 8px;border-radius:99px;font-size:12px}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:7px 10px;font-size:12px}.hint{color:var(--muted);font-size:13px;margin-top:10px}.empty{text-align:center;color:var(--muted);padding:28px}
+@media print{body{background:white;color:#111}header,.formpanel,.stats,.filters,.actions,.hint,.noprint{display:none!important}main{padding:0}.panel{background:white;border:0;padding:0}th{background:#eee;color:#111}td,th{border:1px solid #bbb;color:#111}table{min-width:0}}
+</style></head><body>
+<header><h1>📖 Library Management</h1><div class="sub">KK WORLD • Manage books, issue records and returns</div></header>
+<main>
+<section class="stats">
+<div class="stat"><strong id="bookCount">0</strong><span>Book titles</span></div>
+<div class="stat"><strong id="copies">0</strong><span>Total copies</span></div>
+<div class="stat"><strong id="issued">0</strong><span>Currently issued</span></div>
+<div class="stat"><strong id="overdue">0</strong><span>Overdue issues</span></div>
+</section>
+<section class="panel formpanel">
+<h2 id="bookFormTitle" style="margin-top:0">Add Book to Library</h2>
+<form id="bookForm"><input type="hidden" id="bookEditId">
+<div class="row">
+<div class="field"><label>Book Title *</label><input id="bookTitle" required placeholder="Book name"></div>
+<div class="field"><label>Author</label><input id="author" placeholder="Author name"></div>
+<div class="field"><label>ISBN / Book Code</label><input id="isbn" placeholder="ISBN or internal code"></div>
+<div class="field"><label>Category / Subject</label><input id="category" placeholder="Science, English, etc."></div>
+</div>
+<div class="row" style="margin-top:12px">
+<div class="field"><label>Publisher</label><input id="publisher"></div>
+<div class="field"><label>Rack / Shelf</label><input id="shelf" placeholder="e.g. Rack A-2"></div>
+<div class="field"><label>Total Copies *</label><input id="totalCopies" type="number" min="1" value="1" required></div>
+<div class="field"><label>Book Status</label><select id="bookStatus"><option>Available</option><option>Reference Only</option><option>Inactive</option></select></div>
+</div>
+<div class="row" style="margin-top:14px"><button type="submit" id="bookSave">＋ Add Book</button><button type="button" class="secondary" id="bookCancel" style="display:none">Cancel Edit</button><button type="button" class="secondary" id="bookClear">Clear</button></div>
+</form></section>
+<section class="panel formpanel">
+<h2 id="issueFormTitle" style="margin-top:0">Issue Book to Student</h2>
+<form id="issueForm"><input type="hidden" id="issueEditId">
+<div class="row">
+<div class="field"><label>Book *</label><select id="issueBook" required><option value="">Select book</option></select></div>
+<div class="field"><label>Student *</label><select id="issueStudent" required><option value="">Select student</option></select></div>
+<div class="field"><label>Issue Date *</label><input type="date" id="issueDate" required></div>
+<div class="field"><label>Due Date *</label><input type="date" id="returnDue" required></div>
+</div>
+<div class="row" style="margin-top:14px"><button type="submit" id="issueSave">📤 Issue Book</button><button type="button" class="secondary" id="issueCancel" style="display:none">Cancel Edit</button><button type="button" class="secondary" id="issueClear">Clear</button></div>
+<div class="hint">Student list is loaded from Education Management (kkworld_students). Issue and return records are stored locally in this browser.</div>
+</form></section>
+<section class="panel">
+<div class="row filters">
+<div class="field"><label>Book Search</label><input id="bookSearch" placeholder="Title, author, ISBN, category"></div>
+<div class="field"><label>Category</label><select id="categoryFilter"><option value="">All categories</option></select></div>
+<button class="secondary" id="bookCsv">⬇ Books CSV</button>
+<button class="secondary" id="printBooks">🖨️ Print Books</button>
+</div>
+<h2>Book Inventory</h2><div class="tablewrap"><table style="min-width:850px"><thead><tr><th>Book</th><th>Author / ISBN</th><th>Category</th><th>Shelf</th><th>Total</th><th>Available</th><th>Status</th><th class="noprint">Actions</th></tr></thead><tbody id="booksBody"></tbody></table></div>
+</section>
+<section class="panel">
+<div class="row filters">
+<div class="field"><label>Issue Search</label><input id="issueSearch" placeholder="Student or book name"></div>
+<div class="field"><label>Issue Status</label><select id="issueFilter"><option value="">All</option><option>Issued</option><option>Returned</option><option>Overdue</option></select></div>
+<button class="secondary" id="issueCsv">⬇ Issue Records CSV</button><button class="secondary" id="printIssues">🖨️ Print Issues</button>
+</div>
+<h2>Book Issue & Return Register</h2><div class="tablewrap"><table><thead><tr><th>Book</th><th>Student</th><th>Issue Date</th><th>Due Date</th><th>Return Date</th><th>Status</th><th class="noprint">Actions</th></tr></thead><tbody id="issuesBody"></tbody></table></div>
+<div class="hint">Return action updates the record and makes the book copy available again. Overdue status is date-based.</div>
+</section>
+</main>
+<script>
+const BOOK_KEY='kkworld_library_books', ISSUE_KEY='kkworld_library_issues', STUDENT_KEY='kkworld_students';
+const $=id=>document.getElementById(id), today=()=>new Date().toISOString().slice(0,10);
+let books=JSON.parse(localStorage.getItem(BOOK_KEY)||'[]'), issues=JSON.parse(localStorage.getItem(ISSUE_KEY)||'[]');
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function students(){try{return JSON.parse(localStorage.getItem(STUDENT_KEY)||'[]')}catch{return []}}
+function studentName(s){return s.name||s.fullName||s.studentName||'Student'}
+function studentId(s){return s.studentId||s.id||s.userId||''}
+function available(b){return Math.max(0,Number(b.totalCopies||0)-issues.filter(i=>i.bookId===b.id&&!i.returnDate).length)}
+function issueStatus(i){if(i.returnDate)return 'Returned';return i.dueDate<today()?'Overdue':'Issued'}
+function persistBooks(){localStorage.setItem(BOOK_KEY,JSON.stringify(books));render()}
+function persistIssues(){localStorage.setItem(ISSUE_KEY,JSON.stringify(issues));render()}
+function refreshDropdowns(){
+ let bs=$('issueBook'),bv=bs.value;bs.innerHTML='<option value="">Select book</option>'+books.filter(b=>b.status!=='Inactive').map(b=>`<option value="${b.id}">${esc(b.title)} — ${available(b)} available</option>`).join('');if([...bs.options].some(o=>o.value===bv))bs.value=bv;
+ let ss=$('issueStudent'),sv=ss.value;ss.innerHTML='<option value="">Select student</option>'+students().map(s=>{let id=studentId(s),n=studentName(s);return `<option value="${esc(id)}">${esc(n)}${id?' ('+esc(id)+')':''}</option>`}).join('');if([...ss.options].some(o=>o.value===sv))ss.value=sv;
+}
+function unique(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>x.localeCompare(y))}
+function refreshCategory(){let el=$('categoryFilter'),v=el.value,arr=unique(books.map(b=>b.category));el.innerHTML='<option value="">All categories</option>'+arr.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if(arr.includes(v))el.value=v}
+function render(){
+ refreshDropdowns();refreshCategory();
+ let q=$('bookSearch').value.toLowerCase(),cat=$('categoryFilter').value;
+ let list=books.filter(b=>(!cat||b.category===cat)&&(!q||[b.title,b.author,b.isbn,b.category,b.publisher,b.shelf].join(' ').toLowerCase().includes(q)));
+ $('booksBody').innerHTML=list.length?list.map(b=>`<tr><td><strong>${esc(b.title)}</strong><br><small>${esc(b.publisher||'')}</small></td><td>${esc(b.author||'—')}<br><small>${esc(b.isbn||'')}</small></td><td>${esc(b.category||'—')}</td><td>${esc(b.shelf||'—')}</td><td>${b.totalCopies}</td><td>${available(b)}</td><td><span class="badge">${esc(b.status)}</span></td><td class="noprint"><div class="actions"><button class="secondary" onclick="editBook('${b.id}')">Edit</button><button class="danger" onclick="deleteBook('${b.id}')">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="8" class="empty">No books found. Add books above.</td></tr>';
+ let iq=$('issueSearch').value.toLowerCase(),st=$('issueFilter').value;
+ let il=issues.filter(i=>(!st||issueStatus(i)===st)&&(!iq||[i.bookTitle,i.studentName,i.studentId].join(' ').toLowerCase().includes(iq))).sort((a,b)=>b.issueDate.localeCompare(a.issueDate));
+ $('issuesBody').innerHTML=il.length?il.map(i=>`<tr><td>${esc(i.bookTitle)}</td><td>${esc(i.studentName)}<br><small>${esc(i.studentId||'')}</small></td><td>${esc(i.issueDate)}</td><td>${esc(i.dueDate)}</td><td>${esc(i.returnDate||'—')}</td><td><span class="badge">${issueStatus(i)}</span></td><td class="noprint"><div class="actions">${!i.returnDate?`<button onclick="returnBook('${i.id}')">Return</button>`:''}<button class="secondary" onclick="editIssue('${i.id}')">Edit</button><button class="danger" onclick="deleteIssue('${i.id}')">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="7" class="empty">No issue records yet.</td></tr>';
+ $('bookCount').textContent=books.length;$('copies').textContent=books.reduce((s,b)=>s+Number(b.totalCopies||0),0);$('issued').textContent=issues.filter(i=>!i.returnDate).length;$('overdue').textContent=issues.filter(i=>issueStatus(i)==='Overdue').length;
+}
+$('bookForm').addEventListener('submit',e=>{e.preventDefault();let id=$('bookEditId').value||'bk_'+Date.now(),obj={id,title:$('bookTitle').value.trim(),author:$('author').value.trim(),isbn:$('isbn').value.trim(),category:$('category').value.trim(),publisher:$('publisher').value.trim(),shelf:$('shelf').value.trim(),totalCopies:Number($('totalCopies').value),status:$('bookStatus').value,updatedAt:new Date().toISOString()};if(obj.totalCopies<1){alert('Copies kam se kam 1 honi chahiye.');return}let idx=books.findIndex(b=>b.id===id);if(idx>=0){let active=issues.filter(i=>i.bookId===id&&!i.returnDate).length;if(obj.totalCopies<active){alert('Total copies active issued books se kam nahi ho sakti.');return}books[idx]=obj}else books.push(obj);persistBooks();resetBook();alert(idx>=0?'Book updated!':'Book added!')});
+function editBook(id){let b=books.find(x=>x.id===id);if(!b)return;['bookTitle','author','isbn','category','publisher','shelf','totalCopies','bookStatus'].forEach((k,i)=>$(k).value=[b.title,b.author,b.isbn,b.category,b.publisher,b.shelf,b.totalCopies,b.status][i]||'');$('bookEditId').value=id;$('bookFormTitle').textContent='Edit Book';$('bookSave').textContent='Save Changes';$('bookCancel').style.display='inline-block';window.scrollTo({top:0,behavior:'smooth'})}
+function deleteBook(id){if(issues.some(i=>i.bookId===id&&!i.returnDate)){alert('Is book ki copy abhi issued hai. Pehle return mark karo.');return}if(confirm('Delete this book from inventory?')){books=books.filter(b=>b.id!==id);persistBooks()}}
+function resetBook(){$('bookForm').reset();$('bookEditId').value='';$('totalCopies').value=1;$('bookFormTitle').textContent='Add Book to Library';$('bookSave').textContent='＋ Add Book';$('bookCancel').style.display='none'}
+$('bookCancel').onclick=resetBook;$('bookClear').onclick=resetBook;
+$('issueForm').addEventListener('submit',e=>{e.preventDefault();if($('returnDue').value<$('issueDate').value){alert('Due date issue date se pehle nahi ho sakti.');return}let b=books.find(x=>x.id===$('issueBook').value),s=students().find(x=>studentId(x)===$('issueStudent').value);if(!b||!s){alert('Book aur student select karo.');return}let id=$('issueEditId').value||'is_'+Date.now();if(!$('issueEditId').value&&available(b)<1){alert('Is book ki koi copy available nahi hai.');return}let obj={id,bookId:b.id,bookTitle:b.title,studentId:studentId(s),studentName:studentName(s),issueDate:$('issueDate').value,dueDate:$('returnDue').value,returnDate:'',updatedAt:new Date().toISOString()};let idx=issues.findIndex(x=>x.id===id);if(idx>=0){obj.returnDate=issues[idx].returnDate;issues[idx]=obj}else issues.push(obj);persistIssues();resetIssue();alert(idx>=0?'Issue record updated!':'Book issued!')});
+function editIssue(id){let i=issues.find(x=>x.id===id);if(!i)return;$('issueBook').value=i.bookId;$('issueStudent').value=i.studentId;$('issueDate').value=i.issueDate;$('returnDue').value=i.dueDate;$('issueEditId').value=id;$('issueFormTitle').textContent='Edit Issue Record';$('issueSave').textContent='Save Changes';$('issueCancel').style.display='inline-block';window.scrollTo({top:0,behavior:'smooth'})}
+function returnBook(id){let i=issues.find(x=>x.id===id);if(i&&!i.returnDate&&confirm('Mark this book as returned today?')){i.returnDate=today();i.updatedAt=new Date().toISOString();persistIssues()}}
+function deleteIssue(id){if(confirm('Delete this issue record?')){issues=issues.filter(x=>x.id!==id);persistIssues()}}
+function resetIssue(){$('issueForm').reset();$('issueEditId').value='';$('issueDate').value=today();$('returnDue').value=today();$('issueFormTitle').textContent='Issue Book to Student';$('issueSave').textContent='📤 Issue Book';$('issueCancel').style.display='none'}
+$('issueCancel').onclick=resetIssue;$('issueClear').onclick=resetIssue;
+['bookSearch','categoryFilter','issueSearch','issueFilter'].forEach(id=>$(id).addEventListener('input',render));
+function csvDownload(filename,headers,rows){let csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url)}
+$('bookCsv').onclick=()=>csvDownload('kk-world-library-books.csv',['Title','Author','ISBN','Category','Publisher','Shelf','Copies','Status'],books.map(b=>[b.title,b.author,b.isbn,b.category,b.publisher,b.shelf,b.totalCopies,b.status]));
+$('issueCsv').onclick=()=>csvDownload('kk-world-library-issues.csv',['Book','Student','Student ID','Issue Date','Due Date','Return Date','Status'],issues.map(i=>[i.bookTitle,i.studentName,i.studentId,i.issueDate,i.dueDate,i.returnDate,issueStatus(i)]));
+$('printBooks').onclick=()=>window.print();$('printIssues').onclick=()=>window.print();
+$('issueDate').value=today();$('returnDue').value=today();render();
+</script></body></html>
