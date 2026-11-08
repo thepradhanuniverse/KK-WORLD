@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK WORLD | Timetable Management</title>
+<style>
+:root{--bg:#080d1b;--panel:#111a2d;--side:#0c1322;--line:#26334d;--text:#eef4ff;--muted:#94a3b8;--blue:#5865f2;--cyan:#38bdf8;--danger:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:24px clamp(16px,4vw,42px);border-bottom:1px solid var(--line);background:linear-gradient(120deg,#111a2d,#10152a)}
+h1{margin:0;font-size:clamp(24px,3vw,32px)}.sub{color:var(--muted);margin-top:6px}
+main{max-width:1450px;margin:auto;padding:24px clamp(12px,3vw,32px)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:150px}
+label{font-size:12px;color:var(--muted);font-weight:700}input,select,textarea{width:100%;background:#080f1e;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit}button{border:0;border-radius:9px;padding:11px 15px;background:linear-gradient(135deg,var(--blue),#2563eb);color:white;font-weight:700;cursor:pointer}button.secondary{background:#1c2941;border:1px solid var(--line)}button.danger{background:#7f1d1d}button:disabled{opacity:.5;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px}.stat strong{display:block;font-size:25px}.stat span{color:var(--muted);font-size:13px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:850px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#0c1322;color:#b9c8df;font-size:12px;text-transform:uppercase}tr:last-child td{border-bottom:0}.badge{display:inline-block;background:#1d3150;color:#7dd3fc;padding:3px 8px;border-radius:99px;font-size:12px}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:7px 10px;font-size:12px}
+.empty{text-align:center;color:var(--muted);padding:28px}.hint{color:var(--muted);font-size:13px;margin-top:10px}
+@media print{body{background:white;color:#111}header,.panel.formpanel,.stats,.filters,.actions,.hint,.noprint{display:none!important}main{padding:0}.panel{background:white;border:0;padding:0}th{background:#eee;color:#111}td,th{border:1px solid #bbb;color:#111}table{min-width:0}}
+</style>
+</head>
+<body>
+<header><h1>🗓️ Timetable Management</h1><div class="sub">KK WORLD • Create, organize and print class-wise weekly schedules</div></header>
+<main>
+<section class="stats">
+ <div class="stat"><strong id="totalCount">0</strong><span>Total periods</span></div>
+ <div class="stat"><strong id="classCount">0</strong><span>Classes / sections</span></div>
+ <div class="stat"><strong id="teacherCount">0</strong><span>Teachers assigned</span></div>
+ <div class="stat"><strong id="dayCount">0</strong><span>Days scheduled</span></div>
+</section>
+<section class="panel formpanel">
+ <h2 id="formTitle" style="margin-top:0">Add Timetable Period</h2>
+ <form id="periodForm">
+  <input type="hidden" id="editId">
+  <div class="row">
+   <div class="field"><label>Class / Course *</label><input id="className" required placeholder="e.g. Class 10 / BCA 1st Year"></div>
+   <div class="field"><label>Section</label><input id="section" placeholder="e.g. A"></div>
+   <div class="field"><label>Day *</label><select id="day" required><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+   <div class="field"><label>Period *</label><input id="period" required placeholder="e.g. 1 / Period 1"></div>
+  </div>
+  <div class="row" style="margin-top:12px">
+   <div class="field"><label>Start Time *</label><input id="startTime" type="time" required></div>
+   <div class="field"><label>End Time *</label><input id="endTime" type="time" required></div>
+   <div class="field"><label>Subject *</label><input id="subject" required placeholder="e.g. Mathematics"></div>
+   <div class="field"><label>Teacher / Staff</label><select id="teacher"><option value="">— Select teacher —</option></select></div>
+   <div class="field"><label>Room</label><input id="room" placeholder="e.g. Room 204"></div>
+  </div>
+  <div class="row" style="margin-top:14px"><button type="submit" id="saveBtn">＋ Add Period</button><button type="button" class="secondary" id="cancelEdit" style="display:none">Cancel Edit</button><button type="button" class="secondary" id="clearForm">Clear Form</button></div>
+  <div class="hint">Teacher dropdown is populated from the Teacher & Staff module (kkworld_staff). Timetable is saved in this browser’s localStorage.</div>
+ </form>
+</section>
+<section class="panel">
+ <div class="row filters">
+  <div class="field"><label>Filter Class</label><select id="filterClass"><option value="">All classes</option></select></div>
+  <div class="field"><label>Filter Section</label><select id="filterSection"><option value="">All sections</option></select></div>
+  <div class="field"><label>Filter Day</label><select id="filterDay"><option value="">All days</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+  <div class="field"><label>Search</label><input id="search" placeholder="Subject, teacher, room…"></div>
+  <button class="secondary" id="printBtn">🖨️ Print</button><button class="secondary" id="csvBtn">⬇ Export CSV</button>
+ </div>
+ <div class="row" style="justify-content:space-between;margin:18px 0 12px"><h2 style="margin:0">Weekly Timetable</h2><span class="badge">Sorted by day & time</span></div>
+ <div class="tablewrap"><table><thead><tr><th>Class</th><th>Section</th><th>Day</th><th>Period / Time</th><th>Subject</th><th>Teacher</th><th>Room</th><th class="noprint">Actions</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+ <div class="hint">Tip: use filters to view one class/section and print its timetable. Conflicting periods are not automatically blocked—please check overlaps.</div>
+</section>
+</main>
+<script>
+const KEY='kkworld_timetable', STAFF_KEY='kkworld_staff';
+const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const $=id=>document.getElementById(id);
+let records=JSON.parse(localStorage.getItem(KEY)||'[]');
+function save(){localStorage.setItem(KEY,JSON.stringify(records));render()}
+function staffList(){try{return JSON.parse(localStorage.getItem(STAFF_KEY)||'[]')}catch{return []}}
+function refreshTeachers(){
+ const sel=$('teacher'), old=sel.value; sel.innerHTML='<option value="">— Select teacher —</option>';
+ staffList().filter(s=>String(s.status||'Active').toLowerCase()!=='inactive').forEach(s=>{
+  const name=s.fullName||s.name||'Staff'; const opt=document.createElement('option'); opt.value=name; opt.textContent=name+(s.staffId?' ('+s.staffId+')':''); sel.appendChild(opt);
+ }); if([...sel.options].some(o=>o.value===old))sel.value=old;
+}
+function unique(arr){return [...new Set(arr.filter(Boolean))].sort((a,b)=>a.localeCompare(b))}
+function refreshFilters(){
+ const fill=(id,values,label)=>{const el=$(id),v=el.value;el.innerHTML=`<option value="">${label}</option>`+values.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if(values.includes(v))el.value=v};
+ fill('filterClass',unique(records.map(r=>r.className)),'All classes');
+ fill('filterSection',unique(records.map(r=>r.section)),'All sections');
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ refreshFilters();
+ const cls=$('filterClass').value,sec=$('filterSection').value,day=$('filterDay').value,q=$('search').value.toLowerCase();
+ const list=records.filter(r=>(!cls||r.className===cls)&&(!sec||r.section===sec)&&(!day||r.day===day)&&(!q||[r.className,r.section,r.day,r.period,r.subject,r.teacher,r.room].join(' ').toLowerCase().includes(q)));
+ list.sort((a,b)=>days.indexOf(a.day)-days.indexOf(b.day)||a.startTime.localeCompare(b.startTime)||a.className.localeCompare(b.className));
+ $('tableBody').innerHTML=list.length?list.map(r=>`<tr><td>${esc(r.className)}</td><td>${esc(r.section||'—')}</td><td>${esc(r.day)}</td><td>${esc(r.period)}<br><small>${esc(r.startTime)}–${esc(r.endTime)}</small></td><td><strong>${esc(r.subject)}</strong></td><td>${esc(r.teacher||'—')}</td><td>${esc(r.room||'—')}</td><td class="noprint"><div class="actions"><button class="secondary" onclick="editRecord('${r.id}')">Edit</button><button class="danger" onclick="deleteRecord('${r.id}')">Delete</button></div></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No timetable periods found. Add your first period above.</td></tr>`;
+ $('totalCount').textContent=records.length;
+ $('classCount').textContent=new Set(records.map(r=>r.className+'|'+(r.section||''))).size;
+ $('teacherCount').textContent=new Set(records.map(r=>r.teacher).filter(Boolean)).size;
+ $('dayCount').textContent=new Set(records.map(r=>r.day)).size;
+}
+$('periodForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ if($('endTime').value<=$('startTime').value){alert('End time must be later than start time.');return}
+ const item={id:$('editId').value||('tt_'+Date.now()),className:$('className').value.trim(),section:$('section').value.trim(),day:$('day').value,period:$('period').value.trim(),startTime:$('startTime').value,endTime:$('endTime').value,subject:$('subject').value.trim(),teacher:$('teacher').value,room:$('room').value.trim(),updatedAt:new Date().toISOString()};
+ if(!item.className||!item.period||!item.subject){alert('Please fill all required fields.');return}
+ const idx=records.findIndex(r=>r.id===item.id);if(idx>=0)records[idx]=item;else records.push(item);
+ save();resetForm();alert(idx>=0?'Period updated!':'Period added!');
+});
+function editRecord(id){const r=records.find(x=>x.id===id);if(!r)return;['className','section','day','period','startTime','endTime','subject','teacher','room'].forEach(k=>$(k).value=r[k]||'');$('editId').value=id;$('formTitle').textContent='Edit Timetable Period';$('saveBtn').textContent='Save Changes';$('cancelEdit').style.display='inline-block';window.scrollTo({top:0,behavior:'smooth'})}
+function deleteRecord(id){if(confirm('Delete this timetable period?')){records=records.filter(r=>r.id!==id);save();if($('editId').value===id)resetForm()}}
+function resetForm(){$('periodForm').reset();$('editId').value='';$('formTitle').textContent='Add Timetable Period';$('saveBtn').textContent='＋ Add Period';$('cancelEdit').style.display='none'}
+$('cancelEdit').onclick=resetForm;$('clearForm').onclick=resetForm;
+['filterClass','filterSection','filterDay','search'].forEach(id=>$(id).addEventListener('input',render));
+$('printBtn').onclick=()=>window.print();
+$('csvBtn').onclick=()=>{
+ const cls=$('filterClass').value,sec=$('filterSection').value,day=$('filterDay').value,q=$('search').value.toLowerCase();
+ const data=records.filter(r=>(!cls||r.className===cls)&&(!sec||r.section===sec)&&(!day||r.day===day)&&(!q||[r.className,r.section,r.day,r.period,r.subject,r.teacher,r.room].join(' ').toLowerCase().includes(q)));
+ const headers=['Class','Section','Day','Period','Start Time','End Time','Subject','Teacher','Room'];
+ const rows=data.map(r=>[r.className,r.section,r.day,r.period,r.startTime,r.endTime,r.subject,r.teacher,r.room]);
+ const csv=[headers,...rows].map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='kk-world-timetable.csv';a.click();URL.revokeObjectURL(url);
+};
+refreshTeachers();render();
+</script>
+</body>
+</html>
