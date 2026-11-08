@@ -80,15 +80,8 @@ body{
   padding:25px;
 }
 
-.stat-card p{
-  color:#94a3b8;
-  margin-bottom:12px;
-}
-
-.stat-card h2{
-  font-size:30px;
-  color:#38bdf8;
-}
+.stat-card p{color:#94a3b8;margin-bottom:12px}
+.stat-card h2{font-size:30px;color:#38bdf8}
 
 .section{
   background:#111a2d;
@@ -105,16 +98,6 @@ body{
   line-height:1.7;
 }
 
-.admin-badge{
-  display:inline-block;
-  background:#172554;
-  color:#38bdf8;
-  padding:8px 14px;
-  border-radius:8px;
-  margin-top:10px;
-  font-size:13px;
-}
-
 .warning{
   background:#422006;
   border:1px solid #92400e;
@@ -123,6 +106,60 @@ body{
   border-radius:10px;
   margin-bottom:25px;
   line-height:1.6;
+}
+
+.search-box{
+  width:100%;
+  padding:14px;
+  background:#080d1b;
+  border:1px solid #26334d;
+  border-radius:10px;
+  color:white;
+  margin:15px 0;
+  outline:none;
+}
+
+.search-box:focus{border-color:#38bdf8}
+
+.table-wrapper{
+  width:100%;
+  overflow-x:auto;
+  margin-top:15px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:750px;
+}
+
+th,td{
+  padding:15px;
+  text-align:left;
+  border-bottom:1px solid #26334d;
+  font-size:14px;
+}
+
+th{
+  color:#38bdf8;
+  background:#0c1322;
+}
+
+td{color:#cbd5e1}
+
+.empty{
+  text-align:center;
+  padding:25px;
+  color:#94a3b8;
+}
+
+.badge{
+  display:inline-block;
+  background:#172554;
+  color:#38bdf8;
+  padding:6px 10px;
+  border-radius:7px;
+  font-size:12px;
 }
 
 footer{
@@ -187,9 +224,12 @@ footer{
   </div>
 
   <div class="warning">
-    ⚠️ Demo Admin Panel: This page is currently frontend-only.
-    It does not provide secure admin authentication or real user management.
+    ⚠️ Demo Admin Panel: This page is frontend-only.
+    It does not provide secure admin authentication.
+    User data is stored locally in this browser.
   </div>
+
+  <!-- Statistics -->
 
   <section class="stats" id="statistics">
 
@@ -210,18 +250,58 @@ footer{
 
   </section>
 
+  <!-- User Management -->
+
   <section class="section" id="users">
 
     <h2>👥 User Management</h2>
 
     <p>
-      Registered accounts on this browser can be counted in this demo.
-      Secure user management will be implemented with the backend.
+      View registered accounts stored in this browser.
     </p>
 
-    <div class="admin-badge">Frontend Demo</div>
+    <input
+      type="text"
+      id="userSearch"
+      class="search-box"
+      placeholder="🔍 Search by name, User ID, mobile or organization..."
+      oninput="renderUsers()"
+    >
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>User ID</th>
+            <th>Mobile</th>
+            <th>Organization</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+
+        <tbody id="userTable">
+
+          <tr>
+            <td colspan="6" class="empty">
+              Loading users...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <p id="userCount" style="margin-top:15px"></p>
 
   </section>
+
+  <!-- Website Management -->
 
   <section class="section" id="management">
 
@@ -232,9 +312,13 @@ footer{
       will be added in future development.
     </p>
 
-    <div class="admin-badge">Coming Soon</div>
+    <br>
+
+    <span class="badge">Coming Soon</span>
 
   </section>
+
+  <!-- Quick Actions -->
 
   <section class="section">
 
@@ -265,13 +349,140 @@ footer{
 
 <script>
 
-// Demo: Count accounts stored in this browser
-const accounts = JSON.parse(
-  localStorage.getItem("kkworld_accounts") || "[]"
-);
+// Read registered accounts
+function getAccounts(){
 
-document.getElementById("totalUsers").textContent =
-  accounts.length;
+  try{
+
+    const accounts = JSON.parse(
+      localStorage.getItem("kkworld_accounts") || "[]"
+    );
+
+    return Array.isArray(accounts) ? accounts : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+// Format account creation date
+function formatDate(date){
+
+  if(!date) return "Not available";
+
+  const parsedDate = new Date(date);
+
+  if(isNaN(parsedDate.getTime())){
+    return "Not available";
+  }
+
+  return parsedDate.toLocaleDateString("en-IN",{
+    day:"2-digit",
+    month:"short",
+    year:"numeric"
+  });
+
+}
+
+// Render users
+function renderUsers(){
+
+  const accounts = getAccounts();
+
+  const search = document
+    .getElementById("userSearch")
+    .value
+    .trim()
+    .toLowerCase();
+
+  const filteredAccounts = accounts.filter(account=>{
+
+    const searchableText = [
+
+      account.name,
+      account.userId,
+      account.mobile,
+      account.organization
+
+    ].join(" ").toLowerCase();
+
+    return searchableText.includes(search);
+
+  });
+
+  document.getElementById("totalUsers").textContent =
+    accounts.length;
+
+  document.getElementById("userCount").textContent =
+    "Showing " + filteredAccounts.length +
+    " of " + accounts.length + " users";
+
+  const table = document.getElementById("userTable");
+
+  if(filteredAccounts.length === 0){
+
+    table.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty">
+          No users found.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  table.innerHTML = filteredAccounts.map((account,index)=>{
+
+    return `
+      <tr>
+
+        <td>${index+1}</td>
+
+        <td>${escapeHTML(account.name || "Not available")}</td>
+
+        <td>
+          <span class="badge">
+            ${escapeHTML(account.userId || "N/A")}
+          </span>
+        </td>
+
+        <td>${escapeHTML(account.mobile || "Not available")}</td>
+
+        <td>${escapeHTML(account.organization || "Not available")}</td>
+
+        <td>${formatDate(account.createdAt)}</td>
+
+      </tr>
+    `;
+
+  }).join("");
+
+}
+
+// Protect HTML from user-entered text
+function escapeHTML(value){
+
+  return String(value).replace(/[&<>"']/g,function(char){
+
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char];
+
+  });
+
+}
+
+// Initial load
+renderUsers();
 
 </script>
 
