@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | Fees Management</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080d1b;color:#f8fafc;font-family:Arial,sans-serif}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:250px;flex-shrink:0;background:#0c1322;border-right:1px solid #26334d;padding:28px 18px}
+.logo{font-size:25px;font-weight:bold;margin:0 0 30px}.logo span{color:#38bdf8}
+.sidebar a{display:block;color:#94a3b8;text-decoration:none;padding:13px;border-radius:9px;margin-bottom:7px}
+.sidebar a:hover,.sidebar a.active{background:#17243b;color:#38bdf8}
+main{flex:1;min-width:0;padding:28px}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}
+.sub{color:#94a3b8;margin-top:7px;line-height:1.5}
+.btn{display:inline-block;border:0;border-radius:9px;padding:11px 16px;background:linear-gradient(135deg,#5865f2,#2563eb);color:white;text-decoration:none;font-weight:bold;cursor:pointer}
+.btn.secondary{background:#1e293b;border:1px solid #334155}.btn.danger{background:#7f1d1d}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.stat,.panel,.table-wrap{background:#111a2d;border:1px solid #26334d;border-radius:15px;padding:20px}
+.stat small{display:block;color:#94a3b8;margin-bottom:9px}.stat strong{font-size:26px;color:#38bdf8}
+.panel{margin-bottom:20px}h2{font-size:19px;margin-bottom:15px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:7px}
+input,select,textarea{width:100%;padding:11px;background:#080d1b;border:1px solid #334155;border-radius:8px;color:#f8fafc;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#38bdf8}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:15px}.filters input,.filters select{max-width:260px}
+.notice{color:#94a3b8;font-size:13px;line-height:1.6;margin-top:10px}
+.table-wrap{overflow-x:auto;padding:0}table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{text-align:left;padding:13px 15px;border-bottom:1px solid #26334d;font-size:14px}
+th{color:#94a3b8;background:#0c1322}td{color:#e2e8f0}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.Paid{background:#064e3b;color:#6ee7b7}.Partial{background:#78350f;color:#fde68a}.Pending{background:#7f1d1d;color:#fecaca}
+.empty{text-align:center;padding:30px;color:#94a3b8}
+footer{margin-top:25px;color:#64748b;font-size:12px}
+@media(max-width:760px){.layout{flex-direction:column}.sidebar{width:100%;border-right:0;border-bottom:1px solid #26334d;padding:18px}.logo{margin-bottom:15px}.sidebar a{display:inline-block;margin:3px;padding:9px}main{padding:18px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="logo">KK <span>World</span></div>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="education-management.html">🎓 Student Management</a>
+  <a href="attendance-management.html">📅 Attendance</a>
+  <a href="fees-management.html" class="active">💰 Fees Management</a>
+  <a href="profile.html">👤 My Profile</a>
+  <a href="index.html">🌐 Main Website</a>
+</aside>
+
+<main>
+<header>
+  <div><h1>Fees Management</h1><p class="sub">Track student fees, payments and outstanding balances.</p></div>
+  <div class="actions" style="margin-top:0">
+    <a class="btn secondary" href="education-management.html">← Student Management</a>
+    <a class="btn" href="dashboard.html">Dashboard</a>
+  </div>
+</header>
+
+<section class="stats">
+  <div class="stat"><small>Total Fee Amount</small><strong id="totalFee">₹0</strong></div>
+  <div class="stat"><small>Total Collected</small><strong id="totalPaid">₹0</strong></div>
+  <div class="stat"><small>Pending Amount</small><strong id="totalPending">₹0</strong></div>
+  <div class="stat"><small>Fee Records</small><strong id="recordCount">0</strong></div>
+</section>
+
+<section class="panel">
+<h2 id="formHeading">Add Fee Record</h2>
+<form id="feeForm">
+  <input type="hidden" id="editId">
+  <div class="form-grid">
+    <div><label for="studentSelect">Student</label><select id="studentSelect" required><option value="">Choose student</option></select></div>
+    <div><label for="feeTitle">Fee Type / Purpose</label><input id="feeTitle" placeholder="e.g. Tuition Fee, Exam Fee" required></div>
+    <div><label for="totalAmount">Total Fee (₹)</label><input id="totalAmount" type="number" min="0.01" step="0.01" required placeholder="e.g. 15000"></div>
+    <div><label for="paidAmount">Amount Paid (₹)</label><input id="paidAmount" type="number" min="0" step="0.01" value="0" required></div>
+    <div><label for="dueDate">Due Date</label><input id="dueDate" type="date"></div>
+    <div><label for="paymentDate">Last Payment Date</label><input id="paymentDate" type="date"></div>
+    <div><label for="paymentMethod">Payment Method</label><select id="paymentMethod"><option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Card</option><option>Cheque</option><option>Other</option></select></div>
+    <div><label for="notes">Notes (optional)</label><input id="notes" placeholder="Payment reference / remarks"></div>
+  </div>
+  <div class="actions">
+    <button class="btn" type="submit" id="saveBtn">Save Fee Record</button>
+    <button class="btn secondary" type="button" onclick="resetForm()">Clear Form</button>
+  </div>
+  <p class="notice" id="formMessage" role="status"></p>
+</form>
+</section>
+
+<section class="panel">
+<h2>Fee Records</h2>
+<div class="filters">
+  <input type="search" id="searchInput" placeholder="Search student / fee type..." oninput="renderTable()">
+  <select id="statusFilter" onchange="renderTable()"><option value="">All payment statuses</option><option>Paid</option><option>Partial</option><option>Pending</option></select>
+  <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
+</div>
+<div class="table-wrap">
+<table><thead><tr><th>Student</th><th>Fee Type</th><th>Total</th><th>Paid</th><th>Balance</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody id="feeBody"></tbody></table>
+</div>
+<div id="emptyState" class="empty" style="display:none"></div>
+<p class="notice">This demo stores fee records in this browser only. Do not enter sensitive financial information. No online payment is processed.</p>
+</section>
+<footer>© 2026 KK World. Fees data is stored locally in this browser.</footer>
+</main>
+</div>
+
+<script>
+const STUDENTS_KEY="kkworld_students";
+const FEES_KEY="kkworld_fees";
+let students=readArray(STUDENTS_KEY);
+let fees=readArray(FEES_KEY);
+
+function readArray(key){
+  try{const data=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(data)?data:[]}
+  catch(e){return []}
+}
+function esc(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function studentId(s){return String(s.studentId||s.rollNo||s.id||"")}
+function studentName(s){return s.name||s.fullName||"Unnamed Student"}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function statusOf(f){const total=Number(f.totalAmount)||0,paid=Number(f.paidAmount)||0;if(paid<=0)return "Pending";if(paid>=total)return "Paid";return "Partial"}
+function studentFor(id){return students.find(s=>studentId(s)===String(id))}
+function fillStudentSelect(){
+  const select=document.getElementById("studentSelect");
+  const active=students.filter(s=>String(s.status||"Active").toLowerCase()!=="inactive");
+  select.innerHTML='<option value="">Choose student</option>'+active.map(s=>`<option value="${esc(studentId(s))}">${esc(studentName(s))} — ${esc(studentId(s))}</option>`).join("");
+}
+function persist(){localStorage.setItem(FEES_KEY,JSON.stringify(fees))}
+function updateStats(){
+  const total=fees.reduce((sum,f)=>sum+Number(f.totalAmount||0),0);
+  const paid=fees.reduce((sum,f)=>sum+Number(f.paidAmount||0),0);
+  document.getElementById("totalFee").textContent=money(total);
+  document.getElementById("totalPaid").textContent=money(paid);
+  document.getElementById("totalPending").textContent=money(Math.max(0,total-paid));
+  document.getElementById("recordCount").textContent=fees.length;
+}
+function resetForm(){
+  document.getElementById("feeForm").reset();
+  document.getElementById("editId").value="";
+  document.getElementById("formHeading").textContent="Add Fee Record";
+  document.getElementById("saveBtn").textContent="Save Fee Record";
+  document.getElementById("paidAmount").value="0";
+  document.getElementById("formMessage").textContent="";
+}
+document.getElementById("feeForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const studentKey=document.getElementById("studentSelect").value;
+  const total=Number(document.getElementById("totalAmount").value);
+  const paid=Number(document.getElementById("paidAmount").value);
+  if(!studentKey){showFormMessage("Student select karo.");return}
+  if(!Number.isFinite(total)||total<=0){showFormMessage("Total fee 0 se zyada honi chahiye.");return}
+  if(!Number.isFinite(paid)||paid<0||paid>total){showFormMessage("Paid amount 0 se total fee ke beech hona chahiye.");return}
+  const student=studentFor(studentKey);
+  if(!student){showFormMessage("Student record nahi mila. Student Management check karo.");return}
+  const editId=document.getElementById("editId").value;
+  const record={
+    id:editId||("FEE-"+Date.now().toString(36).toUpperCase()),
+    studentId:studentKey,
+    studentName:studentName(student),
+    feeTitle:document.getElementById("feeTitle").value.trim(),
+    totalAmount:total,
+    paidAmount:paid,
+    dueDate:document.getElementById("dueDate").value,
+    paymentDate:document.getElementById("paymentDate").value,
+    paymentMethod:document.getElementById("paymentMethod").value,
+    notes:document.getElementById("notes").value.trim(),
+    updatedAt:new Date().toISOString()
+  };
+  if(!record.feeTitle){showFormMessage("Fee type/purpose bharna zaroori hai.");return}
+  const index=fees.findIndex(f=>f.id===editId);
+  if(index>=0)fees[index]=record;else fees.unshift(record);
+  persist();resetForm();updateStats();renderTable();showFormMessage("Fee record save ho gaya!");
+});
+function showFormMessage(text){document.getElementById("formMessage").textContent=text}
+function editFee(id){
+  const f=fees.find(x=>x.id===id);if(!f)return;
+  document.getElementById("editId").value=f.id;
+  document.getElementById("studentSelect").value=f.studentId;
+  document.getElementById("feeTitle").value=f.feeTitle||"";
+  document.getElementById("totalAmount").value=f.totalAmount;
+  document.getElementById("paidAmount").value=f.paidAmount;
+  document.getElementById("dueDate").value=f.dueDate||"";
+  document.getElementById("paymentDate").value=f.paymentDate||"";
+  document.getElementById("paymentMethod").value=f.paymentMethod||"Cash";
+  document.getElementById("notes").value=f.notes||"";
+  document.getElementById("formHeading").textContent="Edit Fee Record";
+  document.getElementById("saveBtn").textContent="Update Fee Record";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function deleteFee(id){
+  if(!confirm("Is fee record ko delete karna hai?"))return;
+  fees=fees.filter(f=>f.id!==id);persist();updateStats();renderTable();
+}
+function renderTable(){
+  const q=document.getElementById("searchInput").value.trim().toLowerCase();
+  const statusFilter=document.getElementById("statusFilter").value;
+  const filtered=fees.filter(f=>{
+    const s=studentFor(f.studentId),name=(s?studentName(s):f.studentName||"").toLowerCase();
+    const text=(name+" "+(f.studentId||"")+" "+(f.feeTitle||"")).toLowerCase();
+    return (!q||text.includes(q))&&(!statusFilter||statusOf(f)===statusFilter);
+  });
+  document.getElementById("feeBody").innerHTML=filtered.map(f=>{
+    const s=studentFor(f.studentId),name=s?studentName(s):(f.studentName||"Student");
+    const balance=Math.max(0,Number(f.totalAmount)-Number(f.paidAmount));
+    const status=statusOf(f);
+    return `<tr><td>${esc(name)}<br><small style="color:#94a3b8">${esc(f.studentId)}</small></td>
+    <td>${esc(f.feeTitle)}</td><td>${money(f.totalAmount)}</td><td>${money(f.paidAmount)}</td><td>${money(balance)}</td>
+    <td>${esc(f.dueDate||"—")}</td><td><span class="badge ${status}">${status}</span></td>
+    <td><button class="btn secondary" style="padding:7px 10px;font-size:12px" onclick="editFee('${esc(f.id)}')">Edit</button>
+    <button class="btn danger" style="padding:7px 10px;font-size:12px;margin-top:5px" onclick="deleteFee('${esc(f.id)}')">Delete</button></td></tr>`;
+  }).join("");
+  const empty=document.getElementById("emptyState");empty.style.display=filtered.length?"none":"block";
+  empty.textContent=fees.length?"No matching fee records found.":"Abhi fee records nahi hain. Upar form se pehla record add karo.";
+}
+function exportCSV(){
+  const rows=[["Student Name","Student ID","Fee Type","Total Fee","Paid","Balance","Due Date","Payment Date","Method","Status","Notes"]];
+  fees.forEach(f=>{
+    const s=studentFor(f.studentId),name=s?studentName(s):(f.studentName||"");
+    rows.push([name,f.studentId,f.feeTitle,f.totalAmount,f.paidAmount,Math.max(0,Number(f.totalAmount)-Number(f.paidAmount)),f.dueDate,f.paymentDate,f.paymentMethod,statusOf(f),f.notes]);
+  });
+  const csv=rows.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\\r\\n");
+  const blob=new Blob(["\\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="KK-World-Fees.csv";a.click();URL.revokeObjectURL(url);
+}
+fillStudentSelect();updateStats();renderTable();
+</script>
+</body>
+</html>
