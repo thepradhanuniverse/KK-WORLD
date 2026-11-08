@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | Fee Receipt Generator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080d1b;--panel:#111a2d;--border:#26334d;--blue:#5865f2;--cyan:#38bdf8;--muted:#94a3b8}
+body{background:var(--bg);color:#f8fafc;font-family:Arial,sans-serif;min-height:100vh}
+header{padding:22px 5%;border-bottom:1px solid var(--border);background:#0c1322;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.logo{font-size:24px;font-weight:800}.logo span{color:var(--cyan)}
+header a{color:var(--cyan);text-decoration:none}
+.wrap{max-width:1200px;margin:auto;padding:28px 18px}
+h1{font-size:30px;margin-bottom:8px}.sub{color:var(--muted);line-height:1.6;margin-bottom:24px}
+.layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:22px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px}
+.panel h2{font-size:19px;margin-bottom:18px}
+label{display:block;font-size:13px;color:#cbd5e1;margin:13px 0 7px}
+input,select,textarea{width:100%;padding:11px 12px;background:#080d1b;border:1px solid #334155;border-radius:8px;color:white;font:inherit}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--cyan)}
+.btn{border:0;border-radius:9px;padding:12px 15px;color:#fff;font-weight:bold;cursor:pointer;background:linear-gradient(135deg,var(--blue),#2563eb)}
+.btn.secondary{background:#26334d}.btn.print{background:linear-gradient(135deg,#0891b2,#2563eb)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.help{color:var(--muted);font-size:12px;line-height:1.6;margin-top:12px}
+.receipt{background:white;color:#111827;border-radius:12px;padding:30px;min-height:650px;box-shadow:0 15px 45px #0003}
+.receipt-top{display:flex;justify-content:space-between;gap:15px;border-bottom:2px solid #1e293b;padding-bottom:18px}
+.school h2{font-size:25px;color:#0f172a;margin-bottom:7px}.school p{font-size:13px;color:#475569;line-height:1.5}
+.stamp{border:2px solid #2563eb;color:#2563eb;padding:8px 13px;font-weight:800;align-self:flex-start;transform:rotate(3deg);border-radius:5px}
+.receipt-title{text-align:center;margin:22px 0;font-size:22px;letter-spacing:2px;font-weight:800}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;font-size:14px}
+.meta div{padding:10px;background:#f1f5f9;border-radius:5px}
+.meta strong{display:block;font-size:11px;color:#64748b;margin-bottom:5px;text-transform:uppercase}
+.student-info{border:1px solid #cbd5e1;border-radius:6px;padding:14px;margin-bottom:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px}
+.student-info strong{color:#64748b;font-size:11px;display:block;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:14px}
+th{background:#e2e8f0;text-align:left}th,td{padding:12px;border:1px solid #cbd5e1}
+.amount-row{display:flex;justify-content:flex-end;margin:10px 0}
+.amount-box{width:280px}
+.amount-box div{display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #e2e8f0}
+.amount-box .grand{font-weight:800;font-size:17px;background:#eff6ff;border:1px solid #bfdbfe}
+.amount-words{margin:18px 0;padding:12px;background:#f8fafc;border:1px dashed #94a3b8;font-size:13px}
+.receipt-bottom{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:38px}
+.signature{border-top:1px solid #64748b;padding-top:8px;text-align:center;width:180px;font-size:12px}
+.thanks{text-align:center;color:#475569;font-size:12px;margin-top:25px}
+.empty{color:#64748b;text-align:center;padding:50px 10px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.receipt{padding:20px;min-height:unset}}
+@media(max-width:520px){.receipt-top{flex-direction:column}.meta,.student-info{grid-template-columns:1fr}.receipt-title{font-size:19px}.amount-box{width:100%}}
+@media print{
+  body{background:white!important;color:#111!important}
+  header,.intro,.controls,.no-print{display:none!important}
+  .wrap{max-width:none;padding:0;margin:0}
+  .layout{display:block}
+  .panel.preview-panel{border:0;padding:0;background:white}
+  .receipt{box-shadow:none;border-radius:0;padding:20px;min-height:0}
+  @page{size:A4;margin:12mm}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">KK <span>World</span></div>
+  <a href="dashboard.html">← Back to Dashboard</a>
+</header>
+<div class="wrap">
+  <div class="intro">
+    <h1>🧾 Fee Receipt Generator</h1>
+    <p class="sub">Select a student fee record, customize receipt details, and print or save it as PDF.</p>
+  </div>
+  <div class="layout">
+    <section class="panel controls">
+      <h2>Receipt Settings</h2>
+      <label for="schoolName">Institution / School Name</label>
+      <input id="schoolName" placeholder="KK World Institution" value="KK World Institution">
+      <label for="schoolAddress">Institution Address</label>
+      <textarea id="schoolAddress" rows="2" placeholder="Address, city, state"> </textarea>
+      <label for="receiptNo">Receipt Number</label>
+      <input id="receiptNo">
+      <label for="receiptDate">Receipt Date</label>
+      <input id="receiptDate" type="date">
+      <label for="feeSelect">Select Fee Record</label>
+      <select id="feeSelect"><option value="">Loading fee records...</option></select>
+      <p class="help">Fee records automatically load from Fees Management (<code>kkworld_fees</code>). Students load from Student Management.</p>
+      <label for="receivedAmount">Amount Received for This Receipt (₹)</label>
+      <input id="receivedAmount" type="number" min="0" step="0.01">
+      <label for="paymentMethod">Payment Method</label>
+      <select id="paymentMethod"><option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Card</option><option>Cheque</option><option>Other</option></select>
+      <label for="transactionRef">Transaction / Reference ID (optional)</label>
+      <input id="transactionRef" placeholder="UPI ID / transaction reference">
+      <label for="cashier">Received By / Cashier</label>
+      <input id="cashier" placeholder="Cashier name">
+      <label for="remarks">Remarks (optional)</label>
+      <textarea id="remarks" rows="2" placeholder="Payment remarks"></textarea>
+      <div class="actions">
+        <button class="btn" id="refreshBtn" type="button">↻ Refresh Records</button>
+        <button class="btn print" id="printBtn" type="button">🖨️ Print / Save PDF</button>
+        <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+      <p class="help">PDF ke liye Print button → printer destination mein “Save as PDF” choose karo. Receipt generation local browser data par based hai.</p>
+      <p class="help" id="message"></p>
+    </section>
+    <section class="panel preview-panel">
+      <div id="receipt" class="receipt">
+        <div class="empty">Fee record select karte hi receipt yahan preview hogi.</div>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+const STUDENTS_KEY="kkworld_students", FEES_KEY="kkworld_fees";
+let students=[], fees=[];
+const $=id=>document.getElementById(id);
+function readArray(key){try{const v=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(v)?v:[]}catch(e){return []}}
+function sid(s){return String(s.studentId||s.rollNo||s.id||"")}
+function sname(s){return s.name||s.fullName||"Unnamed Student"}
+function money(n){return "₹"+(Number(n)||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function dateToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function makeReceiptNo(){return "KKR-"+Date.now().toString().slice(-8)}
+function loadRecords(){
+ students=readArray(STUDENTS_KEY);fees=readArray(FEES_KEY);
+ const select=$("feeSelect"),old=select.value;
+ select.innerHTML='<option value="">Choose fee record</option>';
+ fees.forEach(f=>{
+   const s=students.find(x=>sid(x)===String(f.studentId));
+   const name=s?sname(s):(f.studentName||"Student");
+   const opt=document.createElement("option");opt.value=f.id;
+   opt.textContent=`${name} | ${f.studentId||"—"} | ${f.feeTitle||"Fee"} | Paid ${money(f.paidAmount)}`;
+   select.appendChild(opt);
+ });
+ if(old&&fees.some(f=>String(f.id)===old))select.value=old;
+ $("message").textContent=fees.length?`${fees.length} fee record(s) loaded.`:"Fee records nahi mile. Pehle Fees Management mein record add karo.";
+ render();
+}
+function getSelected(){return fees.find(f=>String(f.id)===$("feeSelect").value)}
+function render(){
+ const f=getSelected();
+ if(!f){$("receipt").innerHTML='<div class="empty">Fee record select karte hi receipt yahan preview hogi.</div>';return}
+ const s=students.find(x=>sid(x)===String(f.studentId));
+ const studentName=s?sname(s):(f.studentName||"Student");
+ const received=Math.max(0,Number($("receivedAmount").value)||0);
+ const total=Number(f.totalAmount)||0,alreadyPaid=Number(f.paidAmount)||0;
+ const balance=Math.max(0,total-alreadyPaid);
+ const remaining=Math.max(0,balance-received);
+ const receiptNo=$("receiptNo").value||makeReceiptNo();
+ if(!$("receiptNo").value)$("receiptNo").value=receiptNo;
+ const receiptDate=$("receiptDate").value||dateToday();
+ const institution=$("schoolName").value.trim()||"Institution";
+ const address=$("schoolAddress").value.trim();
+ const method=$("paymentMethod").value||f.paymentMethod||"Cash";
+ const cashier=$("cashier").value.trim()||"Authorized Signatory";
+ const words=numberWords(Math.round(received));
+ $("receipt").innerHTML=`
+ <div class="receipt-top">
+  <div class="school"><h2>${esc(institution)}</h2><p>${esc(address).replace(/\n/g,"<br>")}</p></div>
+  <div class="stamp">PAYMENT<br>RECEIPT</div>
+ </div>
+ <div class="receipt-title">FEE PAYMENT RECEIPT</div>
+ <div class="meta">
+  <div><strong>Receipt No.</strong>${esc(receiptNo)}</div>
+  <div><strong>Receipt Date</strong>${esc(receiptDate)}</div>
+  <div><strong>Payment Method</strong>${esc(method)}</div>
+  <div><strong>Fee Category</strong>${esc(f.feeTitle||"Fee Payment")}</div>
+ </div>
+ <div class="student-info">
+  <div><strong>STUDENT NAME</strong>${esc(studentName)}</div>
+  <div><strong>STUDENT ID / ROLL NO.</strong>${esc(f.studentId||sid(s||{})||"—")}</div>
+  <div><strong>CLASS / COURSE</strong>${esc((s&&(s.className||s.class||s.course))||"—")}</div>
+  <div><strong>SECTION</strong>${esc((s&&s.section)||"—")}</div>
+ </div>
+ <table><thead><tr><th>Description</th><th>Amount (₹)</th></tr></thead>
+ <tbody><tr><td>${esc(f.feeTitle||"Fee Payment")}</td><td>${money(received)}</td></tr></tbody></table>
+ <div class="amount-row"><div class="amount-box">
+  <div><span>Fee Total</span><strong>${money(total)}</strong></div>
+  <div><span>Previously Paid</span><strong>${money(alreadyPaid)}</strong></div>
+  <div><span>This Receipt</span><strong>${money(received)}</strong></div>
+  <div class="grand"><span>Remaining Balance*</span><strong>${money(remaining)}</strong></div>
+ </div></div>
+ <div class="amount-words"><strong>Amount received in words:</strong> ${esc(words)} Rupees Only</div>
+ ${$("transactionRef").value.trim()?`<p style="font-size:13px;margin:8px 0"><strong>Transaction Ref:</strong> ${esc($("transactionRef").value.trim())}</p>`:""}
+ ${$("remarks").value.trim()?`<p style="font-size:13px;margin:8px 0"><strong>Remarks:</strong> ${esc($("remarks").value.trim())}</p>`:""}
+ <div class="receipt-bottom"><div style="font-size:12px;color:#64748b">*Balance shown is based on current fee record and this receipt amount.</div><div class="signature">${esc(cashier)}<br>Authorized Signature</div></div>
+ <div class="thanks">Thank you for your payment. Please keep this receipt for your records.</div>`;
+}
+function numberWords(num){
+ if(!num)return "Zero";
+ const ones=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+ const tens=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+ function under100(n){return n<20?ones[n]:tens[Math.floor(n/10)]+(n%10?" "+ones[n%10]:"")}
+ function convert(n){if(n<100)return under100(n);if(n<1000)return ones[Math.floor(n/100)]+" Hundred"+(n%100?" "+convert(n%100):"");if(n<100000)return convert(Math.floor(n/1000))+" Thousand"+(n%1000?" "+convert(n%1000):"");if(n<10000000)return convert(Math.floor(n/100000))+" Lakh"+(n%100000?" "+convert(n%100000):"");return convert(Math.floor(n/10000000))+" Crore"+(n%10000000?" "+convert(n%10000000):"")}
+ return convert(num);
+}
+$("feeSelect").addEventListener("change",()=>{
+ const f=getSelected();if(!f)return;
+ $("receivedAmount").value=Number(f.paidAmount)||0;
+ $("paymentMethod").value=f.paymentMethod||"Cash";
+ $("receiptNo").value=makeReceiptNo();
+ $("receiptDate").value=dateToday();render();
+});
+["schoolName","schoolAddress","receiptNo","receiptDate","receivedAmount","paymentMethod","transactionRef","cashier","remarks"].forEach(id=>$(id).addEventListener("input",render));
+$("refreshBtn").addEventListener("click",loadRecords);
+$("printBtn").addEventListener("click",()=>{if(!getSelected()){alert("Pehle fee record select karo.");return}window.print()});
+$("resetBtn").addEventListener("click",()=>{$("feeSelect").value="";$("receiptNo").value=makeReceiptNo();$("receiptDate").value=dateToday();$("receivedAmount").value="";$("transactionRef").value="";$("cashier").value="";$("remarks").value="";render()});
+$("receiptNo").value=makeReceiptNo();$("receiptDate").value=dateToday();loadRecords();
+</script>
+</body>
+</html>
