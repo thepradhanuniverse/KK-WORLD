@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK World | Exam & Marks Management</title>
+<style>
+:root{--bg:#080d1b;--panel:#111a2d;--panel2:#0c1322;--line:#26334d;--text:#f4f7ff;--muted:#91a0ba;--blue:#5865f2;--cyan:#38bdf8;--green:#22c55e;--red:#fb7185;--amber:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{height:72px;background:#0c1322;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:5}
+.brand{font-size:21px;font-weight:800;letter-spacing:.4px}.brand span{color:var(--cyan)}.topnote{color:var(--muted);font-size:13px}
+main{max-width:1250px;margin:32px auto;padding:0 22px}.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:24px}h1{font-size:28px;margin:0 0 5px}.sub{color:var(--muted);margin:0}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;background:linear-gradient(120deg,var(--blue),#2563eb);color:white}.btn.secondary{background:#1b2942;border:1px solid var(--line)}.btn.danger{background:#7f1d35}.btn:hover{filter:brightness(1.12)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px}.stat{padding:18px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:26px;margin-top:5px}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.card{padding:20px}.card h2{font-size:18px;margin:0 0 16px}.field{margin-bottom:13px}.field label{display:block;color:#c3cde0;font-size:13px;margin-bottom:6px}.field input,.field select,.field textarea,.toolbar input,.toolbar select{width:100%;background:#091222;border:1px solid #30405e;border-radius:9px;padding:11px 12px;color:var(--text);outline:none}.field input:focus,.field select:focus,.toolbar input:focus{border-color:var(--cyan)}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-actions{display:flex;gap:9px;margin-top:18px}.form-actions button{flex:1}.toolbar{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:9px;margin-bottom:14px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:720px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px}th{color:#9eacc5;font-weight:600;background:#0d1729}td{color:#e5eaf5}.pill{display:inline-block;border-radius:30px;padding:4px 9px;font-size:11px;font-weight:700;background:#183c34;color:#86efac}.actions{display:flex;gap:6px}.mini{border:1px solid var(--line);background:#17243b;color:#dbeafe;padding:6px 9px;border-radius:7px;cursor:pointer}.mini.del{color:#fda4af}.empty{text-align:center;color:var(--muted);padding:32px}.hint{font-size:12px;color:var(--muted);margin-top:12px}.notice{display:none;margin-bottom:15px;padding:11px 14px;border-radius:9px;background:#12352e;color:#a7f3d0}.notice.show{display:block}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}}@media(max-width:520px){header{padding:0 18px}.topnote{display:none}main{padding:0 14px;margin:22px auto}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:21px}.toolbar{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand">KK <span>WORLD</span></div><div class="topnote">Education Suite&nbsp; / &nbsp;Exam & Marks</div></header>
+<main>
+ <div class="heading"><div><h1>Exam & Marks Management</h1><p class="sub">Record student marks, calculate percentage and grade, and export results.</p></div><button class="btn secondary" onclick="location.href='dashboard.html'">← Back to Dashboard</button></div>
+ <div class="notice" id="notice"></div>
+ <section class="stats">
+  <div class="stat"><small>Total Records</small><strong id="totalRecords">0</strong></div>
+  <div class="stat"><small>Students Assessed</small><strong id="studentsAssessed">0</strong></div>
+  <div class="stat"><small>Average Percentage</small><strong id="averagePercent">0%</strong></div>
+  <div class="stat"><small>Pass Rate</small><strong id="passRate">0%</strong></div>
+ </section>
+ <div class="layout">
+  <section class="card">
+   <h2 id="formTitle">Add Marks Record</h2>
+   <form id="marksForm">
+    <input type="hidden" id="recordId">
+    <div class="field"><label for="student">Student *</label><select id="student" required><option value="">Select student</option></select></div>
+    <div class="field"><label for="exam">Exam / Assessment Name *</label><input id="exam" required placeholder="e.g. Half Yearly Examination"></div>
+    <div class="two">
+     <div class="field"><label for="subject">Subject *</label><input id="subject" required placeholder="e.g. Mathematics"></div>
+     <div class="field"><label for="date">Exam Date</label><input id="date" type="date"></div>
+    </div>
+    <div class="two">
+     <div class="field"><label for="obtained">Marks Obtained *</label><input id="obtained" type="number" min="0" step="0.01" required placeholder="e.g. 78"></div>
+     <div class="field"><label for="maximum">Maximum Marks *</label><input id="maximum" type="number" min="0.01" step="0.01" required value="100"></div>
+    </div>
+    <div class="field"><label for="remarks">Remarks (optional)</label><textarea id="remarks" rows="2" placeholder="Teacher remarks"></textarea></div>
+    <div class="form-actions"><button class="btn" type="submit" id="saveBtn">Save Record</button><button class="btn secondary" type="button" onclick="resetForm()">Clear</button></div>
+   </form>
+   <p class="hint">Grade scale: A+ 90%+, A 80%+, B 70%+, C 60%+, D 40%+, below 40% = Fail.</p>
+   <p class="hint">Student list is loaded from your Education Management records.</p>
+  </section>
+  <section class="card">
+   <h2>Results Records</h2>
+   <div class="toolbar">
+    <input id="search" placeholder="Search student, exam, subject..." oninput="render()">
+    <select id="examFilter" onchange="render()"><option value="">All exams</option></select>
+    <select id="gradeFilter" onchange="render()"><option value="">All grades</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>D</option><option>Fail</option></select>
+    <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
+   </div>
+   <div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam / Subject</th><th>Marks</th><th>Percentage</th><th>Grade</th><th>Actions</th></tr></thead><tbody id="recordsBody"></tbody></table></div>
+   <div class="empty" id="emptyState">No marks records yet. Add the first record using the form.</div>
+  </section>
+ </div>
+</main>
+<script>
+const KEY='kkworld_marks', STUDENT_KEY='kkworld_students';
+let records=load(KEY);
+function load(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return []}}
+function save(){localStorage.setItem(KEY,JSON.stringify(records))}
+function studentName(s){return s.name||s.studentName||'Unnamed Student'}
+function studentId(s){return s.studentId||s.id||''}
+function populateStudents(){
+ const list=load(STUDENT_KEY), select=document.getElementById('student'), old=select.value;
+ select.innerHTML='<option value="">Select student</option>';
+ list.forEach((s,i)=>{const opt=document.createElement('option');opt.value=studentId(s)||String(i);opt.textContent=studentName(s)+(studentId(s)?' • '+studentId(s):'');select.appendChild(opt)});
+ if(old)select.value=old;
+}
+function grade(p){return p>=90?'A+':p>=80?'A':p>=70?'B':p>=60?'C':p>=40?'D':'Fail'}
+function pct(r){return Number(r.obtained)/Number(r.maximum)*100}
+function notify(msg){const n=document.getElementById('notice');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),2600)}
+document.getElementById('marksForm').addEventListener('submit',e=>{
+ e.preventDefault();const obtained=Number(document.getElementById('obtained').value),maximum=Number(document.getElementById('maximum').value);
+ if(maximum<=0||obtained<0||obtained>maximum){alert('Marks obtained must be between 0 and maximum marks.');return}
+ const student=document.getElementById('student');if(!student.value){alert('Please select a student.');return}
+ const selected=load(STUDENT_KEY).find((s,i)=>(studentId(s)||String(i))===student.value);
+ const item={id:document.getElementById('recordId').value||('MRK-'+Date.now()),studentId:student.value,studentName:selected?studentName(selected):student.options[student.selectedIndex].text,exam:document.getElementById('exam').value.trim(),subject:document.getElementById('subject').value.trim(),date:document.getElementById('date').value,obtained,maximum,remarks:document.getElementById('remarks').value.trim(),updatedAt:new Date().toISOString()};
+ const index=records.findIndex(r=>r.id===item.id);if(index>=0)records[index]=item;else records.unshift(item);
+ save();resetForm();render();notify(index>=0?'Marks record updated.':'Marks record saved.');
+});
+function resetForm(){document.getElementById('marksForm').reset();document.getElementById('recordId').value='';document.getElementById('maximum').value=100;document.getElementById('formTitle').textContent='Add Marks Record';document.getElementById('saveBtn').textContent='Save Record'}
+function editRecord(id){const r=records.find(x=>x.id===id);if(!r)return;populateStudents();document.getElementById('recordId').value=r.id;document.getElementById('student').value=r.studentId;document.getElementById('exam').value=r.exam;document.getElementById('subject').value=r.subject;document.getElementById('date').value=r.date||'';document.getElementById('obtained').value=r.obtained;document.getElementById('maximum').value=r.maximum;document.getElementById('remarks').value=r.remarks||'';document.getElementById('formTitle').textContent='Edit Marks Record';document.getElementById('saveBtn').textContent='Update Record';window.scrollTo({top:0,behavior:'smooth'})}
+function deleteRecord(id){if(!confirm('Delete this marks record?'))return;records=records.filter(r=>r.id!==id);save();render();notify('Record deleted.')}
+function render(){
+ const q=document.getElementById('search').value.toLowerCase(), ef=document.getElementById('examFilter').value,gf=document.getElementById('gradeFilter').value;
+ const exams=[...new Set(records.map(r=>r.exam).filter(Boolean))], filter=document.getElementById('examFilter'), current=filter.value;
+ filter.innerHTML='<option value="">All exams</option>'+exams.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');filter.value=exams.includes(current)?current:'';
+ const filtered=records.filter(r=>([r.studentName,r.studentId,r.exam,r.subject].join(' ').toLowerCase().includes(q))&&(!filter.value||r.exam===filter.value)&&(!gf||grade(pct(r))===gf));
+ const body=document.getElementById('recordsBody');body.innerHTML=filtered.map(r=>{const p=pct(r);return `<tr><td><b>${esc(r.studentName)}</b><br><span style="color:#91a0ba">${esc(r.studentId||'')}</span></td><td>${esc(r.exam)}<br><span style="color:#91a0ba">${esc(r.subject)}${r.date?' • '+esc(r.date):''}</span></td><td>${r.obtained} / ${r.maximum}</td><td>${p.toFixed(1)}%</td><td><span class="pill" style="${grade(p)==='Fail'?'background:#4b1d2b;color:#fda4af':''}">${grade(p)}</span></td><td><div class="actions"><button class="mini" onclick="editRecord('${r.id}')">Edit</button><button class="mini del" onclick="deleteRecord('${r.id}')">Delete</button></div></td></tr>`}).join('');
+ document.getElementById('emptyState').style.display=filtered.length?'none':'block';
+ document.getElementById('totalRecords').textContent=records.length;
+ document.getElementById('studentsAssessed').textContent=new Set(records.map(r=>r.studentId)).size;
+ const avg=records.length?records.reduce((a,r)=>a+pct(r),0)/records.length:0;
+ document.getElementById('averagePercent').textContent=avg.toFixed(1)+'%';
+ document.getElementById('passRate').textContent=(records.length?records.filter(r=>pct(r)>=40).length/records.length*100:0).toFixed(0)+'%';
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function exportCSV(){if(!records.length){alert('No records to export.');return}const rows=[['Student','Student ID','Exam','Subject','Date','Obtained','Maximum','Percentage','Grade','Remarks'],...records.map(r=>[r.studentName,r.studentId,r.exam,r.subject,r.date,r.obtained,r.maximum,pct(r).toFixed(2),grade(pct(r)),r.remarks])];const csv=rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='kk-world-marks-results.csv';a.click();URL.revokeObjectURL(a.href)}
+populateStudents();render();
+</script>
+</body></html>
