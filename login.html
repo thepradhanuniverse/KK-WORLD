@@ -1,189 +1,79 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KK World | My Profile</title>
-
+<title>KK World | Login & Signup</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:Arial,sans-serif;
-  background:#080d1b;
-  color:#f8fafc;
-  min-height:100vh;
-  padding:25px;
-}
-
-.container{max-width:850px;margin:auto}
-
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
-  margin-bottom:30px;
-}
-
-.logo{font-size:27px;font-weight:bold}
-.logo span{color:#38bdf8}
-
-.btn{
-  border:0;
-  padding:12px 18px;
-  border-radius:9px;
-  background:linear-gradient(135deg,#5865f2,#2563eb);
-  color:white;
-  font-weight:bold;
-  text-decoration:none;
-  cursor:pointer;
-}
-
-.card{
-  background:#111a2d;
-  border:1px solid #26334d;
-  border-radius:16px;
-  padding:28px;
-  margin-bottom:25px;
-}
-
-h2{margin-bottom:8px}
-.subtitle{color:#94a3b8;margin-bottom:25px;font-size:14px}
-
-label{display:block;margin:16px 0 8px;font-size:14px}
-
-input{
-  width:100%;
-  padding:13px;
-  background:#080d1b;
-  border:1px solid #334155;
-  border-radius:8px;
-  color:white;
-  outline:none;
-}
-
+body{font-family:Arial,sans-serif;background:#080d1b;color:#f8fafc;min-height:100vh;padding:24px;display:flex;align-items:center;justify-content:center}
+.container{width:100%;max-width:480px}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px}
+.logo{font-size:28px;font-weight:bold}.logo span{color:#38bdf8}
+.btn{border:0;padding:12px 18px;border-radius:9px;background:linear-gradient(135deg,#5865f2,#2563eb);color:white;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+.card{background:#111a2d;border:1px solid #26334d;border-radius:18px;padding:28px}
+h1{font-size:25px;margin-bottom:8px}
+.subtitle{color:#94a3b8;font-size:14px;line-height:1.6;margin-bottom:22px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#080d1b;padding:5px;border-radius:10px;margin-bottom:22px}
+.tab{border:0;border-radius:8px;padding:11px;background:transparent;color:#94a3b8;font-weight:bold;cursor:pointer}
+.tab.active{background:#17243b;color:#38bdf8}
+label{display:block;margin:15px 0 7px;font-size:14px}
+input{width:100%;padding:13px;background:#080d1b;border:1px solid #334155;border-radius:8px;color:white;outline:none}
 input:focus{border-color:#38bdf8}
-input:disabled{opacity:.65}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-
-.message{
-  margin-top:15px;
-  color:#38bdf8;
-  font-size:14px;
-}
-
-.danger{background:#991b1b}
-
-.back{
-  display:inline-block;
-  margin-top:10px;
-  color:#38bdf8;
-  text-decoration:none;
-}
-
-@media(max-width:600px){
-  body{padding:15px}
-  .grid{grid-template-columns:1fr}
-  .card{padding:20px}
-}
+.submit{width:100%;margin-top:22px}
+.message{margin-top:15px;font-size:14px;line-height:1.5;min-height:20px}
+.message.error{color:#fca5a5}.message.success{color:#67e8f9}
+.hidden{display:none!important}
+.note{color:#64748b;font-size:12px;line-height:1.5;margin-top:18px}
+@media(max-width:500px){body{padding:15px}.card{padding:21px}.header{align-items:flex-start}}
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
   <div class="header">
     <div class="logo">KK <span>World</span></div>
-    <a href="dashboard.html" class="btn">Dashboard →</a>
+    <a href="index.html" class="btn">Main Website ↗</a>
   </div>
 
-  <!-- PROFILE -->
   <div class="card">
-    <h2>👤 My Profile</h2>
-    <p class="subtitle">Manage your personal information.</p>
+    <div class="tabs">
+      <button type="button" class="tab active" id="loginTab">Login</button>
+      <button type="button" class="tab" id="signupTab">Create Account</button>
+    </div>
 
-    <form id="profileForm">
+    <section id="loginSection">
+      <h1>Welcome Back 👋</h1>
+      <p class="subtitle">Login to access your KK World dashboard.</p>
+      <form id="loginForm">
+        <label for="loginUser">User ID or Mobile Number</label>
+        <input id="loginUser" autocomplete="username" required>
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required>
+        <button class="btn submit" type="submit">Login to Dashboard →</button>
+        <p class="message" id="loginMessage" aria-live="polite"></p>
+      </form>
+    </section>
 
-      <div class="grid">
-        <div>
-          <label>Full Name</label>
-          <input id="name" required maxlength="80">
-        </div>
-
-        <div>
-          <label>Mobile Number</label>
-          <input id="mobile" type="tel" inputmode="numeric"
-          maxlength="10" pattern="[0-9]{10}" required>
-        </div>
-      </div>
-
-      <label>User ID</label>
-      <input id="userId" disabled>
-
-      <label>Organization</label>
-      <input id="organization" maxlength="100">
-
-      <button class="btn" type="submit" style="margin-top:22px">
-        Save Profile
-      </button>
-
-      <p class="message" id="profileMessage"></p>
-    </form>
+    <section id="signupSection" class="hidden">
+      <h1>Create Your Account 🚀</h1>
+      <p class="subtitle">Register to start using KK World.</p>
+      <form id="signupForm">
+        <label for="signupName">Full Name</label>
+        <input id="signupName" maxlength="80" autocomplete="name" required>
+        <label for="signupMobile">Mobile Number</label>
+        <input id="signupMobile" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" autocomplete="tel" required>
+        <label for="signupOrganization">Organization (Optional)</label>
+        <input id="signupOrganization" maxlength="100" autocomplete="organization">
+        <label for="signupPassword">Password (minimum 8 characters)</label>
+        <input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required>
+        <label for="signupConfirm">Confirm Password</label>
+        <input id="signupConfirm" type="password" minlength="8" autocomplete="new-password" required>
+        <button class="btn submit" type="submit">Create Account →</button>
+        <p class="message" id="signupMessage" aria-live="polite"></p>
+      </form>
+    </section>
   </div>
-
-  <!-- PASSWORD -->
-  <div class="card">
-    <h2>🔐 Change Password</h2>
-    <p class="subtitle">Update your account password.</p>
-
-    <form id="passwordForm">
-
-      <label>Current Password</label>
-      <input id="currentPassword" type="password" required>
-
-      <label>New Password</label>
-      <input id="newPassword" type="password" minlength="8" required>
-
-      <label>Confirm New Password</label>
-      <input id="confirmPassword" type="password" minlength="8" required>
-
-      <button class="btn" type="submit" style="margin-top:22px">
-        Change Password
-      </button>
-
-      <p class="message" id="passwordMessage"></p>
-    </form>
-  </div>
-
-  <!-- ACCOUNT -->
-  <div class="card">
-    <h2>📋 Account Information</h2>
-    <p class="subtitle">Your KK World account details.</p>
-
-    <p style="margin:12px 0">
-      <strong>User ID:</strong> <span id="accountId"></span>
-    </p>
-
-    <p style="margin:12px 0">
-      <strong>Account Type:</strong> Standard User
-    </p>
-
-    <button class="btn danger" onclick="logout()" style="margin-top:20px">
-      Logout
-    </button>
-  </div>
-
-  <a href="dashboard.html" class="back">← Back to Dashboard</a>
-
+  <p class="note">Demo version: account data is saved in this browser only. Do not use a real or sensitive password. Secure accounts across devices require a backend.</p>
 </div>
 
 <script>
@@ -192,7 +82,8 @@ const SESSION_KEY = "kkworldUser";
 
 function getAccounts(){
   try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
   }catch{
     return [];
   }
@@ -202,136 +93,124 @@ function saveAccounts(accounts){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
 }
 
-// Check login session
-let user;
+function showMessage(id, text, type){
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = "message " + (type || "");
+}
 
+function setMode(mode){
+  const isLogin = mode === "login";
+  document.getElementById("loginSection").classList.toggle("hidden", !isLogin);
+  document.getElementById("signupSection").classList.toggle("hidden", isLogin);
+  document.getElementById("loginTab").classList.toggle("active", isLogin);
+  document.getElementById("signupTab").classList.toggle("active", !isLogin);
+}
+
+document.getElementById("loginTab").addEventListener("click", () => setMode("login"));
+document.getElementById("signupTab").addEventListener("click", () => setMode("signup"));
+
+function createUserId(accounts){
+  let id;
+  do{
+    id = "KKW-" + Math.floor(100000 + Math.random() * 900000);
+  }while(accounts.some(a => a.userId === id));
+  return id;
+}
+
+function startSession(account){
+  const sessionUser = {
+    name: account.name || "",
+    userId: account.userId,
+    mobile: account.mobile || "",
+    organization: account.organization || ""
+  };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionUser));
+  window.location.href = "dashboard.html";
+}
+
+// If a valid session already exists, take the user to dashboard.
 try{
-  user = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
-}catch{
-  user = null;
-}
-
-if(!user || !user.userId){
-  window.location.replace("login.html");
-}else{
-
-  const accounts = getAccounts();
-  const account = accounts.find(a => a.userId === user.userId);
-
-  if(!account){
-    alert("Account not found in this browser. Please login again.");
-    sessionStorage.removeItem(SESSION_KEY);
-    window.location.replace("login.html");
-  }else{
-
-    // Load complete account details
-    user.name = account.name || "";
-    user.userId = account.userId;
-    user.mobile = account.mobile || "";
-    user.organization = account.organization || "";
-
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
-
-    document.getElementById("name").value = user.name;
-    document.getElementById("mobile").value = user.mobile;
-    document.getElementById("organization").value = user.organization;
-    document.getElementById("userId").value = user.userId;
-    document.getElementById("accountId").textContent = user.userId;
+  const existingUser = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+  if(existingUser && existingUser.userId){
+    window.location.replace("dashboard.html");
   }
+}catch{
+  sessionStorage.removeItem(SESSION_KEY);
 }
 
-// Save profile
-document.getElementById("profileForm").addEventListener("submit",function(e){
+document.getElementById("signupForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  if(!user || !user.userId) return;
-
-  const name = document.getElementById("name").value.trim();
-  const mobile = document.getElementById("mobile").value.trim();
-  const organization = document.getElementById("organization").value.trim();
-
-  const message = document.getElementById("profileMessage");
+  const name = document.getElementById("signupName").value.trim();
+  const mobile = document.getElementById("signupMobile").value.trim();
+  const organization = document.getElementById("signupOrganization").value.trim();
+  const password = document.getElementById("signupPassword").value;
+  const confirmPassword = document.getElementById("signupConfirm").value;
 
   if(!name){
-    message.textContent = "Please enter your name.";
+    showMessage("signupMessage", "Please enter your full name.", "error");
     return;
   }
-
   if(!/^[0-9]{10}$/.test(mobile)){
-    message.textContent = "Enter a valid 10-digit mobile number.";
+    showMessage("signupMessage", "Enter a valid 10-digit mobile number.", "error");
+    return;
+  }
+  if(password.length < 8){
+    showMessage("signupMessage", "Password must be at least 8 characters.", "error");
+    return;
+  }
+  if(password !== confirmPassword){
+    showMessage("signupMessage", "Passwords do not match.", "error");
     return;
   }
 
   const accounts = getAccounts();
-  const account = accounts.find(a => a.userId === user.userId);
-
-  if(!account){
-    message.textContent = "Account not found.";
+  if(accounts.some(a => a.mobile === mobile)){
+    showMessage("signupMessage", "This mobile number is already registered. Please login.", "error");
     return;
   }
 
-  account.name = name;
-  account.mobile = mobile;
-  account.organization = organization;
+  const account = {
+    name,
+    mobile,
+    organization,
+    userId: createUserId(accounts),
+    password,
+    createdAt: new Date().toISOString()
+  };
 
-  saveAccounts(accounts);
+  accounts.push(account);
+  try{
+    saveAccounts(accounts);
+  }catch{
+    showMessage("signupMessage", "Could not save account in this browser.", "error");
+    return;
+  }
 
-  user.name = name;
-  user.mobile = mobile;
-  user.organization = organization;
-
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
-
-  message.textContent = "Profile updated successfully!";
+  showMessage("signupMessage", "Account created! Your User ID: " + account.userId, "success");
+  startSession(account);
 });
 
-// Change password
-document.getElementById("passwordForm").addEventListener("submit",function(e){
+document.getElementById("loginForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  if(!user || !user.userId) return;
-
-  const current = document.getElementById("currentPassword").value;
-  const newPass = document.getElementById("newPassword").value;
-  const confirm = document.getElementById("confirmPassword").value;
-  const message = document.getElementById("passwordMessage");
-
-  if(newPass.length < 8){
-    message.textContent = "Password must be at least 8 characters.";
-    return;
-  }
-
-  if(newPass !== confirm){
-    message.textContent = "New passwords do not match.";
-    return;
-  }
-
+  const loginValue = document.getElementById("loginUser").value.trim();
+  const password = document.getElementById("loginPassword").value;
   const accounts = getAccounts();
-  const account = accounts.find(a => a.userId === user.userId);
 
-  if(!account){
-    message.textContent = "Account not found.";
+  const account = accounts.find(a =>
+    (a.userId && a.userId.toLowerCase() === loginValue.toLowerCase()) ||
+    (a.mobile && a.mobile === loginValue)
+  );
+
+  if(!account || account.password !== password){
+    showMessage("loginMessage", "Incorrect User ID/mobile number or password.", "error");
     return;
   }
 
-  if(account.password !== current){
-    message.textContent = "Current password is incorrect.";
-    return;
-  }
-
-  account.password = newPass;
-  saveAccounts(accounts);
-
-  message.textContent = "Password changed successfully!";
-  document.getElementById("passwordForm").reset();
+  startSession(account);
 });
-
-// Logout
-function logout(){
-  sessionStorage.removeItem(SESSION_KEY);
-  window.location.href = "login.html";
-}
 </script>
-
 </body>
 </html>
