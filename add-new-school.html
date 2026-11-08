@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK WORLD | Add New School</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080d1b;--surface:#111a2d;--surface2:#0c1322;--border:#26334d;--cyan:#38bdf8;--muted:#94a3b8;--text:#f8fafc;--purple:#5865f2}
+body{font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top right,#14213c 0,#080d1b 42%);color:var(--text);min-height:100vh}
+.layout{display:flex;min-height:100vh}.sidebar{width:250px;flex-shrink:0;background:rgba(12,19,34,.96);border-right:1px solid var(--border);padding:24px 17px}
+.logo{font-size:25px;font-weight:800;margin:0 0 28px}.logo span{color:var(--cyan)}
+.sidebar a{display:block;text-decoration:none;color:var(--muted);padding:12px 13px;border-radius:9px;margin-bottom:7px;font-size:14px}
+.sidebar a:hover,.sidebar a.active{background:#17243b;color:var(--cyan)}
+.main{flex:1;min-width:0;padding:28px;max-width:1600px;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:24px}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:1.7px;text-transform:uppercase;margin-bottom:8px}
+h1{font-size:clamp(24px,3vw,34px);letter-spacing:-.5px}.subtitle{color:var(--muted);margin-top:8px;font-size:14px;line-height:1.6}
+.btn{border:0;padding:11px 16px;border-radius:9px;background:linear-gradient(135deg,#5865f2,#2563eb);color:white;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.btn.secondary{background:#26334d}.btn.ghost{background:transparent;border:1px solid var(--border);color:#cbd5e1}.btn:hover{filter:brightness(1.12)}
+.panel{background:linear-gradient(145deg,rgba(17,26,45,.97),rgba(12,19,34,.98));border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 15px 35px rgba(0,0,0,.12)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.panel-head h2{font-size:18px}.panel-head p{color:var(--muted);font-size:13px;margin-top:6px}
+.section-number{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(56,189,248,.13);color:var(--cyan);margin-right:9px;font-size:13px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.field label{display:block;font-size:12px;color:#cbd5e1;margin-bottom:8px;font-weight:650}
+.field input,.field select,.field textarea{width:100%;padding:12px 13px;background:#080d1b;border:1px solid #334155;border-radius:9px;color:white;font:inherit;min-height:44px}
+.field textarea{min-height:90px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{outline:1px solid var(--cyan);border-color:var(--cyan)}
+.field select option{background:#111a2d;color:#fff}
+.required{color:#fb7185}.hint{font-size:11px;color:#64748b;margin-top:6px}
+.pills{display:flex;gap:10px;flex-wrap:wrap}.choice{position:relative}.choice input{position:absolute;opacity:0}.choice span{display:block;padding:12px 17px;border:1px solid #334155;border-radius:10px;background:#080d1b;color:#cbd5e1;cursor:pointer;font-size:14px}.choice input:checked+span{border-color:var(--cyan);background:rgba(56,189,248,.12);color:#e0f2fe;box-shadow:0 0 0 1px rgba(56,189,248,.15)}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:850px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border);font-size:13px}th{color:var(--muted);font-weight:700;background:#0b1220}td input[type=text]{width:100%;min-width:90px;padding:8px;background:#080d1b;border:1px solid #334155;border-radius:7px;color:#fff}td input[type=color]{width:38px;height:32px;padding:2px;background:#080d1b;border:1px solid #334155;border-radius:6px}td input[type=checkbox]{width:17px;height:17px;accent-color:#38bdf8}
+.note{background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:12px 14px;color:#bae6fd;font-size:12px;line-height:1.6;margin-bottom:16px}
+.upload-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.upload-card{border:1px dashed #3b4b67;border-radius:12px;padding:15px;background:#0a1120}
+.upload-card label{font-size:13px;font-weight:700;display:block;margin-bottom:10px}
+.upload-card input{width:100%;font-size:12px;color:var(--muted)}
+.preview{font-size:11px;color:#64748b;margin-top:8px;overflow-wrap:anywhere}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.status{min-height:20px;margin-top:12px;font-size:13px;color:#4ade80}
+.footer-note{color:#64748b;font-size:12px;margin:24px 0 8px}
+@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.upload-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.layout{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid var(--border);padding:16px}.logo{margin-bottom:12px}.sidebar a{display:inline-block;padding:9px;margin:2px}.main{padding:15px}.panel{padding:16px}}
+@media(max-width:520px){.form-grid,.upload-grid{grid-template-columns:1fr}.topbar{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="logo">KK <span>WORLD</span></div>
+  <a href="admin.html">👑 Admin Dashboard</a>
+  <a href="admin.html">🏫 School Management</a>
+  <a class="active" href="add-new-school.html">➕ Add New School</a>
+  <a href="school-record.html">📚 School Record</a>
+  <a href="dashboard.html">🏠 User Dashboard</a>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">KK WORLD • ADMIN CONSOLE</div>
+      <h1>➕ Add New School</h1>
+      <p class="subtitle">Register an institution and configure its student/staff ID card and report card fields.</p>
+    </div>
+    <a class="btn ghost" href="admin.html">← Admin Dashboard</a>
+  </div>
+
+  <form id="schoolForm">
+    <section class="panel">
+      <div class="panel-head"><div><h2><span class="section-number">01</span>School Registration</h2><p>Enter the institution's basic information.</p></div></div>
+      <div class="form-grid">
+        <div class="field"><label>Organization Type <span class="required">*</span></label><select id="organizationType" required><option value="School">School</option><option value="College">College</option><option value="Institute">Institute</option><option value="Coaching Center">Coaching Center</option><option value="Other">Other</option></select></div>
+        <div class="field"><label>Organization Name <span class="required">*</span></label><input id="organizationName" required maxlength="150" placeholder="Enter school / organization name"></div>
+        <div class="field"><label>Owner Name <span class="required">*</span></label><input id="ownerName" required maxlength="100" placeholder="Enter owner / principal name"></div>
+        <div class="field"><label>Mobile Number <span class="required">*</span></label><input id="mobile" required inputmode="numeric" maxlength="15" placeholder="Primary contact number"></div>
+        <div class="field"><label>Alternate Contact Number</label><input id="alternateMobile" inputmode="numeric" maxlength="15" placeholder="Optional alternate number"></div>
+        <div class="field"><label>Email ID</label><input id="email" type="email" maxlength="150" placeholder="name@example.com"></div>
+        <div class="field"><label>State <span class="required">*</span></label><select id="state" required><option value="">Select State</option></select></div>
+        <div class="field"><label>Region <span class="required">*</span></label><select id="region" required disabled><option value="">Select State first</option></select></div>
+        <div class="field"><label>District <span class="required">*</span></label><select id="district" required disabled><option value="">Select Region first</option></select></div>
+        <div class="field"><label>Pincode <span class="required">*</span></label><input id="pincode" required inputmode="numeric" maxlength="6" placeholder="6-digit pincode"></div>
+        <div class="field" style="grid-column:1/-1"><label>Complete Address <span class="required">*</span></label><textarea id="address" required maxlength="500" placeholder="Building, street, locality, landmark..."></textarea></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><h2><span class="section-number">02</span>Organization User Type</h2><p>Choose which user groups this organization will manage.</p></div></div>
+      <div class="pills">
+        <label class="choice"><input type="checkbox" id="typeStudent" checked><span>🎓 Student</span></label>
+        <label class="choice"><input type="checkbox" id="typeStaff" checked><span>👨‍🏫 Employee / Staff</span></label>
+      </div>
+      <p class="hint">Select one or both. The corresponding header configuration will appear below.</p>
+    </section>
+
+    <section class="panel" id="studentHeadersPanel">
+      <div class="panel-head"><div><h2><span class="section-number">03</span>Student Header Configuration</h2><p>Choose and customize up to 10 student ID / report card fields.</p></div><span class="btn secondary" id="studentCount">0 / 10 selected</span></div>
+      <div class="note">Tick Select to include a header. Customize its label, text colors, and bold styling. Maximum 10 selected headers.</div>
+      <div class="table-wrap"><table><thead><tr><th>Select</th><th>Sr. No.</th><th>Header</th><th>Header Color</th><th>Value Color</th><th>Header Bold</th><th>Value Bold</th></tr></thead><tbody id="studentHeaders"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="staffHeadersPanel">
+      <div class="panel-head"><div><h2><span class="section-number">04</span>Employee / Staff Header Configuration</h2><p>Choose and customize up to 10 employee / staff fields.</p></div><span class="btn secondary" id="staffCount">0 / 10 selected</span></div>
+      <div class="note">Tick Select to include a header. Customize its label, text colors, and bold styling. Maximum 10 selected headers.</div>
+      <div class="table-wrap"><table><thead><tr><th>Select</th><th>Sr. No.</th><th>Header</th><th>Header Color</th><th>Value Color</th><th>Header Bold</th><th>Value Bold</th></tr></thead><tbody id="staffHeaders"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><h2><span class="section-number">05</span>ID Card & Report Card Settings</h2><p>Set the photo style and upload optional card background images.</p></div></div>
+      <div class="form-grid" style="margin-bottom:18px">
+        <div class="field"><label>ID Card Photo Alignment</label><select id="photoAlignment"><option>Left</option><option selected>Center</option><option>Right</option></select></div>
+        <div class="field"><label>ID Card Photo Shape</label><select id="photoShape"><option>Rectangle</option><option selected>Square</option><option>Circle</option><option>Rounded</option></select></div>
+        <div class="field"><label>ID Card Type</label><select id="idCardType"><option>Student ID Card</option><option>Employee / Staff ID Card</option><option>Both</option></select></div>
+        <div class="field"><label>ID Card Print Side</label><select id="printSide"><option>Front Side</option><option>Front & Back</option><option>Back Side</option></select></div>
+      </div>
+      <div class="upload-grid">
+        <div class="upload-card"><label>ID Card Front Image (JPG / JPEG)</label><input type="file" id="idFrontImage" accept=".jpg,.jpeg,image/jpeg"><div class="preview" id="idFrontPreview">No image selected</div></div>
+        <div class="upload-card"><label>Report Card Front Image (JPG / JPEG)</label><input type="file" id="reportFrontImage" accept=".jpg,.jpeg,image/jpeg"><div class="preview" id="reportFrontPreview">No image selected</div></div>
+        <div class="upload-card"><label>Report Card Back Image (JPG / JPEG)</label><input type="file" id="reportBackImage" accept=".jpg,.jpeg,image/jpeg"><div class="preview" id="reportBackPreview">No image selected</div></div>
+      </div>
+      <p class="hint">Image selections are kept for this form preview. This first version stores school form data in this browser's localStorage; uploaded image files are not stored permanently yet.</p>
+    </section>
+
+    <section class="panel">
+      <div class="actions"><button type="reset" class="btn secondary">↺ Reset Form</button><button type="submit" class="btn">✓ Submit & Save School</button></div>
+      <div class="status" id="statusMessage" role="status" aria-live="polite"></div>
+    </section>
+  </form>
+  <p class="footer-note">KK WORLD Admin • School registration prototype</p>
+</main>
+</div>
+<script>
+const states = {
+"Andhra Pradesh":["Coastal Andhra","Rayalaseema"],
+"Arunachal Pradesh":["Eastern Arunachal","Western Arunachal","Central Arunachal"],
+"Assam":["Barak Valley","Lower Assam","North Assam","Upper Assam"],
+"Bihar":["Patna Division","Tirhut Division","Saran Division","Darbhanga Division","Kosi Division","Purnia Division","Bhagalpur Division","Munger Division","Magadh Division"],
+"Chhattisgarh":["Raipur Division","Bilaspur Division","Bastar Division","Surguja Division","Durg Division"],
+"Goa":["North Goa","South Goa"],
+"Gujarat":["Ahmedabad Division","Vadodara Division","Rajkot Division","Surat Division"],
+"Haryana":["Ambala Division","Gurugram Division","Hisar Division","Rohtak Division","Karnal Division"],
+"Himachal Pradesh":["Kangra Division","Mandi Division","Shimla Division"],
+"Jharkhand":["North Chotanagpur","South Chotanagpur","Kolhan","Santhal Pargana","Palamu"],
+"Karnataka":["Bengaluru Division","Mysuru Division","Belagavi Division","Kalaburagi Division"],
+"Kerala":["North Kerala","Central Kerala","South Kerala"],
+"Madhya Pradesh":["Bhopal Division","Indore Division","Gwalior Division","Jabalpur Division","Rewa Division","Sagar Division","Shahdol Division","Ujjain Division","Narmadapuram Division"],
+"Maharashtra":["Konkan","Pune Division","Nashik Division","Chhatrapati Sambhajinagar Division","Amravati Division","Nagpur Division"],
+"Manipur":["Imphal Valley","Hill Region"],
+"Meghalaya":["Khasi Hills","Garo Hills","Jaintia Hills"],
+"Mizoram":["Aizawl Region","Lunglei Region"],
+"Nagaland":["Kohima Region","Dimapur Region","Mokokchung Region"],
+"Odisha":["Central Division","Northern Division","Southern Division"],
+"Punjab":["Majha","Doaba","Malwa"],
+"Rajasthan":["Jaipur Division","Jodhpur Division","Udaipur Division","Kota Division","Ajmer Division","Bikaner Division"],
+"Sikkim":["East Sikkim","West Sikkim","North Sikkim","South Sikkim"],
+"Tamil Nadu":["Chennai Region","Coimbatore Region","Madurai Region","Tiruchirappalli Region","Salem Region","Tirunelveli Region"],
+"Telangana":["Hyderabad Region","Warangal Region","Karimnagar Region","Nizamabad Region"],
+"Tripura":["West Tripura","North Tripura","South Tripura","Dhalai"],
+"Uttar Pradesh":["Agra Division","Aligarh Division","Ayodhya Division","Azamgarh Division","Bareilly Division","Basti Division","Chitrakoot Division","Devipatan Division","Gorakhpur Division","Jhansi Division","Kanpur Division","Lucknow Division","Meerut Division","Mirzapur Division","Moradabad Division","Prayagraj Division","Saharanpur Division","Varanasi Division"],
+"Uttarakhand":["Garhwal Division","Kumaon Division"],
+"West Bengal":["Presidency Division","Medinipur Division","Bardhaman Division","Jalpaiguri Division","Malda Division"]
+};
+// District dropdown uses region-scoped options for common districts. Other districts can be added to the region mapping later.
+const districtsByRegion = {
+"Agra Division":["Agra","Firozabad","Mainpuri","Mathura"],
+"Aligarh Division":["Aligarh","Etah","Hathras","Kasganj"],
+"Meerut Division":["Meerut","Ghaziabad","Gautam Buddha Nagar","Bulandshahr","Baghpat","Hapur"],
+"Lucknow Division":["Lucknow","Hardoi","Lakhimpur Kheri","Rae Bareli","Sitapur","Unnao"],
+"Varanasi Division":["Varanasi","Chandauli","Ghazipur","Jaunpur"],
+"Prayagraj Division":["Prayagraj","Fatehpur","Kaushambi","Pratapgarh"],
+"Jaipur Division":["Jaipur","Dausa","Alwar","Jhunjhunu","Sikar"],
+"Jodhpur Division":["Jodhpur","Barmer","Jaisalmer","Pali"],
+"North Goa":["North Goa"],"South Goa":["South Goa"],
+"Coastal Andhra":["Visakhapatnam","East Godavari","West Godavari","Krishna","Guntur"],
+"Rayalaseema":["Kurnool","Anantapur","Kadapa","Chittoor"],
+"North Kerala":["Kasaragod","Kannur","Wayanad","Kozhikode"],
+"Central Kerala":["Malappuram","Palakkad","Thrissur","Ernakulam"],
+"South Kerala":["Idukki","Kottayam","Alappuzha","Pathanamthitta","Kollam","Thiruvananthapuram"],
+"Garhwal Division":["Dehradun","Haridwar","Pauri Garhwal","Tehri Garhwal","Uttarkashi","Chamoli","Rudraprayag"],
+"Kumaon Division":["Nainital","Almora","Pithoragarh","Champawat","Bageshwar","Udham Singh Nagar"]
+};
+const studentDefaults=["Adrs","Class","Course","D.O.B.","F. Name","Mob","Name","Section","Stu. Id","Validity"];
+const staffDefaults=["Adrs","Department","Designation","Email","Emp ID","Expired Date","Joining Date","Mob","Name","Validity"];
+const $=id=>document.getElementById(id);
+function makeHeaderRows(tbodyId, defaults, countId){
+ const tbody=$(tbodyId);
+ defaults.forEach((name,i)=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td><input type="checkbox" class="hdr-select" checked aria-label="Select ${name}"></td>
+  <td>${i+1}</td><td><input type="text" class="hdr-name" value="${name.replaceAll('"','&quot;')}" maxlength="40"></td>
+  <td><input type="color" class="hdr-color" value="#38bdf8"></td><td><input type="color" class="val-color" value="#f8fafc"></td>
+  <td><input type="checkbox" class="hdr-bold" checked></td><td><input type="checkbox" class="val-bold"></td>`;
+  tbody.appendChild(tr);
+ });
+ const update=()=>{
+  const selected=[...tbody.querySelectorAll(".hdr-select:checked")].length;
+  $(countId).textContent=`${selected} / 10 selected`;
+  tbody.querySelectorAll(".hdr-select").forEach(cb=>{cb.disabled=!cb.checked&&selected>=10});
+ };
+ tbody.addEventListener("change",update);update();
+}
+makeHeaderRows("studentHeaders",studentDefaults,"studentCount");
+makeHeaderRows("staffHeaders",staffDefaults,"staffCount");
+function updateUserTypePanels(){
+ $("studentHeadersPanel").style.display=$("typeStudent").checked?"block":"none";
+ $("staffHeadersPanel").style.display=$("typeStaff").checked?"block":"none";
+}
+$("typeStudent").addEventListener("change",updateUserTypePanels);
+$("typeStaff").addEventListener("change",updateUserTypePanels);
+updateUserTypePanels();
+
+Object.keys(states).sort().forEach(state=>{const o=document.createElement("option");o.value=state;o.textContent=state;$("state").appendChild(o)});
+$("state").addEventListener("change",()=>{
+ const state=$("state").value, region=$("region"), district=$("district");
+ region.innerHTML='<option value="">Select Region</option>';district.innerHTML='<option value="">Select Region first</option>';
+ district.disabled=true;region.disabled=!state;
+ if(state) states[state].forEach(r=>{let o=document.createElement("option");o.value=r;o.textContent=r;region.appendChild(o)});
+});
+$("region").addEventListener("change",()=>{
+ const regionName=$("region").value,district=$("district");
+ district.innerHTML='<option value="">Select District</option>';district.disabled=!regionName;
+ (districtsByRegion[regionName]||[regionName+" — District list to be configured"]).forEach(d=>{let o=document.createElement("option");o.value=d;o.textContent=d;district.appendChild(o)});
+});
+["idFrontImage","reportFrontImage","reportBackImage"].forEach(id=>{
+ $(id).addEventListener("change",()=>{
+  const f=$(id).files[0], target=$(id.replace("Image","Preview"));
+  if(!f){target.textContent="No image selected";return}
+  if(!["image/jpeg"].includes(f.type)){alert("Please choose a JPG/JPEG image.");$(id).value="";target.textContent="No image selected";return}
+  target.textContent=f.name;
+ });
+});
+function collectHeaders(tbodyId){
+ return [...$(tbodyId).querySelectorAll("tr")].filter(tr=>tr.querySelector(".hdr-select").checked).map((tr,i)=>({
+  srNo:i+1,header:tr.querySelector(".hdr-name").value.trim(),
+  headerColor:tr.querySelector(".hdr-color").value,valueColor:tr.querySelector(".val-color").value,
+  headerBold:tr.querySelector(".hdr-bold").checked,valueBold:tr.querySelector(".val-bold").checked
+ }));
+}
+$("schoolForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(!$("typeStudent").checked&&!$("typeStaff").checked){alert("Please select Student, Employee / Staff, or both.");return}
+ const students=collectHeaders("studentHeaders"),staff=collectHeaders("staffHeaders");
+ if($("typeStudent").checked&&students.length===0){alert("Select at least one Student header.");return}
+ if($("typeStaff").checked&&staff.length===0){alert("Select at least one Employee / Staff header.");return}
+ const school={
+  id:"SCH-"+Date.now(),organizationType:$("organizationType").value,organizationName:$("organizationName").value.trim(),
+  ownerName:$("ownerName").value.trim(),mobile:$("mobile").value.trim(),alternateMobile:$("alternateMobile").value.trim(),
+  email:$("email").value.trim(),state:$("state").value,region:$("region").value,district:$("district").value,
+  pincode:$("pincode").value.trim(),address:$("address").value.trim(),
+  userTypes:{student:$("typeStudent").checked,staff:$("typeStaff").checked},
+  headers:{student:students,staff:staff},
+  cardSettings:{photoAlignment:$("photoAlignment").value,photoShape:$("photoShape").value,idCardType:$("idCardType").value,printSide:$("printSide").value,
+   idFrontImage:$("idFrontImage").files[0]?.name||"",reportFrontImage:$("reportFrontImage").files[0]?.name||"",reportBackImage:$("reportBackImage").files[0]?.name||""},
+  createdAt:new Date().toISOString()
+ };
+ try{
+  const saved=JSON.parse(localStorage.getItem("kkworld_schools")||"[]");
+  saved.push(school);localStorage.setItem("kkworld_schools",JSON.stringify(saved));
+  $("statusMessage").textContent="✓ School Successfully Registered! School ID: "+school.id;
+  $("statusMessage").style.color="#4ade80";
+  $("statusMessage").scrollIntoView({behavior:"smooth",block:"center"});
+ }catch(err){
+  $("statusMessage").textContent="Could not save school. Browser storage may be full.";
+  $("statusMessage").style.color="#fb7185";
+ }
+});
+$("schoolForm").addEventListener("reset",()=>{
+ setTimeout(()=>{$("statusMessage").textContent="";$("state").dispatchEvent(new Event("change"));updateUserTypePanels()},0);
+});
+</script>
+</body>
+</html>
